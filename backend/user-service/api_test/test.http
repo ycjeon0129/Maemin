@@ -1,0 +1,9 @@
+GET http://localhost:8000/user-service/users/services
+Content-Type: application/json
+
+{
+
+}
+
+###
+POST
