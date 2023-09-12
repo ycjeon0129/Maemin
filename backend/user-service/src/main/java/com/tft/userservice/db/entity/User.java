@@ -12,7 +12,7 @@ import javax.persistence.Id;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +32,9 @@ public class Users {
     private String userStatus;
 
     @Builder
-    public Users(Long userSq, String userId, String userPw, String userNm, String userSt) {
-        this.uid = userSq;
-        this.account = userId;
+    public User(Long userId, String account, String userPw, String userNm, String userSt) {
+        this.userId = userId;
+        this.account = account;
         this.userPw = userPw;
         this.userName = userNm;
         this.userStatus = userSt;

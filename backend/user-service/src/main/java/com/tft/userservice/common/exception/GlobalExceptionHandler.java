@@ -1,6 +1,7 @@
 package com.tft.userservice.common.exception;
 
 import com.tft.userservice.common.exception.custom.GameNotExistException;
+import com.tft.userservice.common.exception.custom.UsernameNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,21 @@ public class GlobalExceptionHandler {
 
         ApiException apiException = new ApiException(
                 ExceptionMessage.GAME_NOT_EXIST_MESSAGE,
+                httpStatus,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+
+        return new ResponseEntity<>(apiException, httpStatus);
+
+    }
+
+    @ExceptionHandler(value = {UsernameNotExistException.class})
+    public ResponseEntity<Object> handelUsernameNotExistException(UsernameNotExistException e) {
+
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+
+        ApiException apiException = new ApiException(
+                ExceptionMessage.USERNAME_NOT_EXIST_MESSAGE,
                 httpStatus,
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
