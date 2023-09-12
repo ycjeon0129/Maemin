@@ -17,10 +17,10 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // 사용자 시퀀스
-    private Long uid;
+    private Long userId;
 
     // 사용자 아이디
-    private String userId;
+    private String account;
 
     // 사용자 패스워드
     private String userPw;
@@ -34,7 +34,7 @@ public class Users {
     @Builder
     public Users(Long userSq, String userId, String userPw, String userNm, String userSt) {
         this.uid = userSq;
-        this.userId = userId;
+        this.account = userId;
         this.userPw = userPw;
         this.userName = userNm;
         this.userStatus = userSt;
