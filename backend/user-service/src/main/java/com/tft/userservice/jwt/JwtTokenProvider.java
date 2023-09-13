@@ -76,6 +76,10 @@ public class JwtTokenProvider {
         return getClaimsFromJwtToken(token).get("value").toString();
     }
 
+    public Date getExpiredTime(String token) {
+        return getClaimsFromJwtToken(token).getExpiration();
+    }
+
     public List<String> getRoles(String token) {
         return (List<String>) getClaimsFromJwtToken(token).get("roles");
     }

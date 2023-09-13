@@ -11,6 +11,24 @@ spring:
       fetch-registry: true
       register-with-eureka: true
 
+  datasource:
+    url: jdbc:mariadb://localhost:3306/mariadb
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true #To beautify or pretty print the SQL
+        show_sql: true #show sql
+
+logging:
+  level:
+    org.hibernate.SQL: debug    # Logger
+    org.hibernate.type: trace   # Show Query Parameter
+
 token:
   access-expired-time: 3600000
   refresh-expired-time: 604800000
