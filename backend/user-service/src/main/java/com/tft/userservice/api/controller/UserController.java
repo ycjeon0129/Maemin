@@ -1,11 +1,12 @@
 package com.tft.userservice.api.controller;
 
+import com.tft.userservice.api.dto.request.JoinReq;
 import com.tft.userservice.api.service.TestService;
+import com.tft.userservice.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,8 +16,13 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-//    private final UserService userService;
+    private final UserService userService;
     private final TestService testService;
+
+    @PostMapping("/join")
+    public ResponseEntity<String> signup(@RequestBody JoinReq userJoinDto) {
+        return ResponseEntity.ok(userService.join(userJoinDto));
+    }
 
 
     @GetMapping(value = "/services")
@@ -24,7 +30,7 @@ public class UserController {
         return testService.getServices();
     }
 
-    @GetMapping("/tests")
+    @GetMapping("/test")
     public String getFood() {
         return "테스트 성공";
     }
