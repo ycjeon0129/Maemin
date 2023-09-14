@@ -29,6 +29,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 //        authorities.add(new SimpleGrantedAuthority(user.getDtype()));
 
         // getAccount 줘서 비교하는건지 모르겠음
-        return new org.springframework.security.core.userdetails.User(user.getAccount(), user.getUserPw(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(user.getUserId().toString(), user.getUserPw(), new ArrayList<>());
     }
 }

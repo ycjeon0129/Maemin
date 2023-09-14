@@ -1,5 +1,6 @@
 package com.tft.userservice.common.exception;
 
+import com.tft.userservice.common.exception.custom.AccessTokenNotValidException;
 import com.tft.userservice.common.exception.custom.GameNotExistException;
 import com.tft.userservice.common.exception.custom.UsernameNotExistException;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,22 @@ public class GlobalExceptionHandler {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 
         ApiException apiException = new ApiException(
-                ExceptionMessage.USERNAME_NOT_EXIST_MESSAGE,
+                ExceptionMessage.USER_NOT_EXIST_MESSAGE,
+                httpStatus,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+
+        return new ResponseEntity<>(apiException, httpStatus);
+
+    }
+
+    @ExceptionHandler(value = {AccessTokenNotValidException.class})
+    public ResponseEntity<Object> handelAccessTokenNotValidException(AccessTokenNotValidException e) {
+
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+
+        ApiException apiException = new ApiException(
+                ExceptionMessage.ACCESS_TOKEN_NOT_VALID,
                 httpStatus,
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
