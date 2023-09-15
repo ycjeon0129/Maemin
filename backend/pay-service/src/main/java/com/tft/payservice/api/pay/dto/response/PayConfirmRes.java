@@ -1,0 +1,18 @@
+package com.tft.payservice.api.pay.dto.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+public class PayConfirmRes {
+
+    private int code;           // HTTP 상태 코드
+    private String msg;         // 메세지
+    private String paymentKey;  // 결제키. 승인 시에만 발급
+
+}
