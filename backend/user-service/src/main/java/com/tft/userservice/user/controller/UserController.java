@@ -1,8 +1,8 @@
-package com.tft.userservice.api.controller;
+package com.tft.userservice.user.controller;
 
-import com.tft.userservice.api.dto.request.JoinReq;
-import com.tft.userservice.api.service.TestService;
-import com.tft.userservice.api.service.UserService;
+import com.tft.userservice.user.dto.request.JoinReq;
+import com.tft.userservice.user.service.TestService;
+import com.tft.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package com.tft.userservice.api.security;
+package com.tft.userservice.user.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tft.userservice.api.dto.request.LoginReq;
+import com.tft.userservice.user.dto.request.LoginReq;
 import com.tft.userservice.jwt.CookieProvider;
 import com.tft.userservice.jwt.JwtTokenProvider;
 import com.tft.userservice.jwt.dto.Result;
@@ -51,7 +51,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
             // loadUserByUsername 메소드에서 로그인 판별
             // account 와 password를 이용해 Authentication 타입의 토큰 생성
              authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(credential.getAccount(), credential.getPassword())
+                    new UsernamePasswordAuthenticationToken(credential.getLoginId(), credential.getLoginPw())
             );
         }catch (IOException e){
             e.printStackTrace();

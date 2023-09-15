@@ -1,10 +1,7 @@
-package com.tft.userservice.api.service;
+package com.tft.userservice.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

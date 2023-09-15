@@ -1,6 +1,5 @@
 package com.tft.userservice.jwt;
 
-import com.tft.userservice.api.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

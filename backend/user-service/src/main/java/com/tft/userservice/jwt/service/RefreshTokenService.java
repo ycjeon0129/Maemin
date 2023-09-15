@@ -2,8 +2,8 @@ package com.tft.userservice.jwt.service;
 
 import com.tft.userservice.common.exception.custom.AccessTokenNotValidException;
 import com.tft.userservice.common.exception.custom.UsernameNotExistException;
-import com.tft.userservice.db.entity.User;
-import com.tft.userservice.db.repository.UserRepository;
+import com.tft.userservice.user.db.entity.User;
+import com.tft.userservice.user.db.repository.UserRepository;
 import com.tft.userservice.jwt.JwtTokenProvider;
 import com.tft.userservice.jwt.dto.JwtTokenDto;
 import com.tft.userservice.jwt.exception.RefreshTokenNotValidException;
@@ -36,10 +36,15 @@ public class RefreshTokenService {
 
     @Transactional
     public void updateRefreshToken(Long id, String uuid) {
-        User user = userRepository.findById(id)
+        System.out.println("********REDIS 갱신*********");
+        User user = userRepository.findByUserId(id)
                 .orElseThrow(() -> new UsernameNotExistException());
 
         refreshTokenRedisRepository.save(RefreshToken.of(user.getUserId(), uuid));
+        System.out.println("******** REDIS 저장 *********");
+        log.info("refresh key : {}", user.getUserId());
+        log.info("refresh value : {}", uuid);
+
     }
 
     @Transactional
@@ -67,7 +72,7 @@ public class RefreshTokenService {
 //                .orElseThrow(() -> new NotExistUserException("유저 고유 번호 : " + userId + "는 없는 유저입니다."));
 
         // access token 생성
-        Authentication authentication = getAuthentication(findUser.getAccount());
+        Authentication authentication = getAuthentication(findUser.getLoginId());
 
         List<String> roles = authentication.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());

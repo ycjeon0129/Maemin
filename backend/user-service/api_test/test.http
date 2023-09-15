@@ -18,8 +18,8 @@ POST http://localhost:8000/user-service/users/join
 Content-Type: application/json
 
 {
-  "account" : "user1",
-  "password" : "1234"
+  "loginId" : "user1",
+  "loginPw" : "1234"
 }
 
 ###
@@ -27,6 +27,6 @@ POST http://localhost:8000/user-service/login
 Content-Type: application/json
 
 {
-"account" : "user1",
-"password" : "1234"
+"loginId" : "user1",
+"loginPw" : "1234"
 }

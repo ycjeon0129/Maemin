@@ -1,10 +1,9 @@
-package com.tft.userservice.api.service;
+package com.tft.userservice.user.service;
 
-import com.tft.userservice.api.dto.request.JoinReq;
-import com.tft.userservice.db.entity.User;
-import com.tft.userservice.db.repository.UserRepository;
+import com.tft.userservice.user.dto.request.JoinReq;
+import com.tft.userservice.user.db.entity.User;
+import com.tft.userservice.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.mapping.Join;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +35,7 @@ public class UserService {
 
         // 2. 기존 클래스인 BCryptPasswordEncoder를 DI를 받아 사용하는 법
         //     BCryptPasswordEncoder클래스안에 있는 메서드 encode() 기능 사용 => 자동으로 EncrypterConfig Bean과 연결됨
-        User saveUser2 = userRepository.save(request.toEntity(encoder.encode(request.getPassword())));    // UserJoinRequest -> User Entity변환후 데이터 DB 저장 , password는 암호화 하여 저장
+        User saveUser2 = userRepository.save(request.toEntity(encoder.encode(request.getLoginPw())));    // UserJoinRequest -> User Entity변환후 데이터 DB 저장 , password는 암호화 하여 저장
 
 //        return UserDto.fromEntity(saveUser2);    // User에게 입력받아 회원가입한 데이터를 UserDto에 저장함
         return "회원가입 성공";

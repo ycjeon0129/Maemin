@@ -1,4 +1,4 @@
-package com.tft.userservice.api.security;
+package com.tft.userservice.user.security;
 
 import com.tft.userservice.jwt.CookieProvider;
 import com.tft.userservice.jwt.JwtTokenProvider;
