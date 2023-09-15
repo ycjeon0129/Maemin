@@ -10,3 +10,28 @@ spring:
         defalutZone: http://localhost:8761/eureka
       fetch-registry: true
       register-with-eureka: true
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/test1
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true #To beautify or pretty print the SQL
+        show_sql: true #show sql
+
+logging:
+  level:
+    org.hibernate.SQL: debug    # Logger
+    org.hibernate.type: trace   # Show Query Parameter
+
+token:
+  access-expired-time: 3600000
+  refresh-expired-time: 604800000
+  secret: $2a$10$q42lY7Y18xqrFt1qbODZIO4OMTeOxnrCe7tF3n9bazJinVE7VH5Pi
+  refresh-token-name: refresh-token
+  access-token-name: access-token

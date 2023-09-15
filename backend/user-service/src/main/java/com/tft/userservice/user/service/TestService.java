@@ -1,4 +1,4 @@
-package com.tft.userservice.api.service;
+package com.tft.userservice.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class TestService {
 
     private final DiscoveryClient discoveryClient;
 
@@ -24,4 +24,5 @@ public class UserService {
         });
         return services;
     }
+
 }
