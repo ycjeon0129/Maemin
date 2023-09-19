@@ -152,3 +152,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### Spring Boot - custom ###
+**/application-env.yml

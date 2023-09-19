@@ -1,6 +1,7 @@
 package com.tft.payservice.api.pay.controller;
 
 import com.tft.payservice.api.pay.dto.request.PayApproveReq;
+import com.tft.payservice.api.pay.dto.request.PayAuthenticationReq;
 import com.tft.payservice.api.pay.dto.request.PayConfirmReq;
 import com.tft.payservice.api.pay.dto.request.PayRegistReq;
 import com.tft.payservice.api.pay.dto.response.PayConfirmRes;
@@ -38,6 +39,13 @@ public class payController {
     @DeleteMapping("/{payId}")
     public ResponseEntity<?> deletePay(@RequestParam Long payId) {
         payService.deletePay(payId);
+
+        return ResponseEntity.status(200).body(null);
+    }
+
+    @PostMapping("/authentication")
+    public ResponseEntity<?> authenticationPayment(@RequestBody PayAuthenticationReq payAuthenticationReq) {
+        payService.authenticationPayment(payAuthenticationReq);
 
         return ResponseEntity.status(200).body(null);
     }

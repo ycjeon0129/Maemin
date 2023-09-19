@@ -1,6 +1,7 @@
 package com.tft.payservice.api.pay.service;
 
 import com.tft.payservice.api.pay.dto.request.PayApproveReq;
+import com.tft.payservice.api.pay.dto.request.PayAuthenticationReq;
 import com.tft.payservice.api.pay.dto.request.PayConfirmReq;
 import com.tft.payservice.api.pay.dto.request.PayRegistReq;
 import com.tft.payservice.api.pay.dto.response.PayConfirmRes;
@@ -22,10 +23,14 @@ public class PayService {
     public void deletePay(Long payId) {
     }
 
+    public void authenticationPayment(PayAuthenticationReq payAuthenticationReq) {
+    }
+
     public PayConfirmRes confirmPayment(PayConfirmReq payConfirmReq) {
         return null;
     }
 
     public void approvePayment(PayApproveReq payApproveReq) {
     }
+
 }
