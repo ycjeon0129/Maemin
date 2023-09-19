@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Pay {
+public class PayDto {
 
     private Long payId;         // 페이ID
     private String company;     // 카드사

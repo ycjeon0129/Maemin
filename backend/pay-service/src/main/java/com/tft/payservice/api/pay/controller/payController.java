@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/pay")
+@RequestMapping("/api/pay")
 public class payController {
 
     private final PayService payService;
