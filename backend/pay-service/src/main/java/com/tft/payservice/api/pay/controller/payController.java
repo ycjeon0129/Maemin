@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @Slf4j
@@ -30,7 +32,7 @@ public class payController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) {
+    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws IOException {
         payService.createPay(payRegistReq);
 
         return ResponseEntity.status(200).body(null);
