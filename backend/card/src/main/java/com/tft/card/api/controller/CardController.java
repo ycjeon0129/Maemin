@@ -14,15 +14,22 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/card")
+@RequestMapping("/api/card")
 public class CardController {
 
     private final CardService cardService;
 
     @PostMapping
     public ResponseEntity<CardRegistRes> createCardPayment(@RequestBody CardRegistReq cardRegistReq) {
-        CardRegistRes card = cardService.createCardPayment(cardRegistReq);
+//        CardRegistRes card = cardService.createCardPayment(cardRegistReq);
+        System.out.println(cardRegistReq.getCardNumber());
+        System.out.println(cardRegistReq.getCardExpireDate());
+        System.out.println(cardRegistReq.getCvc());
+        System.out.println(cardRegistReq.getPassword());
 
+        CardRegistRes card = CardRegistRes.builder()
+                .billingKey("비이이일링키")
+                .build();
 //        throw new PaymentNotExistException();
         return ResponseEntity.status(200).body(card);
     }
