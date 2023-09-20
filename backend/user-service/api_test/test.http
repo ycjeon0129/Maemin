@@ -1,0 +1,38 @@
+GET http://localhost:8000/user-service/users/services
+Content-Type: application/json
+
+{
+
+}
+
+###
+GET http://localhost:8000/user-service/users/test
+Content-Type: application/json
+
+{
+
+}
+
+###
+POST http://localhost:8000/user-service/users/join
+Content-Type: application/json
+
+{
+  "loginId": "user1",
+  "loginPw" : "1234",
+  "userName" : "홍",
+  "nickName" : "홍대",
+  "phone" : "010-1111-2222",
+  "sex" : "False",
+  "age" : 29,
+  "role" : "ROLE_CUSTOMER"
+}
+
+###
+POST http://localhost:8000/user-service/login
+Content-Type: application/json
+
+{
+"loginId" : "user1",
+"loginPw" : "1234"
+}
