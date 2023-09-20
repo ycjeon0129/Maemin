@@ -21,15 +21,8 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<CardRegistRes> createCardPayment(@RequestBody CardRegistReq cardRegistReq) {
-//        CardRegistRes card = cardService.createCardPayment(cardRegistReq);
-        System.out.println(cardRegistReq.getCardNumber());
-        System.out.println(cardRegistReq.getCardExpireDate());
-        System.out.println(cardRegistReq.getCvc());
-        System.out.println(cardRegistReq.getPassword());
+        CardRegistRes card = cardService.createCardPayment(cardRegistReq);
 
-        CardRegistRes card = CardRegistRes.builder()
-                .billingKey("비이이일링키")
-                .build();
 //        throw new PaymentNotExistException();
         return ResponseEntity.status(200).body(card);
     }
