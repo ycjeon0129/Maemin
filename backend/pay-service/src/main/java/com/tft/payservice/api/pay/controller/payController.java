@@ -32,7 +32,7 @@ public class payController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws IOException {
+    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws Exception {
         payService.createPay(payRegistReq);
 
         return ResponseEntity.status(200).body(null);

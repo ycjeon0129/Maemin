@@ -10,19 +10,20 @@ import com.tft.payservice.api.pay.dto.request.PayApproveReq;
 import com.tft.payservice.api.pay.dto.request.PayAuthenticationReq;
 import com.tft.payservice.api.pay.dto.request.PayConfirmReq;
 import com.tft.payservice.api.pay.dto.request.PayRegistReq;
+import com.tft.payservice.api.pay.dto.response.CardRegistRes;
 import com.tft.payservice.api.pay.dto.response.PayConfirmRes;
 import com.tft.payservice.api.pay.dto.response.PayListRes;
+import com.tft.payservice.common.util.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.tft.payservice.common.util.LogCurrent.*;
@@ -33,6 +34,9 @@ import static com.tft.payservice.common.util.LogCurrent.*;
 public class PayService {
 
     private final PayRepository payRepository;
+    private final String COMPANY = "SF카드";
+    @Value("${custom.hash.pepper}")
+    private static String PEPPER;
     private static Gson gson = new GsonBuilder()
             .serializeNulls()
             .setPrettyPrinting()
@@ -70,16 +74,20 @@ public class PayService {
         return res;
     }
 
-    public void createPay(PayRegistReq payRegistReq) throws IOException {
+    @Transactional
+    public void createPay(PayRegistReq payRegistReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-//        String map = "{\"cardNumber\":\"1234-5678-****-****\", \"cardNumber\":\"1234\", \"cvc\":\"123\", \"password\":\"123456\"}";
+        /**
+         *  JWT or ContextHolder에서 yserId 추출하여 사용
+         */
+        Long userId = 1L;
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("cardNumber", payRegistReq.getCardNumber());
         jsonObject.addProperty("cardExpireDate", payRegistReq.getCardExpireDate());
         jsonObject.addProperty("cvc", payRegistReq.getCvc());
-        jsonObject.addProperty("password", payRegistReq.getCardPW());
+        jsonObject.addProperty("password", payRegistReq.getCardPw());
 
         String requestBody = gson.toJson(jsonObject);
 
@@ -103,39 +111,44 @@ public class PayService {
 
         // Receive Response
         int status = con.getResponseCode();
+        CardRegistRes body = new CardRegistRes();
+
         if (200 <= status && status < 300) {
 
-            //
-            try(BufferedReader br = new BufferedReader(
+            try (BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), "utf-8"))) {
                 StringBuilder res = new StringBuilder();
                 String responseLine = null;
                 while ((responseLine = br.readLine()) != null) {
                     res.append(responseLine.trim());
                 }
-                System.out.println("00"+res.toString());
+                body = gson.fromJson(res.toString(), CardRegistRes.class);
             }
 
-            //
-            //
-
-//            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-//            StringBuilder res = new StringBuilder();
-//            String inputLine;
-////            while ((line = br.readLine()) != null) {
-////                res.append(line);
-////                res.append('\r');
-////            }
-//            StringBuffer content = new StringBuffer();
-//            while ((inputLine = br.readLine()) != null) {
-//                content.append(inputLine);
-//            }
-//            br.close();
             con.disconnect();
-//            System.out.println(res.toString());
-        }
 
-        System.out.println(status);
+            // 등록된 간편 결제 정보 저장
+            int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
+
+            String salt = HashUtil.getSalt();
+            String hashingPassword = HashUtil.hashing(payRegistReq.getPayPw().getBytes(), PEPPER, salt, keyStreching);
+
+            Pay pay = Pay.builder()
+                    .userId(userId)
+                    .company(COMPANY)
+                    .basicInfo(payRegistReq.getCardNumber())
+                    .nickname(COMPANY + payRegistReq.getCardNumber().substring(0, 4))
+                    .billingKey(body.getBillingKey())
+                    .payPw(hashingPassword)
+                    .salt(salt)
+                    .keyStreching(keyStreching)
+                    .build();
+
+            payRepository.save(pay);
+        } else {
+            log.info(logCurrent(getClassName(), getMethodName(), END));
+            throw new RuntimeException();
+        }
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
