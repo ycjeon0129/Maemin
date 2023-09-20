@@ -1,6 +1,7 @@
 package com.tft.payservice.api.pay.controller;
 
 import com.tft.payservice.api.pay.dto.request.PayApproveReq;
+import com.tft.payservice.api.pay.dto.request.PayAuthenticationReq;
 import com.tft.payservice.api.pay.dto.request.PayConfirmReq;
 import com.tft.payservice.api.pay.dto.request.PayRegistReq;
 import com.tft.payservice.api.pay.dto.response.PayConfirmRes;
@@ -11,12 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/pay")
+@RequestMapping("/api/pay")
 public class payController {
 
     private final PayService payService;
@@ -29,7 +32,7 @@ public class payController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) {
+    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws IOException {
         payService.createPay(payRegistReq);
 
         return ResponseEntity.status(200).body(null);
@@ -38,6 +41,13 @@ public class payController {
     @DeleteMapping("/{payId}")
     public ResponseEntity<?> deletePay(@RequestParam Long payId) {
         payService.deletePay(payId);
+
+        return ResponseEntity.status(200).body(null);
+    }
+
+    @PostMapping("/authentication")
+    public ResponseEntity<?> authenticationPayment(@RequestBody PayAuthenticationReq payAuthenticationReq) {
+        payService.authenticationPayment(payAuthenticationReq);
 
         return ResponseEntity.status(200).body(null);
     }

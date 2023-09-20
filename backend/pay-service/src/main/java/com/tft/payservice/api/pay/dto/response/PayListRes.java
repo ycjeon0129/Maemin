@@ -1,6 +1,6 @@
 package com.tft.payservice.api.pay.dto.response;
 
-import com.tft.payservice.api.pay.dto.Pay;
+import com.tft.payservice.api.pay.dto.PayDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +14,6 @@ import java.util.List;
 @Getter
 public class PayListRes {
 
-    private List<Pay> payList;
+    private List<PayDto> payList;
 
 }
