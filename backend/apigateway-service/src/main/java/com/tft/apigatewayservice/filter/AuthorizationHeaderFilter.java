@@ -24,13 +24,19 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     }
     @Override
     public GatewayFilter apply(AuthorizationHeaderFilter.Config config) {
+        // 첫 번째 매개변수는 ServerWebExchange 형태
+        // 두 번째 변수가 GatewayFilterChain 람다 함수
         return (exchange, chain) -> {
-            ServerHttpRequest request = exchange.getRequest();
+            ServerHttpRequest request = exchange.getRequest(); // Pre Filter
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
+
+            // Request Header 에서 token 문자열 받아오기
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", "");
+
+            // 토큰 검증
             if (!isJwtValid(jwt)) return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
-            return chain.filter(exchange);
+            return chain.filter(exchange); // 토큰이 일치할때
         };
     }
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
