@@ -2,7 +2,7 @@ package com.tft.userservice.common.exception;
 
 import com.tft.userservice.common.exception.custom.AccessTokenNotValidException;
 import com.tft.userservice.common.exception.custom.GameNotExistException;
-import com.tft.userservice.common.exception.custom.UsernameNotExistException;
+import com.tft.userservice.common.exception.custom.UserNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +31,8 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(value = {UsernameNotExistException.class})
-    public ResponseEntity<Object> handelUsernameNotExistException(UsernameNotExistException e) {
+    @ExceptionHandler(value = {UserNotExistException.class})
+    public ResponseEntity<Object> handelUsernameNotExistException(UserNotExistException e) {
 
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 

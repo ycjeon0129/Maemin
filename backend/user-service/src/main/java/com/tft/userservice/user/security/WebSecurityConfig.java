@@ -42,6 +42,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().anyRequest().permitAll();
 
+//        http.logout()
+//                .logoutUrl("/logout")
+//                .deleteCookies("refresh-token");
+
         http.addFilter(loginAuthenticationFilter);
     }
 
