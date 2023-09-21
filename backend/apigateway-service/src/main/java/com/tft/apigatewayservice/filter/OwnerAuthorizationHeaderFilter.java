@@ -1,9 +1,7 @@
 package com.tft.apigatewayservice.filter;
 
 import com.tft.apigatewayservice.security.JwtTokenProvider;
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -17,12 +15,12 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
+public class OwnerAuthorizationHeaderFilter extends AbstractGatewayFilterFactory<OwnerAuthorizationHeaderFilter.Config> {
     //    private final Environment environment;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public AuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider) {
+    public OwnerAuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider) {
         super(Config.class);
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -36,7 +34,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 //        this.environment = environment;
 //    }
     @Override
-    public GatewayFilter apply(AuthorizationHeaderFilter.Config config) {
+    public GatewayFilter apply(OwnerAuthorizationHeaderFilter.Config config) {
         // 첫 번째 매개변수는 ServerWebExchange 형태
         // 두 번째 변수가 GatewayFilterChain 람다 함수
         return (exchange, chain) -> {
@@ -47,15 +45,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             // Request Header 에서 token 문자열 받아오기
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", "");
-            log.info("jwt 토큰 : {}",jwt);
+
             jwtTokenProvider.validateJwtToken(jwt);
 
             String subject = jwtTokenProvider.getUserId(jwt);
 
-            log.info(jwtTokenProvider.getRoles(jwt).toString());
-
-            if (false == jwtTokenProvider.getRoles(jwt).contains("ROLE_CUSTOMER")) {
-                return onError(exchange, "CUSTOMER 권한 없음", HttpStatus.UNAUTHORIZED);
+            if (false == jwtTokenProvider.getRoles(jwt).contains("ROLE_OWNER")) {
+                return onError(exchange, "OWNER 권한 없음", HttpStatus.UNAUTHORIZED);
             }
 
             return chain.filter(exchange); // 토큰이 일치할때
