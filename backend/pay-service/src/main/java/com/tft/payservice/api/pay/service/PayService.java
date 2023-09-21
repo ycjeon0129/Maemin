@@ -154,16 +154,42 @@ public class PayService {
     }
 
     public void deletePay(Long payId) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        /**
+         *  JWT or ContextHolder에서 yserId 추출하여 사용
+         */
+        Long userId = 1L;
+
+        Pay pay = payRepository.findByPayId(payId)
+                .orElseThrow(); // 없는 payId인 경우 예외 처리
+
+        if (!pay.getUserId().equals(userId)) {
+            throw new RuntimeException(); // 사용자의 페이가 아닐 경우
+        }
+
+        payRepository.delete(pay);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
     public void authenticationPayment(PayAuthenticationReq payAuthenticationReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
     public PayConfirmRes confirmPayment(PayConfirmReq payConfirmReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
         return null;
     }
 
     public void approvePayment(PayApproveReq payApproveReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
 }
