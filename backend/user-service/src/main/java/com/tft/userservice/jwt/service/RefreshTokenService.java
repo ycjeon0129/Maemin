@@ -101,8 +101,8 @@ public class RefreshTokenService {
         refreshTokenRedisRepository.delete(refreshToken);
     }
 
-    public Authentication getAuthentication(String account) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(account);
+    public Authentication getAuthentication(String loginId) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 }

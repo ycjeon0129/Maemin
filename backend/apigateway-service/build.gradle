@@ -38,6 +38,10 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
+
+    // JWT 토큰 생성 관련 javax/xml/bind/DatatypeConverter 에러
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
 }
 
 dependencyManagement {
