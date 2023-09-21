@@ -7,15 +7,19 @@ spring:
   eureka:
     client:
       service-url:
-        defalutZone: http://localhost:8761/eureka
+        #        defalutZone: http://localhost:8761/eureka
+        defalutZone: https://j9c208.p.ssafy.io:8761/eureka
+
       fetch-registry: true
       register-with-eureka: true
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/user
+    url: jdbc:mariadb://j9c208.p.ssafy.io:3306/user
     driverClassName: org.mariadb.jdbc.Driver
     username: root
     password: bigbigred
+  #    url: jdbc:mariadb://localhost:3306/user
+  #    password: root
   jpa:
     hibernate:
       ddl-auto: create
@@ -26,8 +30,8 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug    # Logger
-    org.hibernate.type: trace   # Show Query Parameter
+    org.hibernate.SQL: debug # Logger
+    org.hibernate.type: trace # Show Query Parameter
 
 token:
   access-expired-time: 3600000

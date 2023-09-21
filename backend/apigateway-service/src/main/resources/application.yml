@@ -6,7 +6,9 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+#      defaultZone: http://localhost:8761/eureka
+      defaultZone: https://j9c208.p.ssafy.io/eureka
+
 
 spring:
   application:
@@ -25,8 +27,9 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:8080"
-#              - "https://just-pickup.com:8080"
+              - "*"
+#              - "http://localhost:8080"
+#              - "https://j9c208.p.ssafy.io:8000"
             allowedMethods:
               - GET
               - POST
@@ -50,12 +53,11 @@ spring:
 
         - id: user-service
           predicates:
-            - Path=/user-service/users/login
+            - Path=/user-service/login
             - Method=POST
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-
 
         - id: user-service
           predicates:
@@ -68,7 +70,7 @@ spring:
         - id: user-service
           predicates:
             - Path=/user-service/auth/logout
-            - Method=GET
+            - Method=POST
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
@@ -107,6 +109,14 @@ spring:
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
+
+        - id: user-service
+          predicates:
+            - Path=/user-service/users/services
+            - Method=GET
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
 
 #        - id: user-service # 구분하기 위한 id값으로 임의로 작성해도 무관
 #          predicates: # 라우팅 조건
