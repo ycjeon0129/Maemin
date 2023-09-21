@@ -7,7 +7,7 @@ eureka:
     register-with-eureka: true
     service-url:
 #      defaultZone: http://localhost:8761/eureka
-      defaultZone: https://j9c208.p.ssafy.io/eureka
+      defaultZone: https://j9c208.p.ssafy.io:8761/eureka
 
 
 spring:
