@@ -1,9 +1,6 @@
 package com.tft.payservice.api.pay.controller;
 
-import com.tft.payservice.api.pay.dto.request.PayApproveReq;
-import com.tft.payservice.api.pay.dto.request.PayAuthenticationReq;
-import com.tft.payservice.api.pay.dto.request.PayConfirmReq;
-import com.tft.payservice.api.pay.dto.request.PayRegistReq;
+import com.tft.payservice.api.pay.dto.request.*;
 import com.tft.payservice.api.pay.dto.response.PayConfirmRes;
 import com.tft.payservice.api.pay.dto.response.PayListRes;
 import com.tft.payservice.api.pay.service.PayService;
@@ -19,10 +16,19 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/pay")
+@RequestMapping("/pay")
 public class payController {
 
     private final PayService payService;
+
+    @PostMapping("/user")
+    public ResponseEntity<?> createPayUser(@RequestBody PayJoinReq payJoinReq) {
+        payService.createPayUser(payJoinReq);
+
+        return ResponseEntity.status(200).body(null);
+    }
+
+
 
     @GetMapping
     public ResponseEntity<PayListRes> getPayList() {
@@ -33,7 +39,7 @@ public class payController {
 
     @PostMapping
     public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws Exception {
-        payService.createPay(payRegistReq);
+//        payService.createPay(payRegistReq);
 
         return ResponseEntity.status(200).body(null);
     }
