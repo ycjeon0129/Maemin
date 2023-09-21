@@ -1,28 +1,23 @@
-package com.tft.userservice.jwt;
+package com.tft.apigatewayservice.security;
 
-import com.tft.userservice.common.exception.custom.UserNotExistException;
-import com.tft.userservice.user.db.entity.User;
-import com.tft.userservice.user.db.repository.UserRepository;
+
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 @RequiredArgsConstructor
 @Slf4j
 @Component
 public class JwtTokenProvider {
 
-    private final UserDetailsService userDetailsService;
-    private final UserRepository userRepository;
+//    private final UserDetailsService userDetailsService;
+//    private final UserRepository userRepository;
 
     @Value("${token.access-expired-time}")
     private long ACCESS_EXPIRED_TIME;
@@ -35,10 +30,10 @@ public class JwtTokenProvider {
 
     // JWT access token 생성
     public String createJwtAccessToken(String userId, String uri, List<String> roles) {
-        User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(UserNotExistException::new);
+//        User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(UserNotExistException::new);
         Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
-        claims.put("name", user.getUserName());
-        claims.put("nickName", user.getNickName());
+//        claims.put("name", user.getUserName());
+//        claims.put("nickName", user.getNickName());
         claims.put("roles", roles); // 정보는 key : value 쌍으로 저장된다.
 
 
@@ -67,13 +62,6 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-    }
-
-    // 권한정보 획득
-    // Spring Security 인증과정에서 권한확인을 위한 기능
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserId(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public String getUserId(String token) {

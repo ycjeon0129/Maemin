@@ -18,13 +18,13 @@ POST http://localhost:8000/user-service/users/join
 Content-Type: application/json
 
 {
-  "loginId": "user1",
+  "loginId": "test1",
   "loginPw" : "1234",
   "userName" : "Daehong",
-  "nickName" : "홍대",
+  "nickName" : "닉네임1",
   "phone" : "010-1111-2222",
   "sex" : "False",
-  "age" : 29,
+  "age" : 28,
   "role" : "ROLE_CUSTOMER"
 }
 
@@ -33,6 +33,6 @@ POST http://localhost:8000/user-service/login
 Content-Type: application/json
 
 {
-"loginId" : "user1",
+"loginId" : "test1",
 "loginPw" : "1234"
 }
