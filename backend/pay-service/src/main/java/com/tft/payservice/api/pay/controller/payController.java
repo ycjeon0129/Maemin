@@ -22,13 +22,11 @@ public class payController {
     private final PayService payService;
 
     @PostMapping("/user")
-    public ResponseEntity<?> createPayUser(@RequestBody PayJoinReq payJoinReq) {
+    public ResponseEntity<?> createPayUser(@RequestBody PayJoinReq payJoinReq) throws Exception {
         payService.createPayUser(payJoinReq);
 
         return ResponseEntity.status(200).body(null);
     }
-
-
 
     @GetMapping
     public ResponseEntity<PayListRes> getPayList() {
@@ -38,8 +36,8 @@ public class payController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws Exception {
-//        payService.createPay(payRegistReq);
+    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws IOException {
+        payService.createPay(payRegistReq);
 
         return ResponseEntity.status(200).body(null);
     }

@@ -46,6 +46,29 @@ public class PayService {
     @Value("${custom.card.CARD_URL}")
     private String CARD_URL;
 
+    public void createPayUser(PayJoinReq payJoinReq) throws Exception {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        /**
+         *  JWT or ContextHolder에서 yserId 추출하여 사용
+         */
+        Long userId = 1L;
+
+        int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
+        String salt = HashUtil.getSalt();
+        String hashingPassword = HashUtil.hashing(payJoinReq.getPayPw().getBytes(), PEPPER, salt, keyStreching);
+        PayUser user = PayUser.builder()
+                .userId(userId)
+                .payPw(hashingPassword)
+                .salt(salt)
+                .keyStreching(keyStreching)
+                .build();
+
+        payUserRepository.save(user);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+    }
+
     public PayListRes getPayList() {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
@@ -78,106 +101,85 @@ public class PayService {
         return res;
     }
 
-
-    public void createPayUser(PayJoinReq payJoinReq) {
+    @Transactional
+    public void createPay(PayRegistReq payRegistReq) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        log.info(logCurrent(getClassName(), getMethodName(), END));
-    }
+        /**
+         *  JWT or ContextHolder에서 yserId 추출하여 사용
+         */
+        Long userId = 1L;
 
-    @Transactional
-//    public void createPay(PayRegistReq payRegistReq) throws Exception {
-//        log.info(logCurrent(getClassName(), getMethodName(), START));
-//
-//        /**
-//         *  JWT or ContextHolder에서 yserId 추출하여 사용
-//         */
-//        Long userId = 1L;
-//
-//        Optional<PayUser> user = payUserRepository.findByUserId(userId);
-//        if (user.isEmpty()) {
+        PayUser user = payUserRepository.findByUserId(userId)
+                .orElseThrow( () -> new NullPointerException());
+
+        // Request Body 생성
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("cardNumber", payRegistReq.getCardNumber());
+        jsonObject.addProperty("cardExpireDate", payRegistReq.getCardExpireDate());
+        jsonObject.addProperty("cvc", payRegistReq.getCvc());
+        jsonObject.addProperty("password", payRegistReq.getCardPw());
+
+        String requestBody = gson.toJson(jsonObject);
+
+        // Connection Set
+        URL url = new URL(CARD_URL+"/card");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("Content-Length", Integer.toString(requestBody.getBytes().length));
+        con.setRequestProperty("Content-Language", "ko-KR");
+
+        con.setUseCaches(false);    // 캐싱 데이터를 받을지 설정
+        con.setDoOutput(true);  // 쓰기 모드 설정
+
+        // Send Request
+        try(OutputStream os = con.getOutputStream()) {
+            byte[] input = requestBody.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        // Receive Response
+        int status = con.getResponseCode();
+        CardRegistRes body = new CardRegistRes();
+
+        if (200 <= status && status < 300) {
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                StringBuilder res = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    res.append(responseLine.trim());
+                }
+                body = gson.fromJson(res.toString(), CardRegistRes.class);
+            }
+
+            con.disconnect();
+
+//            // 등록된 간편 결제 정보 저장
 //            int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
 //
 //            String salt = HashUtil.getSalt();
-//            String hashingPassword = HashUtil.hashing(payRegistReq.getPayPw().getBytes(), PEPPER, salt, keyStreching);
-//            user = Optional.of(PayUser.builder()
-//                    .userId(userId)
-//                    .payPw(hashingPassword)
-//                    .salt(salt)
-//                    .keyStreching(keyStreching)
-//                    .build());
-//        }
-//
-//        JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty("cardNumber", payRegistReq.getCardNumber());
-//        jsonObject.addProperty("cardExpireDate", payRegistReq.getCardExpireDate());
-//        jsonObject.addProperty("cvc", payRegistReq.getCvc());
-//        jsonObject.addProperty("password", payRegistReq.getCardPw());
-//
-//        String requestBody = gson.toJson(jsonObject);
-//
-//        // Connection Set
-//        URL url = new URL(CARD_URL+"/card");
-//        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-//        con.setRequestMethod("POST");
-//        con.setRequestProperty("Content-Type", "application/json; utf-8");
-//        con.setRequestProperty("Accept", "application/json");
-//        con.setRequestProperty("Content-Length", Integer.toString(requestBody.getBytes().length));
-//        con.setRequestProperty("Content-Language", "ko-KR");
-//
-//        con.setUseCaches(false);    // 캐싱 데이터를 받을지 설정
-//        con.setDoOutput(true);  // 쓰기 모드 설정
-//
-//        // Send Request
-//        try(OutputStream os = con.getOutputStream()) {
-//            byte[] input = requestBody.getBytes("utf-8");
-//            os.write(input, 0, input.length);
-//        }
-//
-//        // Receive Response
-//        int status = con.getResponseCode();
-//        CardRegistRes body = new CardRegistRes();
-//
-//        if (200 <= status && status < 300) {
-//
-//            try (BufferedReader br = new BufferedReader(
-//                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
-//                StringBuilder res = new StringBuilder();
-//                String responseLine = null;
-//                while ((responseLine = br.readLine()) != null) {
-//                    res.append(responseLine.trim());
-//                }
-//                body = gson.fromJson(res.toString(), CardRegistRes.class);
-//            }
-//
-//            con.disconnect();
-//
-////            // 등록된 간편 결제 정보 저장
-////            int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
-////
-////            String salt = HashUtil.getSalt();
-//            String hashingPassword = HashUtil.hashing(payRegistReq.getPayPw().getBytes(), PEPPER, user.get().getSalt(), user.get().getKeyStreching());
-//
-//            Pay pay = Pay.builder()
-//                    .payUser(user.get())
-////                    .userId(userId)
-//                    .company(COMPANY)
-//                    .basicInfo(payRegistReq.getCardNumber())
-//                    .nickname(COMPANY + payRegistReq.getCardNumber().substring(0, 4))
-//                    .billingKey(body.getBillingKey())
-////                    .payPw(hashingPassword)
-////                    .salt(salt)
-////                    .keyStreching(keyStreching)
-//                    .build();
-//
-//            payRepository.save(pay);
-//        } else {
-//            log.info(logCurrent(getClassName(), getMethodName(), END));
-//            throw new RuntimeException();
-//        }
-//
-//        log.info(logCurrent(getClassName(), getMethodName(), END));
-//    }
+//            String hashingPassword = HashUtil.hashing(user.getPayPw().getBytes(), PEPPER, user.get().getSalt(), user.get().getKeyStreching());
+
+            Pay pay = Pay.builder()
+                    .payUser(user)
+                    .company(COMPANY)
+                    .basicInfo(payRegistReq.getCardNumber())
+                    .nickname(COMPANY + payRegistReq.getCardNumber().substring(0, 4))
+                    .billingKey(body.getBillingKey())
+                    .build();
+
+            payRepository.save(pay);
+        } else {
+            log.info(logCurrent(getClassName(), getMethodName(), END));
+            throw new RuntimeException();
+        }
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+    }
 
     public void deletePay(Long payId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
