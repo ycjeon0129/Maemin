@@ -43,7 +43,7 @@ public class payController {
     }
 
     @DeleteMapping("/{payId}")
-    public ResponseEntity<?> deletePay(@RequestParam Long payId) {
+    public ResponseEntity<?> deletePay(@PathVariable Long payId) throws IOException {
         payService.deletePay(payId);
 
         return ResponseEntity.status(200).body(null);

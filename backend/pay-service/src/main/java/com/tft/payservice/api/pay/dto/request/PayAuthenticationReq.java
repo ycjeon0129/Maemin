@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PayAuthenticationReq {
 
-    private String password;    // 간편 인증 비밀번호 6자리
+    private String payPw;    // 간편 인증 비밀번호 6자리
 
 }

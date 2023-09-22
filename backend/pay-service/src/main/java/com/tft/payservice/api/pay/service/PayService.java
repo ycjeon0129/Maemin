@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,12 +159,6 @@ public class PayService {
 
             con.disconnect();
 
-//            // 등록된 간편 결제 정보 저장
-//            int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
-//
-//            String salt = HashUtil.getSalt();
-//            String hashingPassword = HashUtil.hashing(user.getPayPw().getBytes(), PEPPER, user.get().getSalt(), user.get().getKeyStreching());
-
             Pay pay = Pay.builder()
                     .payUser(user)
                     .company(COMPANY)
@@ -174,6 +169,7 @@ public class PayService {
 
             payRepository.save(pay);
         } else {
+            con.disconnect();
             log.info(logCurrent(getClassName(), getMethodName(), END));
             throw new RuntimeException();
         }
@@ -181,7 +177,8 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public void deletePay(Long payId) {
+    @Transactional
+    public void deletePay(Long payId) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         /**
@@ -196,7 +193,30 @@ public class PayService {
 //            throw new RuntimeException(); // 사용자의 페이가 아닐 경우
 //        }
 
-        payRepository.delete(pay);
+        // Request Param 생성
+        String billingKey = pay.getBillingKey();
+
+        // Connection Set
+        URL url = new URL(CARD_URL+"/card?billingKey=" + billingKey);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("DELETE");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("Content-Language", "ko-KR");
+
+        con.setUseCaches(false);    // 캐싱 데이터를 받을지 설정
+        con.setDoOutput(false);  // 쓰기 모드 설정
+
+        // Receive Response
+        int status = con.getResponseCode();
+        con.disconnect();
+
+        if (200 <= status && status < 300) {
+            payRepository.delete(pay);
+        } else {
+            log.info(logCurrent(getClassName(), getMethodName(), END));
+            throw new RuntimeException();
+        }
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
