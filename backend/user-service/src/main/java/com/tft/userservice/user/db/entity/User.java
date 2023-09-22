@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,6 +46,9 @@ public class User {
 
     private String role;
 
+    @OneToMany
+    private List<Bill> bills;
+
     @Builder
     public User(Long userId, String loginId, String loginPw, String userName, String nickName, String phone,
                 String address, LocalDateTime createdDate, boolean sex, int age, String role) {
@@ -55,7 +59,6 @@ public class User {
         this.nickName = nickName;
         this.phone = phone;
         this.currentAddress = address;
-//        this.createdDate = createdDate;
         this.sex = sex;
         this.age = age;
         this.role = role;

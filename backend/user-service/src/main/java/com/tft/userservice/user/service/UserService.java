@@ -1,12 +1,18 @@
 package com.tft.userservice.user.service;
 
 import com.tft.userservice.common.exception.custom.LoginIdExistException;
+import com.tft.userservice.common.exception.custom.UserNotExistException;
+import com.tft.userservice.user.db.entity.Bill;
 import com.tft.userservice.user.dto.request.JoinReq;
 import com.tft.userservice.user.db.entity.User;
 import com.tft.userservice.user.db.repository.UserRepository;
+import com.tft.userservice.user.dto.response.BillRes;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -40,5 +46,15 @@ public class UserService {
 
 //        return UserDto.fromEntity(saveUser2);    // User에게 입력받아 회원가입한 데이터를 UserDto에 저장함
         return "회원가입 성공";
+    }
+
+    public BillRes getBills(String userId){
+        User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(()->new UserNotExistException());
+        
+        List<Bill> bills = user.getBills();
+        
+        // 수정중
+
+        return null;
     }
 }
