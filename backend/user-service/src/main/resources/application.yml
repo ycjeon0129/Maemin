@@ -30,6 +30,10 @@ spring:
         format_sql: true #To beautify or pretty print the SQL
         show_sql: true #show sql
 
+  redis:
+    port: 6379
+    host: j9c208.p.ssafy.io
+
 logging:
   level:
     org.hibernate.SQL: debug # Logger

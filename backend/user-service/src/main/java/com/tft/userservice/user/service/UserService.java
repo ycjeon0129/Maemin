@@ -1,5 +1,6 @@
 package com.tft.userservice.user.service;
 
+import com.tft.userservice.common.exception.custom.LoginIdExistException;
 import com.tft.userservice.user.dto.request.JoinReq;
 import com.tft.userservice.user.db.entity.User;
 import com.tft.userservice.user.db.repository.UserRepository;
@@ -20,12 +21,12 @@ public class UserService {
     // 유저에게 입력받은 데이터 중복 검사 및 DB 저장
     public String join(JoinReq request){
 
-//        userRepository.findByAccount(request.getAccount())
-//                // 내가 원하는 에러코드를 만들어서 설정하기
-//                // enum클래스를 통해 미리 설정해둔 에러구조를 통해 에러를 넘겨준다.
-//                .ifPresent(user -> {
-//                    throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME,String.format("Username :"+request.getUserName()));
-//                });
+        userRepository.findByLoginId(request.getLoginId())
+                // 내가 원하는 에러코드를 만들어서 설정하기
+                // enum클래스를 통해 미리 설정해둔 에러구조를 통해 에러를 넘겨준다.
+                .ifPresent(user -> {
+                    throw new LoginIdExistException();
+                });
 
 
         // 비밀번호 암호화 하는방식 2가지
