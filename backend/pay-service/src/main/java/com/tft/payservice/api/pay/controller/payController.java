@@ -50,7 +50,7 @@ public class payController {
     }
 
     @PostMapping("/authentication")
-    public ResponseEntity<?> authenticationPayment(@RequestBody PayAuthenticationReq payAuthenticationReq) {
+    public ResponseEntity<?> authenticationPayment(@RequestBody PayAuthenticationReq payAuthenticationReq) throws Exception {
         payService.authenticationPayment(payAuthenticationReq);
 
         return ResponseEntity.status(200).body(null);

@@ -16,8 +16,10 @@ import com.tft.payservice.common.util.HashUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -221,8 +223,22 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public void authenticationPayment(PayAuthenticationReq payAuthenticationReq) {
+    public void authenticationPayment(PayAuthenticationReq payAuthenticationReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        /**
+         *  JWT or ContextHolder에서 yserId 추출하여 사용
+         */
+        Long userId = 1L;
+        PayUser user = payUserRepository.findByUserId(userId)
+                .orElseThrow(() -> new NullPointerException());
+
+        String submittedPassword = HashUtil.hashing(payAuthenticationReq.getPayPw().getBytes(), PEPPER, user.getSalt(), user.getKeyStreching());
+
+        if (!user.getPayPw().equals(submittedPassword)) {
+            log.info(logCurrent(getClassName(), getMethodName(), END));
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid payPw");
+        }
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
