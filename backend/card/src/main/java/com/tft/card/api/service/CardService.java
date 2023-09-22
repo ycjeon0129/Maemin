@@ -22,7 +22,7 @@ public class CardService {
     private final CardRepository cardRepository;
 
     @Transactional
-    public CardRegistRes createCardPayment(CardRegistReq cardRegistReq) {
+    public CardRegistRes createCard(CardRegistReq cardRegistReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         String uuid = UUID.randomUUID().toString();
@@ -42,6 +42,16 @@ public class CardService {
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return cardRegist;
+    }
+
+    public void deleteCard(String billingKey) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        Card card = cardRepository.findByBillingKey(billingKey)
+                .orElseThrow(() -> new NullPointerException());
+        cardRepository.delete(card);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
     public void createPayment(CardPaymentReq cardPaymentReq) {
