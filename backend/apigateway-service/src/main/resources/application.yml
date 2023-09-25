@@ -106,6 +106,15 @@ spring:
             - RewritePath=/store-service/(?<segment>.*), /$\{segment}
         #            - OwnerAuthorizationHeaderFilter
 
+        - id: store-service
+          predicates:
+            - Path=/store-service/customer/stores/register
+            - Method=POST
+          uri: lb://STORE-SERVICE
+          filters:
+            - RewritePath=/store-service/(?<segment>.*), /$\{segment}
+        #            - OwnerAuthorizationHeaderFilter
+
         - id: payment-service
           predicates:
             - Path=/payment-service/**
