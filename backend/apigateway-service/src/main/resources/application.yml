@@ -6,7 +6,11 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      #      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://j9c208.p.ssafy.io:8761/eureka
+
+  instance:
+    prefer-ip-address: true
 
 spring:
   application:
@@ -14,32 +18,77 @@ spring:
 
   cloud:
     gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+      globalcors:
+        cors-configurations:
+          "[/**]":
+            allowedOrigins:
+              - "http://localhost:8000"
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "https://j9c208.p.ssafy.io"
 
-#      default-filters:
-#        - name: GlobalFilter
-#          args:
-#            baseMessage: Spring Cloud Gateway Global Filter
-#            preLogger: true
-#            postLogger: true
-#      globalcors:
-#        cors-configurations:
-#          '[/**]':
-#            allowedOrigins: "https://just-pickup.com:8080"
-#            allowedMethods:
-#              - GET
-#              - POST
-#              - DELETE
-#              - PUT
-#              - OPTIONS
-#              - DELETE
-#              - PATCH
-#            allowedHeaders: '*'
-#            allow-credentials: true
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTIONS
+              - DELETE
+              - PATCH
+            allowedHeaders: "*"
+            allow-credentials: true
 
-      routes: # 라우팅 설정
+      # 라우팅 설정
+      routes:
+        - id: user-service
+          predicates:
+            - Path=/user-service/users/join
+            - Method=POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          predicates:
+            - Path=/user-service/auth/reissue
+            - Method=GET
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          predicates:
+            - Path=/user-service/auth/logout
+            - Method=POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          predicates:
+            - Path=/user-service/api/test/services
+            - Method=GET
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
         - id: user-service # 구분하기 위한 id값으로 임의로 작성해도 무관
           predicates: # 라우팅 조건
-            - Path=/user-service/** # first-service/ 으로 요청이 들어오면
+            - Path=/user-service/** # user-service/ 으로 요청이 들어오면
           uri: lb://USER-SERVICE # 유레카 서버에서 DEMO-EUREKA-CLIENT를 찾아서 그곳으로 요청을 보낸다.
           filters:
             # url 재정의
@@ -47,16 +96,34 @@ spring:
             # 콤마(,)를 기준으로 왼쪽 url을 오른쪽 url로 재정의한다.
             # 콤마 기준 오른쪽 부분은 ${변수명}으로 url 가져오고 앞에 / 붙여준거라고 보면 된다.
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-        - id: second-service
-          predicates:
-            - Path=/second-service/**
-          uri: lb://DEMO-EUREKA-CLIENT2
-          filters:
-            - RewritePath=/second-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 
-#token:
-#  access-expired-time: 3600000
-#  refresh-expired-time: 604800000
-#  secret: $2a$10$q42lY7Y18xqrFt1qbODZIO4OMTeOxnrCe7tF3n9bazJinVE7VH5Pi
-#  refresh-token-name: refresh-token
-#  access-token-name: access-token
+        - id: store-service
+          predicates:
+            - Path=/store-service/**
+          uri: lb://STORE-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        #            - OwnerAuthorizationHeaderFilter
+
+        - id: payment-service
+          predicates:
+            - Path=/payment-service/**
+          uri: lb://PAYMENT-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: pay-service
+          predicates:
+            - Path=/pay-service/**
+          uri: lb://PAY-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+#            - AuthorizationHeaderFilter
+
+token:
+  access-expired-time: 3600000
+  refresh-expired-time: 604800000
+  secret: $2a$10$q42lY7Y18xqrFt1qbODZIO4OMTeOxnrCe7tF3n9bazJinVE7VH5Pi
+  refresh-token-name: refresh-token
+  access-token-name: access-token

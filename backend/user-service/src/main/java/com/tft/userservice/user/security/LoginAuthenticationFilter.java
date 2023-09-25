@@ -44,15 +44,21 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException{
         Authentication authentication;
         try{
-            // POST 요청으로 들어오는 acoount 와 password
+            // POST 요청으로 들어오는 loginId 와 loginPw
+            log.info("1. loginId, loginPw 받는다.");
             LoginReq credential = new ObjectMapper().readValue(request.getInputStream(), LoginReq.class);
+            log.info(credential.toString());
 
             // UsernamePasswordAuthenticationToken은 Spring이 Authentication logic에 사용할 Token
             // loadUserByUsername 메소드에서 로그인 판별
             // account 와 password를 이용해 Authentication 타입의 토큰 생성
+            log.info("->> Authenticate Start");
              authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(credential.getLoginId(), credential.getLoginPw())
             );
+            log.info("로그인 성공 후 principal : {}", authentication.getPrincipal().toString());
+
+            log.info("<<-- Authenticate End");
         }catch (IOException e){
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -70,7 +76,9 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        // userId, loginId 아님
         String userId = user.getUsername();
+        log.info("1. accesstoken 넘겨줄 userId : {}", userId);
 
         // response body에 넣어줄 access token 및 expired time 생성
         String accessToken = jwtTokenProvider.createJwtAccessToken(userId, request.getRequestURI(), roles);
