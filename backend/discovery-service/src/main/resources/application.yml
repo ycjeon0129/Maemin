@@ -10,6 +10,11 @@ eureka:
   client:
     register-with-eureka: false   # euraka의 registry에 등록할지 여부를 설정, 서버기 때문에
     fetch-registry: false         # registy에 있는 정보를 가져올지 여부를 결정
+    service-url:
+      defaultZone: http://j9c208.p.ssafy.io:8761/eureka/
+  
+  instance:
+    prefer-ip-address: true
 
   server:
     wait-time-in-ms-when-sync-empty: 5  # 서버가 요청을 받기 전 대기할 초기 시간(ms) : 거의 대기 없음 (default 5분 : 상용에서는 모든 서비스가 등록 되길 기다리기 위해 5분 후 정보를 공유)
