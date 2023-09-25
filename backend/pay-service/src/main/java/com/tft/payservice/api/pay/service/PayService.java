@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +48,8 @@ public class PayService {
     @Value("${custom.card.CARD_URL}")
     private String CARD_URL;
 
-    public void createPayUser(PayJoinReq payJoinReq) throws Exception {
+    public void createPayUser(Long userId, PayJoinReq payJoinReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-
-        /**
-         *  JWT or ContextHolder에서 yserId 추출하여 사용
-         */
-        Long userId = 1L;
 
         int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
         String salt = HashUtil.getSalt();
@@ -72,13 +66,8 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public PayListRes getPayList() {
+    public PayListRes getPayList(Long userId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-
-        /**
-         *  JWT or ContextHolder에서 yserId 추출하여 사용
-         */
-        Long userId = 1L;
 
         List<PayDto> payList = new ArrayList<>();
         Optional<PayUser> payUser = payUserRepository.findByUserId(userId);
@@ -105,13 +94,8 @@ public class PayService {
     }
 
     @Transactional
-    public void createPay(PayRegistReq payRegistReq) throws IOException {
+    public void createPay(Long userId, PayRegistReq payRegistReq) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-
-        /**
-         *  JWT or ContextHolder에서 yserId 추출하여 사용
-         */
-        Long userId = 1L;
 
         PayUser user = payUserRepository.findByUserId(userId)
                 .orElseThrow( () -> new NullPointerException());
@@ -180,13 +164,8 @@ public class PayService {
     }
 
     @Transactional
-    public void deletePay(Long payId) throws IOException {
+    public void deletePay(Long userId, Long payId) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-
-        /**
-         *  JWT or ContextHolder에서 yserId 추출하여 사용
-         */
-        Long userId = 1L;
 
         Pay pay = payRepository.findByPayId(payId)
                 .orElseThrow(); // 없는 payId인 경우 예외 처리
@@ -223,13 +202,9 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public void authenticationPayment(PayAuthenticationReq payAuthenticationReq) throws Exception {
+    public void authenticationPayment(Long userId, PayAuthenticationReq payAuthenticationReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        /**
-         *  JWT or ContextHolder에서 yserId 추출하여 사용
-         */
-        Long userId = 1L;
         PayUser user = payUserRepository.findByUserId(userId)
                 .orElseThrow(() -> new NullPointerException());
 
@@ -243,14 +218,14 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public PayConfirmRes confirmPayment(PayConfirmReq payConfirmReq) {
+    public PayConfirmRes confirmPayment(Long userId, PayConfirmReq payConfirmReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return null;
     }
 
-    public void approvePayment(PayApproveReq payApproveReq) {
+    public void approvePayment(Long userId, PayApproveReq payApproveReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         log.info(logCurrent(getClassName(), getMethodName(), END));

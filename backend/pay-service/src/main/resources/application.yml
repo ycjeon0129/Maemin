@@ -20,8 +20,10 @@ spring:
 #      fetch-registry: true
 #      register-with-eureka: true
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:4406/pay?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: jdbc:mariadb://j9c208.p.ssafy.io:3307/pay
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: bigbigred
     hikari:
       idle-timeout: '600000'
       maximum-pool-size: '50'
@@ -38,6 +40,9 @@ spring:
     properties:
       show_sql: true
       format_sql: true
+  redis:
+    port: 6379
+    host: j9c208.p.ssafy.io
   devtools:
     livereload:
       enabled: 'true'
@@ -63,5 +68,11 @@ springfox:
   documentation:
     swagger:
       use-model-v3: 'false'
+
+custom:
+  hash:
+    pepper: '67b1551b36d255f7c63cd62aa0d5ddbe'
+  card:
+    CARD_URL: 'http://localhost:8090/api'
 ---
 
