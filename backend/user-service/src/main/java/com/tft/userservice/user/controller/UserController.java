@@ -1,6 +1,7 @@
 package com.tft.userservice.user.controller;
 
 import com.tft.userservice.user.dto.request.JoinReq;
+import com.tft.userservice.user.dto.response.BillRes;
 import com.tft.userservice.user.service.TestService;
 import com.tft.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,10 @@ public class UserController {
         return ResponseEntity.ok(userService.join(userJoinDto));
     }
 
+    @GetMapping("/bills")
+    public ResponseEntity<BillRes> getBills(@RequestHeader(value = "user-id") String userId) {
+        return ResponseEntity.ok(userService.getBills(userId));
+    }
 
     @GetMapping(value = "/services")
     public List<String> services() {

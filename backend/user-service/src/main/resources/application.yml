@@ -8,6 +8,9 @@ eureka:
 #      defaultZone: http://localhost:8761/eureka
       defaultZone: http://j9c208.p.ssafy.io:8761/eureka
 
+  instance:
+    prefer-ip-address: true
+
 spring:
   application:
     name: user-service
@@ -26,6 +29,10 @@ spring:
       hibernate:
         format_sql: true #To beautify or pretty print the SQL
         show_sql: true #show sql
+
+  redis:
+    port: 6379
+    host: j9c208.p.ssafy.io
 
 logging:
   level:

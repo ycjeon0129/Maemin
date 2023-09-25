@@ -1,11 +1,18 @@
 package com.tft.userservice.user.service;
 
+import com.tft.userservice.common.exception.custom.LoginIdExistException;
+import com.tft.userservice.common.exception.custom.UserNotExistException;
+import com.tft.userservice.user.db.entity.Bill;
 import com.tft.userservice.user.dto.request.JoinReq;
 import com.tft.userservice.user.db.entity.User;
 import com.tft.userservice.user.db.repository.UserRepository;
+import com.tft.userservice.user.dto.response.BillRes;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -20,12 +27,12 @@ public class UserService {
     // 유저에게 입력받은 데이터 중복 검사 및 DB 저장
     public String join(JoinReq request){
 
-//        userRepository.findByAccount(request.getAccount())
-//                // 내가 원하는 에러코드를 만들어서 설정하기
-//                // enum클래스를 통해 미리 설정해둔 에러구조를 통해 에러를 넘겨준다.
-//                .ifPresent(user -> {
-//                    throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME,String.format("Username :"+request.getUserName()));
-//                });
+        userRepository.findByLoginId(request.getLoginId())
+                // 내가 원하는 에러코드를 만들어서 설정하기
+                // enum클래스를 통해 미리 설정해둔 에러구조를 통해 에러를 넘겨준다.
+                .ifPresent(user -> {
+                    throw new LoginIdExistException();
+                });
 
 
         // 비밀번호 암호화 하는방식 2가지
@@ -39,5 +46,15 @@ public class UserService {
 
 //        return UserDto.fromEntity(saveUser2);    // User에게 입력받아 회원가입한 데이터를 UserDto에 저장함
         return "회원가입 성공";
+    }
+
+    public BillRes getBills(String userId){
+        User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(()->new UserNotExistException());
+        
+        List<Bill> bills = user.getBills();
+        
+        // 수정중
+
+        return null;
     }
 }
