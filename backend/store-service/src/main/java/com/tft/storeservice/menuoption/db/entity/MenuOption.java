@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.tft.storeservice.menu.db.entity.Menu;
+import com.tft.storeservice.store.db.entity.Store;
 
 @Builder
 @Entity

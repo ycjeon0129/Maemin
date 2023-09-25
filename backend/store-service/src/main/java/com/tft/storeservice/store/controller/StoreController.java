@@ -15,7 +15,7 @@ import com.tft.storeservice.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/store-service/customer")
+@RequestMapping("/customer")
 @RequiredArgsConstructor
 @Slf4j
 @RestController

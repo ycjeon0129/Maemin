@@ -13,7 +13,7 @@ import com.tft.storeservice.storeImage.service.StoreImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/store-service/owner/storeImage")
+@RequestMapping("/owner/storeImage")
 @RequiredArgsConstructor
 @Slf4j
 @RestController

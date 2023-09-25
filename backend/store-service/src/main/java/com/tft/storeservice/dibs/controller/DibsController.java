@@ -13,7 +13,7 @@ import com.tft.storeservice.dibs.service.DibsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/store-service/customer/dibs")
+@RequestMapping("/customer/dibs")
 @RequiredArgsConstructor
 @Slf4j
 @RestController

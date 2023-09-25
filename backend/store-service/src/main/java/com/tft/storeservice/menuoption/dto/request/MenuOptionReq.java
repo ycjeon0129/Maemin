@@ -7,7 +7,6 @@ import com.tft.storeservice.menuoption.db.entity.MenuOption;
 import com.tft.storeservice.store.db.entity.Store;
 
 public class MenuOptionReq {
-	private Long storeId;
 	private String option;
 	private String content;
 	private int price;
