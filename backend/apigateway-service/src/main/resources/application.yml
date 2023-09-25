@@ -7,7 +7,10 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
-#      defaultZone: http://j9c208.p.ssafy.io:8761/eureka
+  #      defaultZone: http://j9c208.p.ssafy.io:8761/eureka
+
+  instance:
+    prefer-ip-address: true
 
 spring:
   application:
@@ -15,7 +18,6 @@ spring:
 
   cloud:
     gateway:
-
       default-filters:
         - name: GlobalFilter
           args:
@@ -24,11 +26,12 @@ spring:
             postLogger: true
       globalcors:
         cors-configurations:
-          '[/**]':
+          "[/**]":
             allowedOrigins:
-              - "https://j9c208.p.ssafy.io:8000"
-              - "http://j9c208.p.ssafy.io:8000"
               - "http://localhost:8000"
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "https://j9c208.p.ssafy.io"
 
             allowedMethods:
               - GET
@@ -38,7 +41,7 @@ spring:
               - OPTIONS
               - DELETE
               - PATCH
-            allowedHeaders: '*'
+            allowedHeaders: "*"
             allow-credentials: true
 
       # 라우팅 설정
@@ -101,7 +104,7 @@ spring:
           uri: lb://STORE-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-            - OwnerAuthorizationHeaderFilter
+        #            - OwnerAuthorizationHeaderFilter
 
         - id: payment-service
           predicates:
