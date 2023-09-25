@@ -28,13 +28,14 @@ spring:
         cors-configurations:
           "[/**]":
             allowedOrigins:
-              - "https://j9c208.p.ssafy.io:8000"
-              - "http://j9c208.p.ssafy.io:8000"
+#              - "https://j9c208.p.ssafy.io:8000"
+#              - "http://j9c208.p.ssafy.io:8000"
               - "http://localhost:8000"
               - "http://localhost:3000"
-              - "https://j9c208.p.ssafy.io:3000"
+#              - "https://j9c208.p.ssafy.io:3000"
               - "http://localhost:3001"
-              - "https://j9c208.p.ssafy.io:3001"
+#              - "https://j9c208.p.ssafy.io:3001"
+              - "https://j9c208.p.ssafy.io"
 
             allowedMethods:
               - GET
