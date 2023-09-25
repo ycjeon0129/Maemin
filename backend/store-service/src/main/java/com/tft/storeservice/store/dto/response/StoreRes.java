@@ -1,11 +1,13 @@
 package com.tft.storeservice.store.dto.response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.tft.storeservice.dibs.dto.response.DibsRes;
 import com.tft.storeservice.menu.db.entity.Menu;
 import com.tft.storeservice.store.db.entity.Store;
 import com.tft.storeservice.storeImage.db.entity.StoreImage;
+import com.tft.storeservice.menu.dto.response.MenuRes;
+import com.tft.storeservice.storeImage.dto.response.StoreImageRes;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +27,7 @@ public class StoreRes {
 	private String closeDays;
 
 	private int dibsCount;
-	private List<StoreImage> pictureUrl;
+	private List<StoreImageRes> pictureUrl;
 	private String area;
 	// 위도
 	private Long latitude;
@@ -36,7 +38,7 @@ public class StoreRes {
 	// 고쳐야할것
 	private int category;
 	private double rating;
-	private List<Menu> menuList;
+	private List<MenuRes> menuList;
 	// private int reviewCount;
 
 	public StoreRes(Store store) {
@@ -48,12 +50,18 @@ public class StoreRes {
 		this.operationHours = store.getOperationHours();
 		this.closeDays = store.getClosedDays();
 		this.dibsCount = store.getDibsList().size();
-		this.pictureUrl = store.getStoreImageList();
+		this.pictureUrl = store.getStoreImageList()
+			.stream()
+			.map(StoreImageRes::new)
+			.collect(Collectors.toList());
 		this.area = store.getArea().getArea();
 		this.latitude = store.getLatitude();
 		this.longitude = store.getLongitude();
 		this.rating = store.getRating();
 		this.category = store.getCategory();
-		this.menuList = store.getMenuList();
+		this.menuList = store.getMenuList()
+			.stream()
+			.map(MenuRes::new)
+			.collect(Collectors.toList());
 	}
 }

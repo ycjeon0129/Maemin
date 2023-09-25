@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.tft.storeservice.area.db.entity.Area;
 import com.tft.storeservice.menuoption.db.entity.MenuOption;
 import com.tft.storeservice.store.db.entity.Store;
 
@@ -28,7 +29,7 @@ public class Menu{
 	private Store store;
 
 	@OneToMany(mappedBy = "menu", orphanRemoval = true, cascade = CascadeType.REMOVE)
-	private List<MenuOption> menuList = new ArrayList<>();
+	private List<MenuOption> menuOptionList = new ArrayList<>();
 
 
 	@NotNull
@@ -49,4 +50,9 @@ public class Menu{
 	@CreatedDate
 	@Column(updatable = false, nullable = false)
 	private LocalDateTime createdDate;
+
+	public Menu addStore(Store store) {
+		this.store = store;
+		return this;
+	}
 }

@@ -1,10 +1,12 @@
 package com.tft.storeservice.menu.dto.response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.tft.storeservice.dibs.dto.response.DibsRes;
 import com.tft.storeservice.menu.db.entity.Menu;
 import com.tft.storeservice.menuoption.db.entity.MenuOption;
+import com.tft.storeservice.menuoption.dto.response.MenuOptionRes;
 import com.tft.storeservice.store.db.entity.Store;
 import com.tft.storeservice.storeImage.db.entity.StoreImage;
 
@@ -23,7 +25,7 @@ public class MenuRes {
 	private int price;
 	private String menuPictureUrl;
 	private int popularity;
-	private List<MenuOption> menuOptionList;
+	private List<MenuOptionRes> menuOptionList;
 
 	// 고쳐야할것
 	private int category;
@@ -36,6 +38,9 @@ public class MenuRes {
 		this.menuPictureUrl = menu.getMenuPictureUrl();
 		this.popularity = menu.getPopularity();
 		this.category = menu.getCategory();
-		this.menuOptionList = menu.getMenuList();
+		this.menuOptionList = menu.getMenuOptionList()
+			.stream()
+			.map(MenuOptionRes::new)
+			.collect(Collectors.toList());
 	}
 }

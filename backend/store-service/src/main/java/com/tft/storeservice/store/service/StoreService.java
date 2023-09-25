@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tft.storeservice.area.db.entity.Area;
 import com.tft.storeservice.area.db.repository.AreaRepository;
+import com.tft.storeservice.area.service.AreaService;
+import com.tft.storeservice.store.db.entity.Store;
 import com.tft.storeservice.store.db.repository.StoreRepository;
 import com.tft.storeservice.store.dto.request.StoreReq;
 import com.tft.storeservice.store.dto.response.StoreRes;
@@ -19,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StoreService {
 
 	private final StoreRepository storeRepository;
-	private final AreaRepository areaRepository;
+	private final AreaService areaService;
 
 	public StoreRes getStoreInfo(Long storeId) {
 		return new StoreRes(storeRepository.findById(storeId).orElseThrow());
@@ -31,7 +33,10 @@ public class StoreService {
 	}
 
 	private Area getArea(StoreReq storeReq) {
-		return areaRepository.findAreaByAreaCode(storeReq.getAreaCode())
-			.orElseThrow(() -> new IllegalArgumentException("id 실수?"));
+		return areaService.getAreaInfo(storeReq.getAreaCode());
+	}
+
+	public Store getStore(Long storeId) {
+		return storeRepository.findStoreByStoreId(storeId);
 	}
 }

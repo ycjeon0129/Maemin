@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tft.storeservice.menu.dto.request.MenuReq;
+import com.tft.storeservice.menu.dto.response.MenuRes;
 import com.tft.storeservice.menu.service.MenuService;
 import com.tft.storeservice.store.dto.request.StoreReq;
 import com.tft.storeservice.store.dto.response.StoreRes;
@@ -22,7 +23,7 @@ public class MenuController {
 
 	private final MenuService menuService;
 	@PostMapping("/register")
-	public ResponseEntity<StoreRes> register(@RequestBody MenuReq menuReq){
-		return ResponseEntity.ok(menuService.regist(menuReq));
+	public ResponseEntity<MenuRes> register(@RequestBody MenuReq menuReq){
+		return ResponseEntity.ok(menuService.register(menuReq));
 	}
 }

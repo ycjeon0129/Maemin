@@ -14,6 +14,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import com.tft.storeservice.dibs.db.entity.Dibs;
 import com.tft.storeservice.store.db.entity.Store;
+import com.tft.storeservice.storeImage.db.repository.StoreImageRepository;
 
 @Builder
 @Entity
@@ -38,5 +39,8 @@ public class StoreImage{
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
-
+	public StoreImage addStore(Store store){
+		this.store = store;
+		return this;
+	}
 }

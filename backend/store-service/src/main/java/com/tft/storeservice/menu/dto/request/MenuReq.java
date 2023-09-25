@@ -3,7 +3,9 @@ package com.tft.storeservice.menu.dto.request;
 import org.springframework.validation.annotation.Validated;
 
 import com.sun.istack.NotNull;
+import com.tft.storeservice.menu.db.entity.Menu;
 import com.tft.storeservice.store.db.entity.Store;
+import com.tft.storeservice.store.dto.request.StoreReq;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,31 +14,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Validated
 public class MenuReq {
-	private Long ownerId;
-	private String name;
+	private Long storeId;
 	private int category;
-	private String address;
-	private int areaCode;
-	private String phone;
-	private String content;
-	private String operationHours;
-	private String closeDays;
-	private Long latitude;
-	private Long longitude;
+	private String name;
+	private int price;
+	private String menuPictureUrl;
+	private int popularity;
 
 
-	public Store toStore() {
-		return Store.builder()
-			.ownerId(this.ownerId)
+	public Menu toMenu() {
+		return Menu.builder()
 			.name(this.name)
 			.category(this.category)
-			.address(this.address)
-			.phone(this.phone)
-			.content(this.content)
-			.operationHours(this.operationHours)
-			.closedDays(this.closeDays)
-			.latitude(this.latitude)
-			.longitude(this.longitude)
+			.price(this.price)
+			.menuPictureUrl(this.menuPictureUrl)
+			.popularity(this.popularity)
 			.build();
 	}
 }
