@@ -1,27 +1,37 @@
 package com.tft.storeservice.store.db.entity;
 
-import com.tft.storeservice.common.baseEntitty.BaseEntity;
 
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.data.annotation.CreatedDate;
+
+import com.tft.storeservice.area.db.entity.Area;
+import com.tft.storeservice.dibs.db.entity.Dibs;
+import com.tft.storeservice.menu.db.entity.Menu;
+import com.tft.storeservice.storeImage.db.entity.StoreImage;
 
 @Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class Store extends BaseEntity {
+public class Store{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long storeId;
 
 	@NotNull
-	private int areaCode;
+	@OneToOne
+	private Area area;
 
+	@Getter
 	@NotNull
 	private String name;
 
@@ -31,7 +41,11 @@ public class Store extends BaseEntity {
 	@NotNull
 	private String address;
 
-	private String storeImageId;
+	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+	private List<Menu> menuList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+	private List<StoreImage> storeImageList = new ArrayList<>();
 
 	@NotNull
 	private String phone;
@@ -41,18 +55,31 @@ public class Store extends BaseEntity {
 	@NotNull
 	private double rating;
 
-	@NotNull
-	private int dibsCount;
+	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+	private List<Dibs> dibsList = new ArrayList<>();
 
-	@NotNull
-	private int reviewCount;
+	// @NotNull
+	// private int reviewCount;
 
 	private String operationHours;
 	private String closedDays;
 
-	@NotNull
+	@CreatedDate
+	@Column(updatable = false, nullable = false)
+	private LocalDateTime createdDate;
+
 	private String status;
 
 	@NotNull
 	private Long ownerId;
+	
+	// 위도
+	private Long latitude;
+	// 경도
+	private Long longitude;
+
+	public Store addArea(Area area) {
+		this.area = area;
+		return this;
+	}
 }
