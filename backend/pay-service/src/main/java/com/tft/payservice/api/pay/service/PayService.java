@@ -11,6 +11,7 @@ import com.tft.payservice.api.pay.dto.PayDto;
 import com.tft.payservice.api.pay.dto.request.*;
 import com.tft.payservice.api.pay.dto.response.*;
 import com.tft.payservice.common.dto.AuthenticationCode;
+//import com.tft.payservice.common.dto.AuthenticationCodeRedisRepository;
 import com.tft.payservice.common.dto.AuthenticationCodeRepository;
 import com.tft.payservice.common.util.HashUtil;
 import com.tft.payservice.common.util.RandomUtil;
@@ -18,6 +19,9 @@ import com.tft.payservice.common.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +31,7 @@ import javax.naming.NoPermissionException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.tft.payservice.common.util.LogCurrent.*;
 
@@ -41,6 +43,8 @@ public class PayService {
     private final PayRepository payRepository;
     private final PayUserRepository payUserRepository;
     private final AuthenticationCodeRepository authenticationCodeRepository;
+    private RedisTemplate redisTemplate;
+    private StringRedisTemplate StringRedisTemplate;
     private final String COMPANY = "SF카드";
     @Value("${custom.hash.pepper}")
     private static String PEPPER;
@@ -273,7 +277,7 @@ public class PayService {
         Long userId = RequestUtil.getUserId();
 
         Pay pay = payRepository.findByPayId(payPaymentReq.getPayId())
-                .orElseThrow( () -> new NullPointerException());
+                .orElseThrow( () -> new NullPointerException() );
         if (!pay.getPayUser().getUserId().equals(userId)) {
             throw new NoPermissionException();
         }
@@ -398,4 +402,5 @@ public class PayService {
             throw new RuntimeException();
         }
     }
+
 }

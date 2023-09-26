@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface AuthenticationCodeRepository extends CrudRepository<AuthenticationCode, String> {
 
-    Optional<AuthenticationCode> findByCode(String code);
-    Optional<AuthenticationCode> findByUserId(Long userId);
+//    Optional<AuthenticationCode> findByCode(String code);
+//    Optional<AuthenticationCode> findByUserId(Long userId);
 
 }

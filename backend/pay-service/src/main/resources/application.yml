@@ -74,6 +74,7 @@ custom:
   hash:
     pepper: '67b1551b36d255f7c63cd62aa0d5ddbe'
   card:
-    CARD_URL: 'http://localhost:8090/api'
+#    CARD_URL: 'http://localhost:8090/api'
+    CARD_URL: 'http://j9c208.p.ssafy.io:8090/api'
 ---
 

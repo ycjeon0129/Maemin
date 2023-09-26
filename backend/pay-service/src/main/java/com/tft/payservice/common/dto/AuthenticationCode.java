@@ -15,9 +15,6 @@ import org.springframework.data.redis.core.index.Indexed;
 public class AuthenticationCode {
 
     @Id
-//    private String codeId;
-//
-//    @Indexed
     private String code;
 
     @Indexed
