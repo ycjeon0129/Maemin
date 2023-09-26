@@ -23,7 +23,6 @@ eureka:
 spring:
   application:
     name: payment-service
-
   datasource:
     url: jdbc:mariadb://j9c208.p.ssafy.io:3309/payment
     driverClassName: org.mariadb.jdbc.Driver
@@ -45,6 +44,9 @@ spring:
     properties:
       show_sql: true
       format_sql: true
+  redis:
+    port: 6379
+    host: j9c208.p.ssafy.io
   devtools:
     livereload:
       enabled: 'true'
@@ -71,7 +73,8 @@ springfox:
     swagger:
       use-model-v3: 'false'
 custom:
-  url: "http://localhost:8000"
+#  url: "http://localhost:8000"
+  url: "https://j9c208.p.ssafy.io:8000"
 ---
 
 

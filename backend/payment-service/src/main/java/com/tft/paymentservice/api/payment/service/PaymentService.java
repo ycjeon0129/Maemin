@@ -50,12 +50,12 @@ public class PaymentService {
                     .amount(paymentReq.getAmount())
                     .code(paymentReq.getCode())
                     .build();
-//            // Redis에서 authentication code 확인
-//            AuthenticationCode code = authenticationCodeRepository.findByCode(paymentReq.getCode())
-//                    .orElseThrow( () -> new NullPointerException());
-//            if (!code.getUserId().equals(userId)) {
-//                throw new IllegalAccessException();
-//            }
+            // Redis에서 authentication code 확인
+            AuthenticationCode code = authenticationCodeRepository.findById(paymentReq.getCode())
+                    .orElseThrow( () -> new NullPointerException());
+            if (!code.getUserId().equals(userId)) {
+                throw new IllegalAccessException();
+            }
             PayPaymentRes payRes = payFeignClient.payPayment(payReq);
 
             paymentRes.updatePaymentDate(payRes.getPayedDate());
