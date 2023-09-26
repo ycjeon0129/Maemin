@@ -103,7 +103,7 @@ spring:
             - Path=/store-service/**
           uri: lb://STORE-SERVICE
           filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/store-service/(?<segment>.*), /$\{segment}
         #            - OwnerAuthorizationHeaderFilter
 
         - id: payment-service
@@ -111,14 +111,14 @@ spring:
             - Path=/payment-service/**
           uri: lb://PAYMENT-SERVICE
           filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/payment-service/(?<segment>.*), /$\{segment}
 
         - id: pay-service
           predicates:
             - Path=/pay-service/**
           uri: lb://PAY-SERVICE
           filters:
-            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - RewritePath=/pay-service/(?<segment>.*), /$\{segment}
 #            - AuthorizationHeaderFilter
 
 token:
