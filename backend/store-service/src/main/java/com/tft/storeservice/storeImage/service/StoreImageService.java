@@ -18,7 +18,7 @@ public class StoreImageService {
     private final StoreImageRepository storeImageRepository;
 
     public StoreImageRes register(StoreImageReq storeImageReq) {
-        return new StoreImageRes(storeImageRepository.save(storeImageReq.toStoreImage())
-                .addStore(storeRepository.findStoreByStoreId(storeImageReq.getStoreId())));
+        return new StoreImageRes(storeImageRepository.save(storeImageReq.toStoreImage()
+                .addStore(storeRepository.findStoreByStoreId(storeImageReq.getStoreId()))));
     }
 }

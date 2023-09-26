@@ -1,5 +1,6 @@
 package com.tft.storeservice.menu.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tft.storeservice.menuoption.db.entity.MenuOption;
 import com.tft.storeservice.store.db.entity.Store;
 import lombok.*;
@@ -25,6 +26,7 @@ public class Menu {
     private Store store;
 
     @OneToMany(mappedBy = "menu", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties({"menu"})
     private List<MenuOption> menuOptionList = new ArrayList<>();
 
 

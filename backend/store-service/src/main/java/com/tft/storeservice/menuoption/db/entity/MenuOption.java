@@ -35,4 +35,9 @@ public class MenuOption {
     private LocalDateTime createdDate;
 
     private String status;
+
+    public MenuOption addMenu(Menu menu){
+        this.menu = menu;
+        return this;
+    }
 }

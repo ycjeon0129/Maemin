@@ -29,9 +29,6 @@ public class StoreImage {
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdDate;
 
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
     public StoreImage addStore(Store store) {
         this.store = store;
         return this;

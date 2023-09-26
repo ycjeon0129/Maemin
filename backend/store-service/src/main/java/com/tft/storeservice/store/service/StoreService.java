@@ -1,10 +1,15 @@
 package com.tft.storeservice.store.service;
 
+import java.util.List;
+
 import com.tft.storeservice.area.db.entity.Area;
 import com.tft.storeservice.area.service.AreaService;
+import com.tft.storeservice.menu.db.entity.Menu;
+import com.tft.storeservice.menu.db.repository.MenuRepository;
 import com.tft.storeservice.store.db.entity.Store;
 import com.tft.storeservice.store.db.repository.StoreRepository;
 import com.tft.storeservice.store.dto.request.StoreReq;
+import com.tft.storeservice.store.dto.response.StoreAllRes;
 import com.tft.storeservice.store.dto.response.StoreRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +24,10 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final AreaService areaService;
+    private final MenuRepository menuRepository;
 
-    public StoreRes getStoreInfo(Long storeId) {
-        return new StoreRes(storeRepository.findById(storeId).orElseThrow());
+    public StoreAllRes getStoreInfo(Long storeId) {
+        return new StoreAllRes(storeRepository.findById(storeId).orElseThrow());
     }
 
     public StoreRes register(StoreReq storeReq) {

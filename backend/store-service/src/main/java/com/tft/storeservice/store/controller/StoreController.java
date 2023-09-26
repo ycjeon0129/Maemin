@@ -1,6 +1,10 @@
 package com.tft.storeservice.store.controller;
 
+import java.util.List;
+
+import com.tft.storeservice.menu.db.entity.Menu;
 import com.tft.storeservice.store.dto.request.StoreReq;
+import com.tft.storeservice.store.dto.response.StoreAllRes;
 import com.tft.storeservice.store.dto.response.StoreRes;
 import com.tft.storeservice.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +21,7 @@ public class StoreController {
     private final StoreService storeService;
 
     @GetMapping("/stores/{storeId}")
-    public ResponseEntity<StoreRes> getStoreInfo(@PathVariable Long storeId) {
+    public ResponseEntity<StoreAllRes> getStoreInfo(@PathVariable Long storeId) {
         return ResponseEntity.ok(storeService.getStoreInfo(storeId));
     }
 

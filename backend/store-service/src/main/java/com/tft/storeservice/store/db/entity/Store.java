@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tft.storeservice.area.db.entity.Area;
 import com.tft.storeservice.dibs.db.entity.Dibs;
 import com.tft.storeservice.menu.db.entity.Menu;
@@ -27,7 +28,7 @@ public class Store{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long storeId;
 
-	@OneToOne
+	@ManyToOne
 	private Area area;
 
 	@Getter
@@ -41,9 +42,11 @@ public class Store{
 	private String address;
 
 	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties({"store"})
 	private List<Menu> menuList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties({"store"})
 	private List<StoreImage> storeImageList = new ArrayList<>();
 
 	@NotNull
@@ -51,11 +54,11 @@ public class Store{
 
 	private String content;
 
-	@NotNull
-	private double rating;
+	// @NotNull
+	// private double rating;
 
-	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
-	private List<Dibs> dibsList = new ArrayList<>();
+	// @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+	// private List<Dibs> dibsList = new ArrayList<>();
 
 	// @NotNull
 	// private int reviewCount;

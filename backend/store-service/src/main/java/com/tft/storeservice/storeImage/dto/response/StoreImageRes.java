@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StoreImageRes {
     private Long storeImageId;
-    private Store store;
     private String storePicureUrl;
 
     public StoreImageRes(StoreImage storeImage) {
         this.storeImageId = storeImage.getStoreImageId();
-        this.store = storeImage.getStore();
         this.storePicureUrl = storeImage.getStorePicureUrl();
     }
 }

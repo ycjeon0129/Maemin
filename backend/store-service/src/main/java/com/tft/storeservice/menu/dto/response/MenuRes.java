@@ -18,7 +18,7 @@ public class MenuRes {
     private int price;
     private String menuPictureUrl;
     private int popularity;
-    private List<MenuOptionRes> menuOptionList;
+    // private List<MenuOptionRes> menuOptionList;
 
     // 고쳐야할것
     private int category;
@@ -31,9 +31,9 @@ public class MenuRes {
         this.menuPictureUrl = menu.getMenuPictureUrl();
         this.popularity = menu.getPopularity();
         this.category = menu.getCategory();
-        this.menuOptionList = menu.getMenuOptionList()
-                .stream()
-                .map(MenuOptionRes::new)
-                .collect(Collectors.toList());
+        // this.menuOptionList = menu.getMenuOptionList()
+        //         .stream()
+        //         .map(MenuOptionRes::new)
+        //         .collect(Collectors.toList());
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.tft.storeservice.menu.db.entity.Menu;
+import com.tft.storeservice.menu.dto.response.MenuAllRes;
 import com.tft.storeservice.store.db.entity.Store;
 import com.tft.storeservice.storeImage.db.entity.StoreImage;
 import com.tft.storeservice.menu.dto.response.MenuRes;
@@ -15,9 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class StoreAllRes {
-
+	private Long storeId;
 	private Long ownerId;
 	private String name;
 	private String address;
@@ -26,7 +26,7 @@ public class StoreAllRes {
 	private String operationHours;
 	private String closeDays;
 
-	private int dibsCount;
+	// private int dibsCount;
 	private List<StoreImageRes> pictureUrl;
 	private int area;
 	// 위도
@@ -38,18 +38,19 @@ public class StoreAllRes {
 	// 고쳐야할것
 	private int category;
 	private double rating;
-	private List<MenuRes> menuList;
+	private List<MenuAllRes> menuList;
 	// private int reviewCount;
 
 	public StoreAllRes(Store store) {
-		this.ownerId = store.getStoreId();
+		this.storeId = store.getStoreId();
+		this.ownerId = store.getOwnerId();
 		this.name = store.getName();
 		this.address = store.getAddress();
 		this.phone = store.getPhone();
 		this.content = store.getContent();
 		this.operationHours = store.getOperationHours();
 		this.closeDays = store.getClosedDays();
-		this.dibsCount = store.getDibsList().size();
+		// this.dibsCount = store.getDibsList().size();
 		this.pictureUrl = store.getStoreImageList()
 			.stream()
 			.map(StoreImageRes::new)
@@ -57,11 +58,11 @@ public class StoreAllRes {
 		this.area = store.getArea().getAreaCode();
 		this.latitude = store.getLatitude();
 		this.longitude = store.getLongitude();
-		this.rating = store.getRating();
+		// this.rating = store.getRating();
 		this.category = store.getCategory();
 		this.menuList = store.getMenuList()
 			.stream()
-			.map(MenuRes::new)
+			.map(MenuAllRes::new)
 			.collect(Collectors.toList());
 	}
 }

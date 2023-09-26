@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 public class StoreRes {
 
+	private Long storeId;
 	private Long ownerId;
 	private String name;
 	private String address;
@@ -39,7 +40,8 @@ public class StoreRes {
 	// private int reviewCount;
 
 	public StoreRes(Store store) {
-		this.ownerId = store.getStoreId();
+		this.storeId = store.getStoreId();
+		this.ownerId = store.getOwnerId();
 		this.name = store.getName();
 		this.address = store.getAddress();
 		this.phone = store.getPhone();
@@ -49,7 +51,8 @@ public class StoreRes {
 		this.area = store.getArea().getAreaCode();
 		this.latitude = store.getLatitude();
 		this.longitude = store.getLongitude();
-		this.rating = store.getRating();
+		// this.rating = store.getRating();
 		this.category = store.getCategory();
+
 	}
 }
