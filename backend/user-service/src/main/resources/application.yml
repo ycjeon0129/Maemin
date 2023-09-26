@@ -16,12 +16,11 @@ spring:
     name: user-service
 
   datasource:
-#    url: jdbc:mariadb://j9c208.p.ssafy.io:3306/user
+    url: jdbc:mariadb://j9c208.p.ssafy.io:3306/user
     driverClassName: org.mariadb.jdbc.Driver
     username: root
-#    password: bigbigred
-    url: jdbc:mariadb://localhost:3306/user
-    password: root
+    password: bigbigred
+
   jpa:
     hibernate:
       ddl-auto: create
