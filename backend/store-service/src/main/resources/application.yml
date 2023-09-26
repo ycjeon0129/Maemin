@@ -16,15 +16,17 @@ spring:
     name: store-service
 
   datasource:
-    url: jdbc:mariadb://j9c208.p.ssafy.io:3310/store
+    url: jdbc:mariadb://localhost:3305/store
+#    url: jdbc:mariadb://j9c208.p.ssafy.io:3310/store
     driverClassName: org.mariadb.jdbc.Driver
     username: root
-    password: bigbigred
-  #    url: jdbc:mariadb://localhost:3306/user
+    password: ssafy
+#    password: bigbigred
+
   #    password: root
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true #To beautify or pretty print the SQL

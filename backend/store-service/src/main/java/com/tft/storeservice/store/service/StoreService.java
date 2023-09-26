@@ -25,8 +25,8 @@ public class StoreService {
     }
 
     public StoreRes register(StoreReq storeReq) {
-        return new StoreRes(storeRepository.save(storeReq.toStore())
-                .addArea(getArea(storeReq)));
+        return new StoreRes(storeRepository.save(storeReq.toStore()
+                .addArea(getArea(storeReq))));
     }
 
     private Area getArea(StoreReq storeReq) {

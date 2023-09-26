@@ -1,8 +1,11 @@
 package com.tft.storeservice.store.dto.response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.tft.storeservice.menu.db.entity.Menu;
 import com.tft.storeservice.store.db.entity.Store;
+import com.tft.storeservice.storeImage.db.entity.StoreImage;
 import com.tft.storeservice.menu.dto.response.MenuRes;
 import com.tft.storeservice.storeImage.dto.response.StoreImageRes;
 
@@ -13,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class StoreRes {
+public class StoreAllRes {
 
 	private Long ownerId;
 	private String name;
@@ -38,7 +41,7 @@ public class StoreRes {
 	private List<MenuRes> menuList;
 	// private int reviewCount;
 
-	public StoreRes(Store store) {
+	public StoreAllRes(Store store) {
 		this.ownerId = store.getStoreId();
 		this.name = store.getName();
 		this.address = store.getAddress();
@@ -46,10 +49,19 @@ public class StoreRes {
 		this.content = store.getContent();
 		this.operationHours = store.getOperationHours();
 		this.closeDays = store.getClosedDays();
+		this.dibsCount = store.getDibsList().size();
+		this.pictureUrl = store.getStoreImageList()
+			.stream()
+			.map(StoreImageRes::new)
+			.collect(Collectors.toList());
 		this.area = store.getArea().getAreaCode();
 		this.latitude = store.getLatitude();
 		this.longitude = store.getLongitude();
 		this.rating = store.getRating();
 		this.category = store.getCategory();
+		this.menuList = store.getMenuList()
+			.stream()
+			.map(MenuRes::new)
+			.collect(Collectors.toList());
 	}
 }
