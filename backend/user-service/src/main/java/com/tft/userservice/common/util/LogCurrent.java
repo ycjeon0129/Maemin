@@ -1,4 +1,4 @@
-package com.tft.userservice.common.exception.util;
+package com.tft.userservice.common.util;
 
 public class LogCurrent {
 

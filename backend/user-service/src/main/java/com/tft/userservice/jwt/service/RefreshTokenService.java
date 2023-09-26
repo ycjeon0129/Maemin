@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.tft.userservice.common.exception.util.LogCurrent.*;
+import static com.tft.userservice.common.util.LogCurrent.*;
 
 @Slf4j
 @RequiredArgsConstructor
