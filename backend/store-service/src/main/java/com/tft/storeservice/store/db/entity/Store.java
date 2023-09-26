@@ -14,7 +14,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tft.storeservice.area.db.entity.Area;
-import com.tft.storeservice.dibs.db.entity.Dibs;
 import com.tft.storeservice.menu.db.entity.Menu;
 import com.tft.storeservice.storeImage.db.entity.StoreImage;
 

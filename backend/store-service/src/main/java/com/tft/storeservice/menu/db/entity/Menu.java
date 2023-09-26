@@ -29,7 +29,6 @@ public class Menu {
     @JsonIgnoreProperties({"menu"})
     private List<MenuOption> menuOptionList = new ArrayList<>();
 
-
     @NotNull
     private int category;
 

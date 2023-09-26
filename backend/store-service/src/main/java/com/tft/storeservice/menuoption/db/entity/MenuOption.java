@@ -1,6 +1,7 @@
 package com.tft.storeservice.menuoption.db.entity;
 
 import com.tft.storeservice.menu.db.entity.Menu;
+
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
