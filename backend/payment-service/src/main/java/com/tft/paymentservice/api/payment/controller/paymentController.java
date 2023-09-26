@@ -5,6 +5,7 @@ import com.tft.paymentservice.api.payment.dto.request.RefundReq;
 import com.tft.paymentservice.api.payment.dto.response.PaymentLogRes;
 import com.tft.paymentservice.api.payment.dto.response.PaymentRes;
 import com.tft.paymentservice.api.payment.service.PaymentService;
+import com.tft.paymentservice.common.uitl.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,11 @@ public class paymentController {
     private final PaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<List<PaymentRes>> createPayment(@RequestBody PaymentReq paymentReq) {
-        List<PaymentRes> list = paymentService.createPayment(paymentReq);
+    public ResponseEntity<PaymentRes> createPayment(@RequestBody PaymentReq paymentReq) throws IllegalAccessException {
+        PaymentRes payment = paymentService.createPayment(paymentReq);
 
 //        throw new PaymentNotExistException();
-        return ResponseEntity.status(200).body(list);
+        return ResponseEntity.status(200).body(payment);
     }
 
     @GetMapping
