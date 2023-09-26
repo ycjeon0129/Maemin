@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreImageController {
     private final StoreImageService storeImageService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<StoreImageRes> register(@RequestBody StoreImageReq storeImageReq) {
         return ResponseEntity.ok(storeImageService.register(storeImageReq));
     }
