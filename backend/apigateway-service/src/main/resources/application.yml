@@ -6,7 +6,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      #      defaultZone: http://localhost:8761/eureka
+#            defaultZone: http://localhost:8761/eureka
       defaultZone: http://j9c208.p.ssafy.io:8761/eureka
 
   instance:
@@ -88,7 +88,7 @@ spring:
 
         - id: user-service
           predicates:
-            - Path=/user-service/sms
+            - Path=/user-service/sms/**
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
