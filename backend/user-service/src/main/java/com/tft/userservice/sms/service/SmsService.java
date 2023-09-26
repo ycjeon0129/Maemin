@@ -2,12 +2,11 @@ package com.tft.userservice.sms.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tft.userservice.common.exception.custom.SmsNumNotValidException;
 import com.tft.userservice.jwt.redis.RefreshToken;
 import com.tft.userservice.sms.db.redis.SmsCheck;
 import com.tft.userservice.sms.db.repository.SmsCheckRedisRepository;
-import com.tft.userservice.sms.dto.MessageDto;
-import com.tft.userservice.sms.dto.SmsReq;
-import com.tft.userservice.sms.dto.SmsRes;
+import com.tft.userservice.sms.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -54,7 +53,7 @@ public class SmsService {
 
     //휴대폰 인증 번호
     private final String smsConfirmNum = createSmsKey();
-    private SmsCheckRedisRepository smsCheckRedisRepository;
+    private final SmsCheckRedisRepository smsCheckRedisRepository;
 
     public String makeSignature(String time) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
@@ -62,7 +61,7 @@ public class SmsService {
         String space = " ";
         String newLine = "\n";
         String method = "POST";
-        String url = "/sms/v2/services/"+ this.serviceId+"/messages";
+        String url = "/sms/v2/services/" + this.serviceId + "/messages";
         String accessKey = this.accessKey;
         String secretKey = this.secretKey;
 
@@ -121,20 +120,44 @@ public class SmsService {
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
         //restTemplate로 post 요청 보내고 오류가 없으면 202코드 반환
-        SmsRes smsResponseDto = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+ serviceId +"/messages"), httpBody, SmsRes.class);
-        smsResponseDto.setSmsConfirmNum(smsConfirmNum);
+        SmsRes smsResponseDto = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + serviceId + "/messages"), httpBody, SmsRes.class);
+//        smsResponseDto.setSmsConfirmNum(smsConfirmNum);
         SmsRes responseDto = new SmsRes(smsConfirmNum);
-        log.info("smsResponseDto : reauestid={}, requesttime={}, statuscode={}, statusname={}, smsconfirmnum={}" ,
+        log.info("smsResponseDto : reauestid={}, requesttime={}, statuscode={}, statusname={}, smsconfirmnum={}",
                 smsResponseDto.getRequestId(), smsResponseDto.getRequestTime(), smsResponseDto.getStatusCode(), smsResponseDto.getStatusName(), smsResponseDto.getSmsConfirmNum());
-        log.info("responseDto : {}",responseDto.getSmsConfirmNum());
+        log.info("responseDto : {}", responseDto.getSmsConfirmNum());
 
         log.info("messageTo : {}", messageDto.getTo());
 
-
+        // redis 에 저장
         smsCheckRedisRepository.save(SmsCheck.of(messageDto.getTo(), responseDto.getSmsConfirmNum()));
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return smsResponseDto;
     }
+
+    public String testSave() {
+        MessageDto messageDto = MessageDto.builder().to("01034547282").build();
+        String ranNum =createRanKey();
+        smsCheckRedisRepository.save(SmsCheck.of(messageDto.getTo(), ranNum));
+
+        return "저장 성공 : " + ranNum;
+    }
+
+    public SmsAuthRes checkNum(SmsAuthReq smsAuthReq) {
+        SmsCheck smsCheck = smsCheckRedisRepository.findById(smsAuthReq.getTo())
+                .orElseThrow(SmsNumNotValidException::new);
+
+        String findOrigNum = smsCheck.getSmsConfirmNum();
+
+        if (!findOrigNum.equals(smsAuthReq.getCheckNum())) {
+            return new SmsAuthRes("FAIL");
+
+        }
+
+
+        return new SmsAuthRes("SUCCESS");
+    }
+
 
     // 인증코드 만들기
     private static String createSmsKey() {
@@ -145,6 +168,14 @@ public class SmsService {
             key.append((rnd.nextInt(10)));
         }
         return key.toString();
+    }
+
+    private static String createRanKey() {
+        Random rnd = new Random();
+
+        String ranKey = String.valueOf(rnd.nextInt(88888) + 11111);
+
+        return ranKey;
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Slf4j
 @Getter
-@RedisHash(timeToLive = 180)
+@RedisHash(timeToLive = 190)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SmsCheck {
 
