@@ -1,10 +1,16 @@
 package com.tft.card.api.service;
 
 import com.tft.card.api.db.entity.Card;
+import com.tft.card.api.db.entity.CardPayLog;
+import com.tft.card.api.db.repository.CardPayLogRepository;
 import com.tft.card.api.db.repository.CardRepository;
-import com.tft.card.api.dto.request.CardPaymentReq;
+import com.tft.card.api.dto.request.CardApproveReq;
+import com.tft.card.api.dto.request.CardConfirmReq;
 import com.tft.card.api.dto.request.CardRegistReq;
+import com.tft.card.api.dto.response.CardApproveRes;
+import com.tft.card.api.dto.response.CardConfirmRes;
 import com.tft.card.api.dto.response.CardRegistRes;
+import com.tft.card.common.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +26,7 @@ import static com.tft.card.common.util.LogCurrent.*;
 public class CardService {
 
     private final CardRepository cardRepository;
+    private final CardPayLogRepository cardPayLogRepository;
 
     @Transactional
     public CardRegistRes createCard(CardRegistReq cardRegistReq) {
@@ -54,6 +61,49 @@ public class CardService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public void createPayment(CardPaymentReq cardPaymentReq) {
+    @Transactional
+    public CardConfirmRes confirmPayment(CardConfirmReq cardConfirmReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        Card card = cardRepository.findByBillingKey(cardConfirmReq.getBillingKey())
+                .orElseThrow( () -> new NullPointerException() );
+
+        String paymentKey = RandomUtil.excuteGenerate();
+
+        CardPayLog payLog = CardPayLog.builder()
+                .card(card)
+                .company(cardConfirmReq.getCompany())
+                .paymentKey(paymentKey)
+                .build();
+        cardPayLogRepository.save(payLog);
+
+        CardConfirmRes cardConfirmRes = CardConfirmRes.builder()
+                .code(200)
+                .paymentKey(paymentKey)
+                .requestId(cardConfirmReq.getRequestId())
+                .amount(cardConfirmReq.getAmount())
+                .build();
+        System.out.println(paymentKey);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return cardConfirmRes;
+    }
+
+    @Transactional
+    public CardApproveRes approvePayment(CardApproveReq cardApproveReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        System.out.println(cardApproveReq.getPaymentKey());
+        Card card = cardRepository.findByBillingKey(cardApproveReq.getBillingKey())
+                .orElseThrow( () -> new NullPointerException() );
+        CardPayLog payLog = cardPayLogRepository.findByPaymentKey(cardApproveReq.getPaymentKey())
+                .orElseThrow( () -> new NullPointerException() );
+        payLog.approvePayment();
+
+        CardApproveRes approveRes = CardApproveRes.builder()
+                .code(200)
+                .payedDate(payLog.getPayedDate().toString())
+                .build();
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return approveRes;
     }
 }

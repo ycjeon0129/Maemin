@@ -5,14 +5,13 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
-@ToString
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @Table(name = "card")
 @Entity
@@ -33,5 +32,8 @@ public class Card {
 
     @NotNull
     private String billingKey;  // 간편 결제를 위한 카드 고유 빌링키
+
+    @OneToMany(mappedBy = "card")
+    private List<CardPayLog> logs = new ArrayList<>();
 
 }

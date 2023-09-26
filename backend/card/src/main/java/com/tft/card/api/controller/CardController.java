@@ -1,15 +1,16 @@
 package com.tft.card.api.controller;
 
-import com.tft.card.api.dto.request.CardPaymentReq;
+import com.tft.card.api.dto.request.CardApproveReq;
+import com.tft.card.api.dto.request.CardConfirmReq;
 import com.tft.card.api.dto.request.CardRegistReq;
+import com.tft.card.api.dto.response.CardApproveRes;
+import com.tft.card.api.dto.response.CardConfirmRes;
 import com.tft.card.api.dto.response.CardRegistRes;
 import com.tft.card.api.service.CardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com.tft.card.common.util.LogCurrent.*;
 import static com.tft.card.common.util.LogCurrent.START;
@@ -41,13 +42,22 @@ public class CardController {
         return ResponseEntity.status(200).body(null);
     }
 
-    @PostMapping("/payment")
-    public ResponseEntity<?> createPayment(@RequestBody CardPaymentReq cardPaymentReq) {
+    @PostMapping("/confirm")
+    public ResponseEntity<CardConfirmRes> confirmPayment(@RequestBody CardConfirmReq cardConfirmReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-        cardService.createPayment(cardPaymentReq);
+        CardConfirmRes cardConfirm = cardService.confirmPayment(cardConfirmReq);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
-        return ResponseEntity.status(200).body(null);
+        return ResponseEntity.status(200).body(cardConfirm);
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity<CardApproveRes> approvePayment(@RequestBody CardApproveReq cardApproveReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        CardApproveRes cardApprove = cardService.approvePayment(cardApproveReq);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return ResponseEntity.status(200).body(cardApprove);
     }
 
 }
