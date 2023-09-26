@@ -1,85 +1,82 @@
 package com.tft.storeservice.store.db.entity;
 
 
-import lombok.*;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.data.annotation.CreatedDate;
-
 import com.tft.storeservice.area.db.entity.Area;
 import com.tft.storeservice.dibs.db.entity.Dibs;
 import com.tft.storeservice.menu.db.entity.Menu;
 import com.tft.storeservice.storeImage.db.entity.StoreImage;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class Store{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long storeId;
+public class Store {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long storeId;
 
-	@NotNull
-	@OneToOne
-	private Area area;
+    @NotNull
+    @OneToOne
+    private Area area;
 
-	@Getter
-	@NotNull
-	private String name;
+    @Getter
+    @NotNull
+    private String name;
 
-	@NotNull
-	private int category;
+    @NotNull
+    private int category;
 
-	@NotNull
-	private String address;
+    @NotNull
+    private String address;
 
-	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
-	private List<Menu> menuList = new ArrayList<>();
+    @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<Menu> menuList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
-	private List<StoreImage> storeImageList = new ArrayList<>();
+    @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<StoreImage> storeImageList = new ArrayList<>();
 
-	@NotNull
-	private String phone;
+    @NotNull
+    private String phone;
 
-	private String content;
+    private String content;
 
-	@NotNull
-	private double rating;
+    @NotNull
+    private double rating;
 
-	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
-	private List<Dibs> dibsList = new ArrayList<>();
+    @OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<Dibs> dibsList = new ArrayList<>();
 
-	// @NotNull
-	// private int reviewCount;
+    // @NotNull
+    // private int reviewCount;
 
-	private String operationHours;
-	private String closedDays;
+    private String operationHours;
+    private String closedDays;
 
-	@CreatedDate
-	@Column(updatable = false, nullable = false)
-	private LocalDateTime createdDate;
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdDate;
 
-	private String status;
+    private String status;
 
-	@NotNull
-	private Long ownerId;
-	
-	// 위도
-	private Long latitude;
-	// 경도
-	private Long longitude;
+    @NotNull
+    private Long ownerId;
 
-	public Store addArea(Area area) {
-		this.area = area;
-		return this;
-	}
+    // 위도
+    private Long latitude;
+    // 경도
+    private Long longitude;
+
+    public Store addArea(Area area) {
+        this.area = area;
+        return this;
+    }
 }

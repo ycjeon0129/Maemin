@@ -1,46 +1,39 @@
 package com.tft.storeservice.storeImage.db.entity;
 
+import com.tft.storeservice.store.db.entity.Store;
 import lombok.*;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.tft.storeservice.dibs.db.entity.Dibs;
-import com.tft.storeservice.store.db.entity.Store;
-import com.tft.storeservice.storeImage.db.repository.StoreImageRepository;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class StoreImage{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long storeImageId;
+public class StoreImage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long storeImageId;
 
-	@ManyToOne
-	private Store store;
+    @ManyToOne
+    private Store store;
 
-	@NotNull
-	private String storePicureUrl;
+    @NotNull
+    private String storePicureUrl;
 
-	@CreatedDate
-	@Column(updatable = false, nullable = false)
-	private LocalDateTime createdDate;
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdDate;
 
-	@LastModifiedDate
-	private LocalDateTime updatedAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
-	public StoreImage addStore(Store store){
-		this.store = store;
-		return this;
-	}
+    public StoreImage addStore(Store store) {
+        this.store = store;
+        return this;
+    }
 }
