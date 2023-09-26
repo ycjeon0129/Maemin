@@ -11,6 +11,7 @@ import com.tft.card.api.dto.response.CardApproveRes;
 import com.tft.card.api.dto.response.CardConfirmRes;
 import com.tft.card.api.dto.response.CardRegistRes;
 import com.tft.card.common.util.RandomUtil;
+import com.tft.card.common.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -100,7 +101,7 @@ public class CardService {
 
         CardApproveRes approveRes = CardApproveRes.builder()
                 .code(200)
-                .payedDate(payLog.getPayedDate().toString())
+                .payedDate(TimeUtil.parseTimestamp(payLog.getPayedDate()))
                 .build();
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
