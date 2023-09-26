@@ -5,13 +5,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class User {
@@ -46,12 +49,16 @@ public class User {
 
     private String role;
 
+    @Column(columnDefinition = "TINYINT(1)")
+    @ColumnDefault("False")
+    private boolean pay;
+
     @OneToMany
     private List<Bill> bills;
 
     @Builder
     public User(Long userId, String loginId, String loginPw, String userName, String nickName, String phone,
-                String address, LocalDateTime createdDate, boolean sex, int age, String role) {
+                String address, LocalDateTime createdDate, boolean sex, int age, String role, boolean pay) {
         this.userId = userId;
         this.loginId = loginId;
         this.loginPw = loginPw;
@@ -62,5 +69,6 @@ public class User {
         this.sex = sex;
         this.age = age;
         this.role = role;
+        this.pay = pay;
     }
 }
