@@ -9,10 +9,12 @@ import com.tft.payservice.api.pay.db.repository.PayRepository;
 import com.tft.payservice.api.pay.db.repository.PayUserRepository;
 import com.tft.payservice.api.pay.dto.PayDto;
 import com.tft.payservice.api.pay.dto.request.*;
-import com.tft.payservice.api.pay.dto.response.CardRegistRes;
-import com.tft.payservice.api.pay.dto.response.PayConfirmRes;
-import com.tft.payservice.api.pay.dto.response.PayListRes;
+import com.tft.payservice.api.pay.dto.response.*;
+import com.tft.payservice.common.dto.AuthenticationCode;
+import com.tft.payservice.common.dto.AuthenticationCodeRepository;
 import com.tft.payservice.common.util.HashUtil;
+import com.tft.payservice.common.util.RandomUtil;
+import com.tft.payservice.common.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.naming.NoPermissionException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,6 +40,7 @@ public class PayService {
 
     private final PayRepository payRepository;
     private final PayUserRepository payUserRepository;
+    private final AuthenticationCodeRepository authenticationCodeRepository;
     private final String COMPANY = "SF카드";
     @Value("${custom.hash.pepper}")
     private static String PEPPER;
@@ -48,8 +52,9 @@ public class PayService {
     @Value("${custom.card.CARD_URL}")
     private String CARD_URL;
 
-    public void createPayUser(Long userId, PayJoinReq payJoinReq) throws Exception {
+    public void createPayUser(PayJoinReq payJoinReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        Long userId = RequestUtil.getUserId();
 
         int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
         String salt = HashUtil.getSalt();
@@ -66,8 +71,9 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public PayListRes getPayList(Long userId) {
+    public PayListRes getPayList() {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        Long userId = RequestUtil.getUserId();
 
         List<PayDto> payList = new ArrayList<>();
         Optional<PayUser> payUser = payUserRepository.findByUserId(userId);
@@ -94,8 +100,9 @@ public class PayService {
     }
 
     @Transactional
-    public void createPay(Long userId, PayRegistReq payRegistReq) throws IOException {
+    public void createPay(PayRegistReq payRegistReq) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        Long userId = RequestUtil.getUserId();
 
         PayUser user = payUserRepository.findByUserId(userId)
                 .orElseThrow( () -> new NullPointerException());
@@ -164,8 +171,9 @@ public class PayService {
     }
 
     @Transactional
-    public void deletePay(Long userId, Long payId) throws IOException {
+    public void deletePay(Long payId) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        Long userId = RequestUtil.getUserId();
 
         Pay pay = payRepository.findByPayId(payId)
                 .orElseThrow(); // 없는 payId인 경우 예외 처리
@@ -202,8 +210,10 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
-    public void authenticationPayment(Long userId, PayAuthenticationReq payAuthenticationReq) throws Exception {
+    @Transactional
+    public PayAuthenticationRes authenticationPayment(PayAuthenticationReq payAuthenticationReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        Long userId = RequestUtil.getUserId();
 
         PayUser user = payUserRepository.findByUserId(userId)
                 .orElseThrow(() -> new NullPointerException());
@@ -215,20 +225,177 @@ public class PayService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid payPw");
         }
 
+        String code = RandomUtil.excuteGenerate();
+
+        // Redis에 저장
+        AuthenticationCode authenticationCode = AuthenticationCode.builder()
+                .code(code)
+                .userId(userId)
+                .ttl(300)
+                .build();
+        authenticationCodeRepository.save(authenticationCode);
+
+        PayAuthenticationRes payAuthenticationRes = PayAuthenticationRes.builder()
+                .code(code)
+                .build();
+
         log.info(logCurrent(getClassName(), getMethodName(), END));
+        return payAuthenticationRes;
     }
 
-    public PayConfirmRes confirmPayment(Long userId, PayConfirmReq payConfirmReq) {
+//    public PayConfirmRes confirmPayment(Long userId, PayConfirmReq payConfirmReq) {
+//        log.info(logCurrent(getClassName(), getMethodName(), START));
+//
+//        System.out.println(payConfirmReq.getRequestId());
+//        System.out.println(payConfirmReq.getAmount());
+//
+//        PayConfirmRes confirm = PayConfirmRes.builder()
+//                .code(200)
+//                .msg("Success!~!~")
+//                .paymentKey("asfnkajbnfab")
+//                .requestId(payConfirmReq.getRequestId())
+//                .amount(payConfirmReq.getAmount())
+//                .build();
+//
+//        log.info(logCurrent(getClassName(), getMethodName(), END));
+//        return confirm;
+//    }
+//
+//    public PayApproveRes approvePayment(Long userId, PayApproveReq payApproveReq) {
+//        log.info(logCurrent(getClassName(), getMethodName(), START));
+//
+//        log.info(logCurrent(getClassName(), getMethodName(), END));
+//        return null;
+//    }
+
+    public PayPaymentRes payPayment(PayPaymentReq payPaymentReq) throws IOException, NoPermissionException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        Long userId = RequestUtil.getUserId();
 
-        log.info(logCurrent(getClassName(), getMethodName(), END));
-        return null;
+        Pay pay = payRepository.findByPayId(payPaymentReq.getPayId())
+                .orElseThrow( () -> new NullPointerException());
+        if (!pay.getPayUser().getUserId().equals(userId)) {
+            throw new NoPermissionException();
+        }
+
+        // Request Body 생성
+        JsonObject ConfirmJsonObject = new JsonObject();
+        ConfirmJsonObject.addProperty("requestId", payPaymentReq.getRequestId());
+        ConfirmJsonObject.addProperty("company", "TFT페이");
+        ConfirmJsonObject.addProperty("billingKey", pay.getBillingKey());
+        ConfirmJsonObject.addProperty("amount", payPaymentReq.getAmount());
+
+        String confirmReq = gson.toJson(ConfirmJsonObject);
+
+        // Connection Set
+        URL confirmUrl = new URL(CARD_URL+"/card/confirm");
+        HttpURLConnection confirmCon = (HttpURLConnection) confirmUrl.openConnection();
+        confirmCon.setRequestMethod("POST");
+        confirmCon.setRequestProperty("Content-Type", "application/json; utf-8");
+        confirmCon.setRequestProperty("Accept", "application/json");
+        confirmCon.setRequestProperty("Content-Length", Integer.toString(confirmReq.getBytes().length));
+        confirmCon.setRequestProperty("Content-Language", "ko-KR");
+
+        confirmCon.setUseCaches(false);    // 캐싱 데이터를 받을지 설정
+        confirmCon.setDoOutput(true);  // 쓰기 모드 설정
+
+        // Send Request
+        try(OutputStream os = confirmCon.getOutputStream()) {
+            byte[] input = confirmReq.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        // Receive Response
+        int confirmStatus = confirmCon.getResponseCode();
+        PayConfirmRes confirmRes = new PayConfirmRes();
+
+        if (200 <= confirmStatus && confirmStatus < 300) {
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(confirmCon.getInputStream(), "utf-8"))) {
+                StringBuilder res = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    res.append(responseLine.trim());
+                }
+                confirmRes = gson.fromJson(res.toString(), PayConfirmRes.class);
+            }
+
+            confirmCon.disconnect();
+
+            if (payPaymentReq.getRequestId().equals(confirmRes.getRequestId()) && payPaymentReq.getAmount() == confirmRes.getAmount()) {
+                // Request Body 생성
+                JsonObject ApproveJsonObject = new JsonObject();
+                System.out.println(confirmRes.getRequestId());
+                ApproveJsonObject.addProperty("requestId", confirmRes.getRequestId());
+                ApproveJsonObject.addProperty("company", "TFT페이");
+                System.out.println(pay.getBillingKey());
+                ApproveJsonObject.addProperty("billingKey", pay.getBillingKey());
+                System.out.println(confirmRes.getPaymentKey());
+                ApproveJsonObject.addProperty("paymentKey", confirmRes.getPaymentKey());
+                System.out.println(confirmRes.getAmount());
+                ApproveJsonObject.addProperty("amount", confirmRes.getAmount());
+
+                String approveReq = gson.toJson(ApproveJsonObject);
+
+                // Connection Set
+                URL approveUrl = new URL(CARD_URL+"/card/approve");
+                HttpURLConnection approveCon = (HttpURLConnection) approveUrl.openConnection();
+                approveCon.setRequestMethod("POST");
+                approveCon.setRequestProperty("Content-Type", "application/json; utf-8");
+                approveCon.setRequestProperty("Accept", "application/json");
+                approveCon.setRequestProperty("Content-Length", Integer.toString(approveReq.getBytes().length));
+                approveCon.setRequestProperty("Content-Language", "ko-KR");
+
+                approveCon.setUseCaches(false);    // 캐싱 데이터를 받을지 설정
+                approveCon.setDoOutput(true);  // 쓰기 모드 설정
+
+                // Send Request
+                try(OutputStream os = approveCon.getOutputStream()) {
+                    byte[] input = approveReq.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+
+                // Receive Response
+                int approveStatus = approveCon.getResponseCode();
+                PayApproveRes approveRes = new PayApproveRes();
+
+                if (200 <= approveStatus && approveStatus < 300) {
+
+                    try (BufferedReader br = new BufferedReader(
+                            new InputStreamReader(approveCon.getInputStream(), "utf-8"))) {
+                        StringBuilder res = new StringBuilder();
+                        String responseLine = null;
+                        while ((responseLine = br.readLine()) != null) {
+                            res.append(responseLine.trim());
+                        }
+                        approveRes = gson.fromJson(res.toString(), PayApproveRes.class);
+                    }
+
+                    approveCon.disconnect();
+
+                    PayPaymentRes payPaymentRes = PayPaymentRes.builder()
+                            .code(200)
+                            .msg("결제 성공")
+                            .payedDate(approveRes.getPayedDate())
+                            .build();
+
+                    log.info(logCurrent(getClassName(), getMethodName(), END));
+                    return payPaymentRes;
+                } else {    // 결제 승인 요청 실패
+                    approveCon.disconnect();
+                    System.out.println(approveStatus);
+                    log.info(logCurrent(getClassName(), getMethodName(), END));
+                    throw new RuntimeException();
+                }
+            } else {    // 결제 인증 요청 중 데이터 위변조
+                log.info(logCurrent(getClassName(), getMethodName(), END));
+                throw new RuntimeException();
+            }
+        } else { // 결제 인증 요청 실패
+            confirmCon.disconnect();
+            log.info(logCurrent(getClassName(), getMethodName(), END));
+            throw new RuntimeException();
+        }
     }
-
-    public void approvePayment(Long userId, PayApproveReq payApproveReq) {
-        log.info(logCurrent(getClassName(), getMethodName(), START));
-
-        log.info(logCurrent(getClassName(), getMethodName(), END));
-    }
-
 }

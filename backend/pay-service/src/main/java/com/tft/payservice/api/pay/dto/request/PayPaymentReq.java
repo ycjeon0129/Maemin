@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class PayConfirmReq {
+public class PayPaymentReq {
 
-    private Long requestId;     // 결제요청ID
-    private String billingKey;  // 빌링키
-    private int amount;         // 결제 가격
+    private Long payId;     // 페이ID
+    private Long requestId; // 결제요청ID
+    private int amount;     // 결제금액
+    private String code;    // 자체 페이 인증 코드
 
 }
