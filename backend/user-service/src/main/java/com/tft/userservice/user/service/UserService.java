@@ -34,12 +34,6 @@ public class UserService {
                     throw new LoginIdExistException();
                 });
 
-
-        // 비밀번호 암호화 하는방식 2가지
-        //  1. 내가 설정한 Config파일인 EncrypterConfig를 DI를받아 사용하는 법
-        //     EncrypterConfig의 메서드인 encodePwd()를 호출하고 BCryptPasswordEncoder안에 있는 encode() 기능 사용
-//        User saveUser = userRepository.save(request.toEntity(encrypterConfig.encodePwd().encode(request.getPassword())));
-
         // 2. 기존 클래스인 BCryptPasswordEncoder를 DI를 받아 사용하는 법
         //     BCryptPasswordEncoder클래스안에 있는 메서드 encode() 기능 사용 => 자동으로 EncrypterConfig Bean과 연결됨
         User saveUser2 = userRepository.save(request.toEntity(encoder.encode(request.getLoginPw())));    // UserJoinRequest -> User Entity변환후 데이터 DB 저장 , password는 암호화 하여 저장

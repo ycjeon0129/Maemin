@@ -35,9 +35,10 @@ public class UserController {
         return testService.getServices();
     }
 
-    @GetMapping("/test")
-    public String getFood() {
-        return "테스트 성공";
+    @GetMapping("/testheader")
+        public String getFood(@RequestHeader("user-id") String userId) {
+        return userId;
     }
+
 
 }
