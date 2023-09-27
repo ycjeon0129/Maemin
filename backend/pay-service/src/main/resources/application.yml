@@ -20,6 +20,9 @@ spring:
         defalutZone: http://j9c208.p.ssafy.io:8761/eureka
       fetch-registry: true
       register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
   datasource:
     url: jdbc:mariadb://j9c208.p.ssafy.io:3307/pay
     driverClassName: org.mariadb.jdbc.Driver
