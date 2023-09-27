@@ -25,7 +25,7 @@ public class OrderReq {
 	private int paymentMethod;
 	private String requests;
 	private List<Long> menuId = new ArrayList<>();
-	private List<OrderMenuOption> menuOptionId = new ArrayList<>();
+	private List<OrderMenuOption> menuOptionIds = new ArrayList<>();
 	private List<Integer> quantity = new ArrayList<>();
 
 	public Orders toOrder(OrderReq orderReq){
@@ -35,7 +35,7 @@ public class OrderReq {
 			.paymentMethod(orderReq.paymentMethod)
 			.requests(orderReq.requests)
 			.menuId(orderReq.menuId)
-			.menuOptionId(orderReq.menuOptionId)
+			.menuOptionId(orderReq.menuOptionIds)
 			.quantity(orderReq.quantity)
 			.createdTime(LocalDateTime.now())
 			.build();

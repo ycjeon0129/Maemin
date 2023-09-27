@@ -28,6 +28,11 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.register(orderReq));
 	}
 
+	@GetMapping("/info/{orderId}")
+	public ResponseEntity<OrderRes> getInfo(@PathVariable Long orderId){
+		return ResponseEntity.ok(orderService.getInfo(orderId));
+	}
+
 	// @GetMapping("/info/{orderId}")
 	// public ResponseEntity<OrderRes> getInfo(@PathVariable Long orderId){
 	// 	return ResponseEntity.ok(orderService.getInfo(orderId));

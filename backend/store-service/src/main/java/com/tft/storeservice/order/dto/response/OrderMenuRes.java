@@ -1,5 +1,6 @@
 package com.tft.storeservice.order.dto.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tft.storeservice.menu.db.entity.Menu;
@@ -7,14 +8,16 @@ import com.tft.storeservice.order.dto.request.OrderReq;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
+@ToString
 public class OrderMenuRes {
 	private Long menuId;
 	private String name;
 	private int price;
-	private List<OrderOptionRes> menuOptions;
+	private List<OrderOptionRes> menuOptions = new ArrayList<>();
 	private int quantity;
 
 	public OrderMenuRes toOrderMenu(OrderReq orderReq, int index){

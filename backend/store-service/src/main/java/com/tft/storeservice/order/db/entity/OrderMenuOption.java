@@ -29,6 +29,14 @@ public class OrderMenuOption {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long orderMenuId;
 
+	@ManyToOne
+	Orders orders;
+
 	@ElementCollection
 	private List<Long> menuOptionId;
+
+	public OrderMenuOption addOrders(Orders orders){
+		this.orders = orders;
+		return this;
+	}
 }
