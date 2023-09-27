@@ -15,8 +15,8 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defalutZone: http://j9c208.p.ssafy.io:8761/eureka
-#      defalutZone: http://localhost:8761/eureka
+#      defalutZone: http://j9c208.p.ssafy.io:8761/eureka
+      defalutZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
 
@@ -73,8 +73,8 @@ springfox:
     swagger:
       use-model-v3: 'false'
 custom:
-#  url: "http://localhost:8000"
-  url: "https://j9c208.p.ssafy.io:8000"
+  url: "http://localhost:8000"
+#  url: "https://j9c208.p.ssafy.io:8000"
 ---
 
 
