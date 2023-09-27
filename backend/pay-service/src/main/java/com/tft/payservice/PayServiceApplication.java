@@ -2,6 +2,7 @@ package com.tft.payservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -11,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 //@EnableFeignClients
+@EnableEurekaClient
 @SpringBootApplication
 public class PayServiceApplication implements WebApplicationInitializer {
 
