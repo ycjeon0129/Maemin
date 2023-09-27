@@ -1,5 +1,6 @@
 package com.tft.storeservice.store.dto.response;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public class StoreAllRes {
 	private String closeDays;
 
 	// private int dibsCount;
-	private List<StoreImageRes> pictureUrl;
+	private List<StoreImageRes> pictureUrl = new ArrayList<>();
 	private int area;
 	// 위도
 	private String latitude;
@@ -38,7 +39,7 @@ public class StoreAllRes {
 	// 고쳐야할것
 	private int category;
 	private double rating;
-	private List<MenuAllRes> menuList;
+	private List<MenuAllRes> menuList = new ArrayList<>();
 	// private int reviewCount;
 
 	public StoreAllRes(Store store) {

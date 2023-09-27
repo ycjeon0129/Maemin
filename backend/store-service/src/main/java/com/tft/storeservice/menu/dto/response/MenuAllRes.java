@@ -5,6 +5,7 @@ import com.tft.storeservice.menuoption.dto.response.MenuOptionRes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class MenuAllRes {
 	private int price;
 	private String menuPictureUrl;
 	private int popularity;
-	private List<MenuOptionRes> menuOptionList;
+	private List<MenuOptionRes> menuOptionList = new ArrayList<>();
 
 	// 고쳐야할것
 	private int category;
