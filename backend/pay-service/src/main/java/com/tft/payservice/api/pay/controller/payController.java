@@ -25,10 +25,8 @@ public class payController {
     private final PayService payService;
 
     @PostMapping("/user")
-    public ResponseEntity<?> createPayUser(@RequestHeader("user-id") Long userid, @RequestHeader("Authorization") String jwt, @RequestBody PayJoinReq payJoinReq) throws Exception {
+    public ResponseEntity<?> createPayUser(@RequestHeader("Authorization") String jwt, @RequestBody PayJoinReq payJoinReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-        System.out.println("user-id:: " + userid);
-        log.info("user-id:: " + userid);
         System.out.println("JWT:: " + jwt);
         log.info("JWT:: " + jwt);
         payService.createPayUser(payJoinReq);
