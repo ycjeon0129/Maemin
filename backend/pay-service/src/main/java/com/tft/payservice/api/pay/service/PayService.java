@@ -60,6 +60,10 @@ public class PayService {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Long userId = RequestUtil.getUserId();
 
+        System.out.println("userId::RequestUtil:: " + userId);
+        log.info("userId::RequestUtil:: " + userId);
+
+
         int keyStreching = (int) ((Math.random() * 10000) % 5) + 1;
         String salt = HashUtil.getSalt();
         String hashingPassword = HashUtil.hashing(payJoinReq.getPayPw().getBytes(), PEPPER, salt, keyStreching);
