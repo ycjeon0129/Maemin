@@ -126,7 +126,7 @@ spring:
           uri: lb://PAY-SERVICE
           filters:
             - RewritePath=/pay-service/(?<segment>.*), /$\{segment}
-#            - AuthorizationHeaderFilter
+            - AuthorizationHeaderFilter
 
 token:
   access-expired-time: 3600000

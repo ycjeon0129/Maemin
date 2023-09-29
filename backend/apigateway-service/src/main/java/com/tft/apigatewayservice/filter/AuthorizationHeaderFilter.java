@@ -58,7 +58,14 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
                 return onError(exchange, "CUSTOMER 권한 없음", HttpStatus.UNAUTHORIZED);
             }
 
-            return chain.filter(exchange); // 토큰이 일치할때
+            ServerHttpRequest newRequest = request.mutate()
+                    .header("user-id", subject)
+                    .build();
+
+//            return chain.filter(exchange); // 토큰이 일치할때
+
+            return chain.filter(exchange.mutate().request(newRequest).build());
+
         };
     }
 
