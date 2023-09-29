@@ -53,7 +53,7 @@ public class PaymentService {
             // Redis에서 authentication code 확인
             AuthenticationCode code = authenticationCodeRepository.findById(paymentReq.getCode())
                     .orElseThrow( () -> new NullPointerException());
-            if (!code.getUserId().equals(userId)) {
+            if (!code.getUserId().equals(userId.toString())) {
                 throw new IllegalAccessException();
             }
             PayPaymentRes payRes = payFeignClient.payPayment(payReq);
