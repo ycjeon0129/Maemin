@@ -50,6 +50,12 @@ public class PaymentService {
                     .amount(paymentReq.getAmount())
                     .code(paymentReq.getCode())
                     .build();
+            System.out.println();
+            System.out.println();
+            System.out.println(paymentReq.getCode());
+            System.out.println(paymentReq.getCode().getClass());
+            System.out.println();
+            System.out.println();
             // Redis에서 authentication code 확인
             AuthenticationCode code = authenticationCodeRepository.findById(paymentReq.getCode())
                     .orElseThrow( () -> new NullPointerException());
