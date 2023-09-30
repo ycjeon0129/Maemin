@@ -10,14 +10,15 @@ import com.tft.payservice.api.pay.db.repository.PayUserRepository;
 import com.tft.payservice.api.pay.dto.PayDto;
 import com.tft.payservice.api.pay.dto.request.*;
 import com.tft.payservice.api.pay.dto.response.*;
-import com.tft.payservice.common.dto.AuthenticationCode;
+//import com.tft.payservice.common.dto.AuthenticationCode;
 //import com.tft.payservice.common.dto.AuthenticationCodeRedisRepository;
-import com.tft.payservice.common.dto.AuthenticationCodeRepository;
+//import com.tft.payservice.common.dto.AuthenticationCodeRepository;
 import com.tft.payservice.common.util.HashUtil;
 import com.tft.payservice.common.util.RandomUtil;
 import com.tft.payservice.common.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,9 +43,10 @@ public class PayService {
 
     private final PayRepository payRepository;
     private final PayUserRepository payUserRepository;
-    private final AuthenticationCodeRepository authenticationCodeRepository;
-    private RedisTemplate redisTemplate;
-    private StringRedisTemplate StringRedisTemplate;
+//    private final AuthenticationCodeRepository authenticationCodeRepository;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    private final String AUTHENTICATION_CODE = "authentication_code::";
     private final String COMPANY = "SF카드";
     @Value("${custom.hash.pepper}")
     private static String PEPPER;
@@ -217,6 +219,7 @@ public class PayService {
     @Transactional
     public PayAuthenticationRes authenticationPayment(PayAuthenticationReq payAuthenticationReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+
         Long userId = RequestUtil.getUserId();
 
         PayUser user = payUserRepository.findByUserId(userId)
@@ -232,12 +235,13 @@ public class PayService {
         String code = RandomUtil.excuteGenerate();
 
         // Redis에 저장
-        AuthenticationCode authenticationCode = AuthenticationCode.builder()
-                .code(code)
-                .userId(userId)
-                .ttl(300)
-                .build();
-        authenticationCodeRepository.save(authenticationCode);
+        redisTemplate.opsForValue().set(AUTHENTICATION_CODE+code, userId.toString());
+//        AuthenticationCode authenticationCode = AuthenticationCode.builder()
+//                .id(code)
+//                .userId(userId)
+//                .ttl(300)
+//                .build();
+//        authenticationCodeRepository.save(authenticationCode);
 
         PayAuthenticationRes payAuthenticationRes = PayAuthenticationRes.builder()
                 .code(code)
