@@ -36,9 +36,12 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private Status status;  //
 
-
     public void updatePaymentDate(String paymentDate) {
         this.paymentDate = paymentDate;
+    }
+
+    public void updateStatus(Status status) {
+        this.status = status;
     }
 
 }

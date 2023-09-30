@@ -82,6 +82,7 @@ public class PaymentService {
             PayPaymentRes payRes = payFeignClient.payPayment(payReq);
 
             payment.updatePaymentDate(payRes.getPayedDate());
+            payment.updateStatus(Status.PAYMENT_COMPLETE);
             paymentRepository.save(payment);
 
             paymentRes.updatePaymentDate(payRes.getPayedDate());
