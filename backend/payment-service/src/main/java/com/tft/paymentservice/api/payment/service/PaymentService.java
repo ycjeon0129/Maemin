@@ -12,9 +12,12 @@ import com.tft.paymentservice.common.feign.PayFeignClient;
 import com.tft.paymentservice.common.uitl.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
@@ -30,12 +33,17 @@ public class PaymentService {
 
     private final PayFeignClient payFeignClient;
     private final PaymentRepository paymentRepository;
-    private final AuthenticationCodeRepository authenticationCodeRepository;
+    //    private final AuthenticationCodeRepository authenticationCodeRepository;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    private final String AUTHENTICATION_CODE = "authentication_code::";
 
+    @Transactional
     public PaymentRes createPayment(PaymentReq paymentReq) throws IllegalAccessException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         Long userId = RequestUtil.getUserId();
+        System.out.println("userId::"+userId);
         PaymentRes paymentRes = PaymentRes.builder()    // 디폴트 값: 유효하지 않은 결제 수단인 경우
                 .method(Method.getMethod(paymentReq.getMethod()))
                 .requestId(paymentReq.getRequestId())
@@ -50,18 +58,20 @@ public class PaymentService {
                     .amount(paymentReq.getAmount())
                     .code(paymentReq.getCode())
                     .build();
-            System.out.println();
-            System.out.println();
-            System.out.println(paymentReq.getCode());
-            System.out.println(paymentReq.getCode().getClass());
-            System.out.println();
-            System.out.println();
             // Redis에서 authentication code 확인
-            AuthenticationCode code = authenticationCodeRepository.findById(paymentReq.getCode())
-                    .orElseThrow( () -> new NullPointerException());
-            if (!code.getUserId().equals(userId.toString())) {
+            String savedUserId = (String) redisTemplate.opsForValue().get(AUTHENTICATION_CODE+paymentReq.getCode());
+            if (savedUserId.isEmpty()) {  // code 없음
+                throw new NullPointerException();
+            }
+            System.out.println("savedUserId vs userId :: "+savedUserId.compareTo(userId.toString()));
+            if (!savedUserId.equals(userId.toString())) {
                 throw new IllegalAccessException();
             }
+//            AuthenticationCode code = authenticationCodeRepository.findById(paymentReq.getCode())
+//                    .orElseThrow(NullPointerException::new);
+//            if (!code.getUserId().equals(userId)) {
+//                throw new IllegalAccessException();
+//            }
             PayPaymentRes payRes = payFeignClient.payPayment(payReq);
 
             paymentRes.updatePaymentDate(payRes.getPayedDate());
