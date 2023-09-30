@@ -1,5 +1,6 @@
 package com.tft.paymentservice.api.payment.service;
 
+import com.tft.paymentservice.api.payment.db.entity.Payment;
 import com.tft.paymentservice.api.payment.db.repository.PaymentRepository;
 import com.tft.paymentservice.api.payment.dto.Method;
 import com.tft.paymentservice.api.payment.dto.Status;
@@ -43,7 +44,13 @@ public class PaymentService {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         Long userId = RequestUtil.getUserId();
-        System.out.println("userId::"+userId);
+
+        Payment payment = Payment.builder()
+                .payMethod(Method.values()[paymentReq.getMethod()])
+                .paymentRequestId(paymentReq.getRequestId())
+                .amount(paymentReq.getAmount())
+                .build();
+
         PaymentRes paymentRes = PaymentRes.builder()    // 디폴트 값: 유효하지 않은 결제 수단인 경우
                 .method(Method.getMethod(paymentReq.getMethod()))
                 .requestId(paymentReq.getRequestId())
@@ -73,6 +80,9 @@ public class PaymentService {
 //                throw new IllegalAccessException();
 //            }
             PayPaymentRes payRes = payFeignClient.payPayment(payReq);
+
+            payment.updatePaymentDate(payRes.getPayedDate());
+            paymentRepository.save(payment);
 
             paymentRes.updatePaymentDate(payRes.getPayedDate());
             paymentRes.updateStatus(Status.PAYMENT_COMPLETE.getKrName());

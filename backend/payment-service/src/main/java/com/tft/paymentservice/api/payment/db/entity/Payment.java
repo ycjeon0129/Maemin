@@ -26,17 +26,19 @@ public class Payment {
     private Method payMethod; // 결제수단
 
     @NotNull
-    private Long payment_request_id;    //
+    private Long paymentRequestId;    //
 
     @NotNull
     private int amount;     // 결제 금액
 
-    @NotNull
-    private String paymentKey;  // 결제 업체로부터 부여받는 값
-
-    private String payment_date;  //
+    private String paymentDate;  //
 
     @Enumerated(EnumType.STRING)
     private Status status;  //
+
+
+    public void updatePaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
+    }
 
 }
