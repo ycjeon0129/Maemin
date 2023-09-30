@@ -59,6 +59,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             }
 
             ServerHttpRequest newRequest = request.mutate()
+                    .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
                     .header("user-id", subject)
                     .build();
 
