@@ -123,6 +123,14 @@ spring:
 
         - id: pay-service
           predicates:
+            - Path=/pay-service/encrypt
+            - Method=GET
+          uri: lb://PAY-SERVICE
+          filters:
+            - RewritePath=/pay-service/(?<segment>.*), /$\{segment}
+
+        - id: pay-service
+          predicates:
             - Path=/pay-service/**
           uri: lb://PAY-SERVICE
           filters:
