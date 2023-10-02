@@ -11,7 +11,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping("/test")
 public class TestController {
 
     private final UserService userService;
@@ -20,6 +20,18 @@ public class TestController {
     @GetMapping(value = "/services")
     public List<String> services() {
         return testService.getServices();
+    }
+
+    @GetMapping(value = "/header")
+    public String headercheck(@RequestHeader(value = "user-id", required = false) Long userId,
+                                    @RequestHeader(value = "AUTHORIZATION", required = false) String Auth) {
+
+        if(userId==null){
+            return "없음";
+        }
+
+
+        return userId + "\n" + Auth;
     }
 
 
