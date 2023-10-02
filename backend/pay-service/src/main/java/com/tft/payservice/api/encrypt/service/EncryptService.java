@@ -32,23 +32,24 @@ public class EncryptService {
     public EncryptKeyRes getPublicKey() throws NoSuchAlgorithmException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        SecureRandom secureRandom = new SecureRandom();
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048, secureRandom);
-        KeyPair keyPair = keyPairGenerator.genKeyPair();
-
-        PublicKey publicKey = keyPair.getPublic();
-        PrivateKey privateKey = keyPair.getPrivate();
-
-        String stringPublicKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
-        String stringPrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
-
+//        SecureRandom secureRandom = new SecureRandom();
+//        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+//        keyPairGenerator.initialize(2048, secureRandom);
+//        KeyPair keyPair = keyPairGenerator.genKeyPair();
+//
+//        PublicKey publicKey = keyPair.getPublic();
+//        PrivateKey privateKey = keyPair.getPrivate();
+//
+//        String stringPublicKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+//        String stringPrivateKey = Base64.getEncoder().encodeToString(privateKey.getEncoded());
+//
+//        RsaUtil.savePrivateKey(redisTemplate, index, stringPrivateKey);
         int index = RandomUtil.getRandomNumber();
-        RsaUtil.savePrivateKey(redisTemplate, index, stringPrivateKey);
+        String publicKey = RsaUtil.createKeyPair(redisTemplate, index);
 
         EncryptKeyRes encryptKey = EncryptKeyRes.builder()
                 .key(index)
-                .value(stringPublicKey)
+                .value(publicKey)
                 .validTime(TimeUtil.parseTimestamp(TimeUtil.getHoursLater(6)))
                 .build();
 

@@ -8,9 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.naming.NoPermissionException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 import static com.tft.payservice.common.util.LogCurrent.*;
@@ -43,7 +49,7 @@ public class payController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws IOException {
+    public ResponseEntity<?> createPay(@RequestBody PayRegistReq payRegistReq) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         payService.createPay(payRegistReq);
 

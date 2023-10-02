@@ -16,6 +16,7 @@ import com.tft.payservice.api.pay.dto.response.*;
 import com.tft.payservice.common.util.HashUtil;
 import com.tft.payservice.common.util.RandomUtil;
 import com.tft.payservice.common.util.RequestUtil;
+import com.tft.payservice.common.util.RsaUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.naming.NoPermissionException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 import static com.tft.payservice.common.util.LogCurrent.*;
@@ -106,19 +114,21 @@ public class PayService {
     }
 
     @Transactional
-    public void createPay(PayRegistReq payRegistReq) throws IOException {
+    public void createPay(PayRegistReq payRegistReq) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Long userId = RequestUtil.getUserId();
 
         PayUser user = payUserRepository.findByUserId(userId)
                 .orElseThrow( () -> new NullPointerException());
 
+        PrivateKey privateKey = RsaUtil.getPrivateKey(redisTemplate, payRegistReq.getKeyIndex());
+
         // Request Body 생성
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("cardNumber", payRegistReq.getCardNumber());
-        jsonObject.addProperty("cardExpireDate", payRegistReq.getCardExpireDate());
-        jsonObject.addProperty("cvc", payRegistReq.getCvc());
-        jsonObject.addProperty("password", payRegistReq.getCardPw());
+        jsonObject.addProperty("cardNumber", RsaUtil.decrypt(payRegistReq.getCardNumber(), privateKey));
+        jsonObject.addProperty("cardExpireDate", RsaUtil.decrypt(payRegistReq.getCardExpireDate(), privateKey));
+        jsonObject.addProperty("cvc", RsaUtil.decrypt(payRegistReq.getCvc(), privateKey));
+        jsonObject.addProperty("password", RsaUtil.decrypt(payRegistReq.getCardPw(), privateKey));
 
         String requestBody = gson.toJson(jsonObject);
 
