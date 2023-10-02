@@ -78,13 +78,14 @@ spring:
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
 
+        # 필터 test용
         - id: user-service
           predicates:
-            - Path=/user-service/api/test/services
-            - Method=GET
+            - Path=/user-service/test/**
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - PaymentAuthorizationHeaderFilter
 
         - id: user-service
           predicates:
