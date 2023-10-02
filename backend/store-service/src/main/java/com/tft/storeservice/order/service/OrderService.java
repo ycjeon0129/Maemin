@@ -1,5 +1,9 @@
 package com.tft.storeservice.order.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +49,11 @@ public class OrderService {
 		orders.updateStatus(orderUpdateStatusReq.getStatus());
 		return new OrderRes(orders);
 	}
+
+	public List<OrderRes> getOrders(Long storeId){
+		return orderRepository.findAllByStoreId(storeId).stream().map(OrderRes::new).collect(Collectors.toList());
+	}
+
 	@Transactional
 	public Long register(OrderReq orderReq) {
 		Orders orders = orderRepository.save(orderReq.toOrder(orderReq));

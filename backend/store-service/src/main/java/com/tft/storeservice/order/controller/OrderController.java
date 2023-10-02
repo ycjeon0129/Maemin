@@ -1,5 +1,7 @@
 package com.tft.storeservice.order.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,5 +40,9 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.changeStatus(orderUpdateStatusReq));
 	}
 
+	@GetMapping("/owner/order/info/{storeId}")
+	public ResponseEntity<List<OrderRes>> getOrders(@PathVariable Long storeId){
+		return ResponseEntity.ok(orderService.getOrders(storeId));
+	}
 
 }
