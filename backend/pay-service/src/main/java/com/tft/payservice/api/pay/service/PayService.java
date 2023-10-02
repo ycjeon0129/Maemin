@@ -334,14 +334,10 @@ public class PayService {
             if (payPaymentReq.getRequestId().equals(confirmRes.getRequestId()) && payPaymentReq.getAmount() == confirmRes.getAmount()) {
                 // Request Body 생성
                 JsonObject ApproveJsonObject = new JsonObject();
-                System.out.println(confirmRes.getRequestId());
                 ApproveJsonObject.addProperty("requestId", confirmRes.getRequestId());
                 ApproveJsonObject.addProperty("company", "TFT페이");
-                System.out.println(pay.getBillingKey());
                 ApproveJsonObject.addProperty("billingKey", pay.getBillingKey());
-                System.out.println(confirmRes.getPaymentKey());
                 ApproveJsonObject.addProperty("paymentKey", confirmRes.getPaymentKey());
-                System.out.println(confirmRes.getAmount());
                 ApproveJsonObject.addProperty("amount", confirmRes.getAmount());
 
                 String approveReq = gson.toJson(ApproveJsonObject);

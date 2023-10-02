@@ -4,7 +4,8 @@ import java.util.Random;
 
 public class RandomUtil {
 
-    private static int pwdLength = 8;
+    private static int PWD_LENGTH = 8;
+    private static int IDX_LENGTH = 10_000_000;
     private static final char[] passwordTable =  { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
             'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
             'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
@@ -17,19 +18,15 @@ public class RandomUtil {
         int tablelength = passwordTable.length;
         StringBuffer buf = new StringBuffer();
 
-        for(int i = 0; i < pwdLength; i++) {
+        for(int i = 0; i < PWD_LENGTH; i++) {
             buf.append(passwordTable[random.nextInt(tablelength)]);
         }
 
         return buf.toString();
     }
 
-    public static int getPwdLength() {
-        return pwdLength;
-    }
-
-    public void setPwdLength(int pwdLength) {
-        this.pwdLength = pwdLength;
+    public static int getRandomNumber() {
+        return (int) (Math.random() * IDX_LENGTH);
     }
 
 }
