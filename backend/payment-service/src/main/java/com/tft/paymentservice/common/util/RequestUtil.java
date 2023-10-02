@@ -1,4 +1,4 @@
-package com.tft.paymentservice.common.uitl;
+package com.tft.paymentservice.common.util;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;

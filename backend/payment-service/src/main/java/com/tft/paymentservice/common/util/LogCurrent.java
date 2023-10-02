@@ -1,4 +1,4 @@
-package com.tft.paymentservice.common.uitl;
+package com.tft.paymentservice.common.util;
 
 public class LogCurrent {
 

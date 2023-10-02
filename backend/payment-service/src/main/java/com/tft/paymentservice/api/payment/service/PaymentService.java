@@ -10,22 +10,17 @@ import com.tft.paymentservice.api.payment.dto.response.PaymentLogRes;
 import com.tft.paymentservice.api.payment.dto.response.PaymentRes;
 import com.tft.paymentservice.common.dto.*;
 import com.tft.paymentservice.common.feign.PayFeignClient;
-import com.tft.paymentservice.common.uitl.RequestUtil;
+import com.tft.paymentservice.common.util.RequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.tft.paymentservice.common.uitl.LogCurrent.*;
+import static com.tft.paymentservice.common.util.LogCurrent.*;
 
 @Slf4j
 @Service
@@ -70,7 +65,6 @@ public class PaymentService {
             if (savedUserId.isEmpty()) {  // code 없음
                 throw new NullPointerException();
             }
-            System.out.println("savedUserId vs userId :: "+savedUserId.compareTo(userId.toString()));
             if (!savedUserId.equals(userId.toString())) {
                 throw new IllegalAccessException();
             }
@@ -119,10 +113,16 @@ public class PaymentService {
     }
 
     public List<PaymentLogRes> getPaymentLog(int page, int count) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
         return null;
     }
 
     public List<PaymentRes> updatePayment(Long orderId, RefundReq refundReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
         return null;
     }
 }

@@ -1,14 +1,12 @@
 package com.tft.paymentservice.config;
 
-import com.tft.paymentservice.common.uitl.RequestUtil;
+import com.tft.paymentservice.common.util.RequestUtil;
 import feign.Client;
 import feign.Logger;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-
-import java.net.http.HttpRequest;
 
 @Configuration
 public class FeignConfig {
