@@ -2,6 +2,7 @@ package com.tft.storeservice.menu.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tft.storeservice.menuoption.db.entity.MenuOption;
+import com.tft.storeservice.order.db.entity.OrderMenus;
 import com.tft.storeservice.store.db.entity.Store;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,6 +29,10 @@ public class Menu {
     @OneToMany(mappedBy = "menu", orphanRemoval = true, cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties({"menu"})
     private List<MenuOption> menuOptionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "menu", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties({"menu"})
+    private List<OrderMenus> orderMenus = new ArrayList<>();
 
     @NotNull
     private int category;

@@ -20,6 +20,7 @@ public class MenuOptionService {
     private final MenuOptionRepository menuOptionRepository;
     private final MenuService menuService;
 
+    @Transactional
     public MenuOptionRes register(MenuOptionReq menuOptionReq) {
         return new MenuOptionRes(menuOptionRepository.save(menuOptionReq.toMenuOption()
             .addMenu(getMenu(menuOptionReq.getMenuId()))));

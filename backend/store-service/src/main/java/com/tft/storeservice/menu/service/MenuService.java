@@ -22,6 +22,7 @@ public class MenuService {
 	private final MenuRepository menuRepository;
 	private final StoreService storeService;
 
+	@Transactional
 	public MenuRes register(MenuReq menuReq) {
 		return new MenuRes(menuRepository.save(menuReq.toMenu().addStore(getStore(menuReq.getStoreId()))));
 	}

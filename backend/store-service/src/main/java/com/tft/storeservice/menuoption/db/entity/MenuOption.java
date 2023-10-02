@@ -1,6 +1,8 @@
 package com.tft.storeservice.menuoption.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tft.storeservice.menu.db.entity.Menu;
+import com.tft.storeservice.order.db.entity.OrderMenuOption;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,6 +10,8 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Entity
@@ -36,6 +40,10 @@ public class MenuOption {
     private LocalDateTime createdDate;
 
     private String status;
+
+    @OneToMany(mappedBy = "menuOption", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties({"menuOption"})
+    private List<OrderMenuOption> menuOptionList = new ArrayList<>();
 
     public MenuOption addMenu(Menu menu){
         this.menu = menu;

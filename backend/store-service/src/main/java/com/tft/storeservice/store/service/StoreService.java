@@ -30,6 +30,7 @@ public class StoreService {
         return new StoreAllRes(storeRepository.findById(storeId).orElseThrow());
     }
 
+    @Transactional
     public StoreRes register(StoreReq storeReq) {
         return new StoreRes(storeRepository.save(storeReq.toStore()
                 .addArea(getArea(storeReq))));

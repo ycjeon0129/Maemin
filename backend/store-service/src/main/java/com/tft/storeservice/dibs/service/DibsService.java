@@ -18,6 +18,7 @@ public class DibsService {
     private final DibsRepository dibsRepository;
     private final StoreService storeService;
 
+    @Transactional
     public DibsRes register(DibsReq dibsReq) {
         return new DibsRes(dibsRepository
                 .save(dibsReq.toDibs()

@@ -31,13 +31,10 @@ public class Store{
 	private Area area;
 
 	@Getter
-	@NotNull
 	private String name;
 
-	@NotNull
 	private int category;
 
-	@NotNull
 	private String address;
 
 	@OneToMany(mappedBy = "store", orphanRemoval = true, cascade = CascadeType.REMOVE)
@@ -48,7 +45,6 @@ public class Store{
 	@JsonIgnoreProperties({"store"})
 	private List<StoreImage> storeImageList = new ArrayList<>();
 
-	@NotNull
 	private String phone;
 
 	private String content;
@@ -71,7 +67,6 @@ public class Store{
 
 	private String status;
 
-	@NotNull
 	private Long ownerId;
 	
 	// 위도
