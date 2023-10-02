@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AreaRepository extends JpaRepository<Area, Integer> {
     Area findAreaByAreaCode(int areaCode);
+    Area findByArea(String area);
 }
