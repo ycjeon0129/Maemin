@@ -37,6 +37,7 @@ public class Orders {
 	private int paymentMethod;
 	private String requests;
 	private int totalPrice;
+	private int status;
 
 	@OneToMany(mappedBy = "orders", orphanRemoval = true, cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({"orders"})
@@ -46,6 +47,10 @@ public class Orders {
 
 	public void addPrice(int price){
 		this.totalPrice = price;
+	}
+
+	public void updateStatus(int status){
+		this.status = status;
 	}
 
 }

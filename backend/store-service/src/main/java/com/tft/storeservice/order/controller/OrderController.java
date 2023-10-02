@@ -8,30 +8,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tft.storeservice.order.dto.request.OrderGetReq;
+// import com.tft.storeservice.order.dto.request.OrderGetReq;
+import com.tft.storeservice.order.dto.request.OrderUpdateStatusReq;
 import com.tft.storeservice.order.dto.request.OrderReq;
 import com.tft.storeservice.order.dto.response.OrderRes;
 import com.tft.storeservice.order.service.OrderService;
-import com.tft.storeservice.store.dto.response.StoreAllRes;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/customer/order")
 @RequiredArgsConstructor
 @Slf4j
 @RestController
 public class OrderController {
 	private final OrderService orderService;
 
-	@PostMapping("/register")
+	@PostMapping("/customer/order/register")
 	public ResponseEntity<String> register(@RequestBody OrderReq orderReq){
 		return ResponseEntity.ok("orderId : " + orderService.register(orderReq));
 	}
 
-	@GetMapping("/info/{orderId}")
+	@GetMapping("/customer/order/info/{orderId}")
 	public ResponseEntity<OrderRes> getInfo(@PathVariable Long orderId){
 		return ResponseEntity.ok(orderService.getInfo(orderId));
+	}
+
+	@PostMapping("/owner/order/change/status")
+	public ResponseEntity<OrderRes> changeInfo(@RequestBody OrderUpdateStatusReq orderUpdateStatusReq){
+		return ResponseEntity.ok(orderService.changeStatus(orderUpdateStatusReq));
 	}
 
 

@@ -24,6 +24,7 @@ public class OrderReq {
 	private Long userId;
 	private int paymentMethod;
 	private String requests;
+	private int status;
 	// 넣어야함
 	private List<OrderMenuReq> menus = new ArrayList<>();
 
@@ -32,6 +33,7 @@ public class OrderReq {
 		return Orders.builder()
 			.storeId(orderReq.storeId)
 			.userId(orderReq.userId)
+			.status(orderReq.status)
 			.paymentMethod(orderReq.paymentMethod)
 			.requests(orderReq.requests)
 			.createdTime(LocalDateTime.now())

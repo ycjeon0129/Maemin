@@ -21,6 +21,7 @@ public class OrderRes {
 	private int totalPrice;
 	private String requests;
 	private LocalDateTime createdDate;
+	private int status;
 	// 넣어야함
 	private List<OrderMenuRes> menus = new ArrayList<>();
 
@@ -32,6 +33,7 @@ public class OrderRes {
 		this.requests = orders.getRequests();
 		this.createdDate = orders.getCreatedTime();
 		this.totalPrice = orders.getTotalPrice();
+		this.status = orders.getStatus();
 		this.menus = orders.getMenuOptionId()
 			.stream()
 			.map(OrderMenuRes::new)

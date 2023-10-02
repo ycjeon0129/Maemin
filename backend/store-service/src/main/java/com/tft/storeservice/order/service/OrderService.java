@@ -13,13 +13,11 @@ import com.tft.storeservice.order.db.entity.Orders;
 import com.tft.storeservice.order.db.repository.OrderMenuOptionRepository;
 import com.tft.storeservice.order.db.repository.OrderMenusRepository;
 import com.tft.storeservice.order.db.repository.OrderRepository;
+import com.tft.storeservice.order.dto.request.OrderUpdateStatusReq;
 import com.tft.storeservice.order.dto.request.OrderReq;
-import com.tft.storeservice.order.dto.response.OrderMenuRes;
-import com.tft.storeservice.order.dto.response.OrderOptionRes;
 import com.tft.storeservice.order.dto.response.OrderRes;
 import com.tft.storeservice.store.db.entity.Store;
 import com.tft.storeservice.store.db.repository.StoreRepository;
-import com.tft.storeservice.store.dto.response.StoreAllRes;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +37,13 @@ public class OrderService {
 
 	public OrderRes getInfo(Long orderId) {
 		return new OrderRes(orderRepository.findById(orderId).orElseThrow());
+	}
+
+	@Transactional
+	public OrderRes changeStatus(OrderUpdateStatusReq orderUpdateStatusReq){
+		Orders orders = orderRepository.findById(orderUpdateStatusReq.getOrderId()).orElseThrow();
+		orders.updateStatus(orderUpdateStatusReq.getStatus());
+		return new OrderRes(orders);
 	}
 	@Transactional
 	public Long register(OrderReq orderReq) {

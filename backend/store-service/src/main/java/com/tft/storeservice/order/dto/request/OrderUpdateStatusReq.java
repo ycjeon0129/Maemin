@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Validated
-public class OrderGetReq {
-	private Long storeId;
-	private Long userId;
+public class OrderUpdateStatusReq {
+	private Long orderId;
+	private int status;
 }
