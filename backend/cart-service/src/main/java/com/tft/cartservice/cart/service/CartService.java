@@ -1,6 +1,7 @@
 package com.tft.cartservice.cart.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,5 +35,10 @@ public class CartService {
 		List<CartMenu> updatedCart = sharedCart.get(teamId);
 		simpMessagingTemplate.convertAndSend("/topic/cart/" + teamId, updatedCart);
 		log.info(updatedCart.toString());
+	}
+
+	public List<CartMenu> getCartMenu(Long teamId){
+		log.info("get " + sharedCart.getOrDefault(teamId, Collections.emptyList()));
+		return sharedCart.getOrDefault(teamId, Collections.emptyList());
 	}
 }
