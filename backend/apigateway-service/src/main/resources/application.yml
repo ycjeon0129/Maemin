@@ -138,6 +138,13 @@ spring:
             - RewritePath=/pay-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
 
+        - id: cart-service
+          predicates:
+            - Path=/cart-service/**
+          uri: lb://CART-SERVICE
+          filters:
+            - RewritePath=/cart-service/(?<segment>.*), /$\{segment}
+
 token:
   access-expired-time: 3600000
   refresh-expired-time: 604800000
