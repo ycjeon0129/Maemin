@@ -1,6 +1,8 @@
 package com.tft.userservice.user.controller;
 
+import com.tft.userservice.user.dto.request.BillAddReq;
 import com.tft.userservice.user.dto.request.JoinReq;
+import com.tft.userservice.user.dto.response.BillAddRes;
 import com.tft.userservice.user.dto.response.BillRes;
 import com.tft.userservice.user.service.TestService;
 import com.tft.userservice.user.service.UserService;
@@ -25,9 +27,21 @@ public class UserController {
         return ResponseEntity.ok(userService.join(userJoinDto));
     }
 
+    @PostMapping("/bills")
+    public ResponseEntity<BillAddRes> addBills(@RequestHeader(value = "user-id") String userId,
+                                               @RequestBody BillAddReq billAddReq) {
+
+        return ResponseEntity.ok(userService.addBills(userId, billAddReq));
+    }
+
     @GetMapping("/bills")
-    public ResponseEntity<BillRes> getBills(@RequestHeader(value = "user-id") String userId) {
+    public ResponseEntity<List<BillRes>> getBills(@RequestHeader(value = "user-id") String userId) {
         return ResponseEntity.ok(userService.getBills(userId));
+    }
+
+    @PatchMapping("/pay")
+    public ResponseEntity<String> joinPay(@RequestHeader(value = "user-id") String userId) {
+        return ResponseEntity.ok(userService.joinPay(userId));
     }
 
     @GetMapping(value = "/services")

@@ -53,7 +53,7 @@ public class User {
     @ColumnDefault("False")
     private boolean pay;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Bill> bills;
 
     @Builder
@@ -70,5 +70,9 @@ public class User {
         this.age = age;
         this.role = role;
         this.pay = pay;
+    }
+
+    public void changePay(boolean newPay){
+        this.pay = newPay;
     }
 }
