@@ -7,10 +7,12 @@ import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @Validated
+@ToString
 public class CartMenu {
 	private Long menuId;
 	private List<Long> menuOptions = new ArrayList<>();

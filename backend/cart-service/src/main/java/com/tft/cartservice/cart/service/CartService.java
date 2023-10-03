@@ -33,5 +33,6 @@ public class CartService {
 	private void broadcastCartUpdate(Long teamId){
 		List<CartMenu> updatedCart = sharedCart.get(teamId);
 		simpMessagingTemplate.convertAndSend("/topic/cart/" + teamId, updatedCart);
+		log.info(updatedCart.toString());
 	}
 }
