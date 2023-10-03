@@ -17,7 +17,7 @@ public class Bill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long billId;
 
     private Long storeId;
 
@@ -30,14 +30,13 @@ public class Bill {
     @CreationTimestamp
     private LocalDateTime createdDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
 
     @Builder
-    public Bill(Long orderId, Long storeId, String paymentMethod, int totalPrice, String requests, LocalDateTime createdDate, User user) {
-        this.orderId = orderId;
+    public Bill(Long storeId, String paymentMethod, int totalPrice, String requests, LocalDateTime createdDate, User user) {
         this.storeId = storeId;
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
