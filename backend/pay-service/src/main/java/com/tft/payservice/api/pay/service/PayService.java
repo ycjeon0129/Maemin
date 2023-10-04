@@ -176,6 +176,15 @@ public class PayService {
 
             con.disconnect();
 
+            System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println("basicInfo:::::::::::::" + body.getBasicInfo());
+            System.out.println("billingKey:::::::::::::" + body.getBillingKey());
+            System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+
             Pay pay = Pay.builder()
                     .payUser(user)
                     .company(COMPANY)
