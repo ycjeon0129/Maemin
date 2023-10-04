@@ -73,6 +73,10 @@ springfox:
     swagger:
       use-model-v3: 'false'
 
+feign:
+  okhttp:
+    enabled: true
+
 custom:
   #  url: "http://localhost:8000"
   url: "https://j9c208.p.ssafy.io"
