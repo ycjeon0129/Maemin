@@ -20,9 +20,6 @@ import lombok.NoArgsConstructor;
 public class OrderReq {
 	@NotNull
 	private Long storeId;
-	@NotNull
-	private Long userId;
-	private int paymentMethod;
 	private String requests;
 	private int status;
 	// 넣어야함
@@ -32,9 +29,7 @@ public class OrderReq {
 	public Orders toOrder(OrderReq orderReq){
 		return Orders.builder()
 			.storeId(orderReq.storeId)
-			.userId(orderReq.userId)
 			.status(orderReq.status)
-			.paymentMethod(orderReq.paymentMethod)
 			.requests(orderReq.requests)
 			.createdTime(LocalDateTime.now())
 			.build();

@@ -33,8 +33,6 @@ public class Orders {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long orderId;
 	private Long storeId;
-	private Long userId;
-	private int paymentMethod;
 	private String requests;
 	private int totalPrice;
 	private int status;
