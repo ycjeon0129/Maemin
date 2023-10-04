@@ -12,6 +12,7 @@ import com.tft.userservice.user.db.entity.User;
 import com.tft.userservice.user.db.repository.UserRepository;
 import com.tft.userservice.user.dto.response.BillAddRes;
 import com.tft.userservice.user.dto.response.BillRes;
+import com.tft.userservice.user.dto.response.IdCheckRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,15 @@ public class UserService {
 
 //        return UserDto.fromEntity(saveUser2);    // User에게 입력받아 회원가입한 데이터를 UserDto에 저장함
         return "회원가입 성공";
+    }
+
+    public IdCheckRes checkId(String loginId) {
+
+        boolean userExists = userRepository.findByLoginId(loginId).isPresent();
+
+        String message = userExists ? "FAIL" : "SUCCESS";
+
+        return IdCheckRes.builder().message(message).build();
     }
 
     public BillAddRes addBills(String userId, BillAddReq billAddReq) {

@@ -1,9 +1,11 @@
 package com.tft.userservice.user.controller;
 
 import com.tft.userservice.user.dto.request.BillAddReq;
+import com.tft.userservice.user.dto.request.IdCheckReq;
 import com.tft.userservice.user.dto.request.JoinReq;
 import com.tft.userservice.user.dto.response.BillAddRes;
 import com.tft.userservice.user.dto.response.BillRes;
+import com.tft.userservice.user.dto.response.IdCheckRes;
 import com.tft.userservice.user.service.TestService;
 import com.tft.userservice.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,11 @@ public class UserController {
     @PostMapping("/join")
     public ResponseEntity<String> signup(@RequestBody JoinReq userJoinDto) {
         return ResponseEntity.ok(userService.join(userJoinDto));
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<IdCheckRes> checkId(@RequestBody IdCheckReq idCheckReq) {
+        return ResponseEntity.ok(userService.checkId(idCheckReq.getCheckId()));
     }
 
     @PostMapping("/bills")
