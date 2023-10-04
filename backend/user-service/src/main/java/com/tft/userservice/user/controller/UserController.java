@@ -39,9 +39,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getBills(userId));
     }
 
-    @PatchMapping("/pay")
+    @PatchMapping("/pay/{status}")
     public ResponseEntity<Integer> joinPay(@RequestHeader(value = "user-id") String userId,
-                                           @RequestBody boolean status) {
+                                           @PathVariable boolean status) {
         return ResponseEntity.ok(userService.joinPay(userId, status));
     }
 
