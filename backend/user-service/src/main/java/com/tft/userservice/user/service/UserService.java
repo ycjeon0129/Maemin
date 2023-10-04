@@ -3,6 +3,8 @@ package com.tft.userservice.user.service;
 import com.tft.userservice.common.exception.custom.LoginIdExistException;
 import com.tft.userservice.common.exception.custom.UserNotExistException;
 import com.tft.userservice.user.db.entity.Bill;
+import com.tft.userservice.user.db.entity.BillMenu;
+import com.tft.userservice.user.db.repository.BillMenuRepository;
 import com.tft.userservice.user.db.repository.BillRepository;
 import com.tft.userservice.user.dto.request.BillAddReq;
 import com.tft.userservice.user.dto.request.JoinReq;
@@ -11,6 +13,7 @@ import com.tft.userservice.user.db.repository.UserRepository;
 import com.tft.userservice.user.dto.response.BillAddRes;
 import com.tft.userservice.user.dto.response.BillRes;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,12 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final BillRepository billRepository;
+    private final BillMenuRepository billMenuRepository;
 
     private final BCryptPasswordEncoder encoder;
 
@@ -53,7 +58,14 @@ public class UserService {
 
         Bill saveBill = billRepository.save(billAddReq.toEntity(user));
 
-        user.getBills().add(saveBill);
+        // 메뉴 리스트
+        List<String> menuList = billAddReq.getMenuList();
+
+        // 메뉴 저장
+        for (String menu : menuList){
+            BillMenu billMenu = BillMenu.builder().menuName(menu).bill(saveBill).build();
+            billMenuRepository.save(billMenu);
+        }
 
         userRepository.save(user);
 
@@ -67,20 +79,25 @@ public class UserService {
         List<BillRes> billResList = new ArrayList<>();
 
         for (Bill bill : bills) {
+            List<String> menuList = new ArrayList<>();
+            List<BillMenu> billMenus = bill.getBillMenus();
+            for (BillMenu billMenu : billMenus){
+                menuList.add(billMenu.getMenuName());
+            }
             BillRes billRes = BillRes.builder()
-                    .billId(bill.getBillId())
-                    .storeId(bill.getStoreId())
-                    .paymentMethod(bill.getPaymentMethod())
+//                    .billId(bill.getBillId())
+                    .storeName(bill.getStoreName())
+                    .paymentMethod(String.valueOf(bill.getPaymentMethod()))
                     .totalPrice(bill.getTotalPrice())
                     .requests(bill.getRequests())
                     .createdDate(bill.getCreatedDate())
+                    .menuList(menuList)
                     .build();
             billResList.add(billRes);
         }
-
-
         return billResList;
     }
+
     public String joinPay (String userId) {
         User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(() -> new UserNotExistException());
 
