@@ -152,7 +152,7 @@ public class PayService {
 
         // Receive Response
         int status = con.getResponseCode();
-        CardRegistRes body = new CardRegistRes();
+        CardRegistRes body;
 
         if (200 <= status && status < 300) {
 
@@ -171,8 +171,8 @@ public class PayService {
             Pay pay = Pay.builder()
                     .payUser(user)
                     .company(COMPANY)
-                    .basicInfo(payRegistReq.getCardNumber())
-                    .nickname(COMPANY + payRegistReq.getCardNumber().substring(0, 4))
+                    .basicInfo(body.getBasicInfo())
+                    .nickname(COMPANY + body.getBasicInfo().substring(0, 4))
                     .billingKey(body.getBillingKey())
                     .build();
 
