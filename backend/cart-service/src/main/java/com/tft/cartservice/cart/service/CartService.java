@@ -6,33 +6,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.tft.cartservice.cart.dto.request.CartMenu;
-import com.tft.cartservice.cart.dto.request.CartReq;
+import com.tft.cartservice.cart.dto.request.Cart;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CartService {
 	private final SimpMessagingTemplate simpMessagingTemplate;
 	private final Map<Long, List<CartMenu>> sharedCart = new HashMap<>();
 
-	public CartService(SimpMessagingTemplate simpMessagingTemplate) {
-		this.simpMessagingTemplate = simpMessagingTemplate;
-	}
 
-	public void addToCart(CartReq cartReq){
-		sharedCart.computeIfAbsent(cartReq.getTeamId(), k -> new ArrayList<>()).add(cartReq.getCartMenu());
-		broadcastCartUpdate(cartReq.getTeamId());
+
+	public void addToCart(Cart cart){
+		sharedCart.computeIfAbsent(cart.getTeamId(), k -> new ArrayList<>()).add(cart.getCartMenu());
+		broadcastCartUpdate(cart.getTeamId());
 	}
 
 	private void broadcastCartUpdate(Long teamId){
 		List<CartMenu> updatedCart = sharedCart.get(teamId);
+		log.info("/topic/cart/" + teamId);
 		simpMessagingTemplate.convertAndSend("/topic/cart/" + teamId, updatedCart);
 		log.info(updatedCart.toString());
 	}
