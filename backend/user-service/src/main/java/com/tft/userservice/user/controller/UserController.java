@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @PatchMapping("/pay")
-    public ResponseEntity<String> joinPay(@RequestHeader(value = "user-id") String userId) {
-        return ResponseEntity.ok(userService.joinPay(userId));
+    public ResponseEntity<Integer> joinPay(@RequestHeader(value = "user-id") String userId, boolean status) {
+        return ResponseEntity.ok(userService.joinPay(userId, status));
     }
 
     @GetMapping(value = "/services")

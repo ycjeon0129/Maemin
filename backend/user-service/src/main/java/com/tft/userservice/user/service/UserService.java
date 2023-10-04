@@ -81,14 +81,14 @@ public class UserService {
 
         return billResList;
     }
-    public String joinPay (String userId) {
+    public int joinPay (String userId, boolean status) {
         User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(() -> new UserNotExistException());
 
-        user.changePay(true);
+        user.changePay(status);
 
         userRepository.save(user);
 
-        return userId + " pay 가입성공";
+        return 200;
     }
     
 }
