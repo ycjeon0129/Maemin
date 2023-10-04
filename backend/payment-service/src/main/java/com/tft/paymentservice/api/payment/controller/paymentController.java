@@ -27,7 +27,7 @@ import static com.tft.paymentservice.common.util.LogCurrent.END;
 public class paymentController {
 
     private final PaymentService paymentService;
-    @Value("${custom.url}"+"/customer/complete")
+    @Value("${custom.url}"+"/customer")
     private String REDIRECT_URL;
 
     @PostMapping
