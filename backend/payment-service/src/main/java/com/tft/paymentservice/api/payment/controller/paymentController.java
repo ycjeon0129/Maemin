@@ -52,7 +52,7 @@ public class paymentController {
         return ResponseEntity.status(200).body(readyRes);
     }
 
-    @GetMapping("/kakao/{storeId}/{tableId}/{sessionId}")
+    @GetMapping("/kakao/success/{storeId}/{tableId}/{sessionId}")
     public void approveKakaoPayment(HttpServletResponse response, @RequestParam("pg_token") String pgToken
     , @PathVariable Long storeId, @PathVariable Long tableId, @PathVariable Long sessionId) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));

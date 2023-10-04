@@ -155,7 +155,7 @@ public class PaymentService {
         parameters.add("total_amount", String.valueOf(paymentKakaoReq.getAmount()));
         parameters.add("tax_free_amount", String.valueOf(0));
         parameters.add("approval_url", REDIRECT_URL+
-                "/kakao/success?storeId="+paymentKakaoReq.getStoreId()+"&sessionId="+paymentKakaoReq.getSessionId()+"&"); // 결제승인시 넘어갈 url
+                "/kakao/success/"+paymentKakaoReq.getStoreId()+"/"+paymentKakaoReq.getTableId()+"/"+paymentKakaoReq.getSessionId()); // 결제승인시 넘어갈 url
         parameters.add("cancel_url", REDIRECT_URL+"/kakao/cancel"); // 결제취소시 넘어갈 url
         parameters.add("fail_url", REDIRECT_URL+"/kakao/fail"); // 결제 실패시 넘어갈 url
 
