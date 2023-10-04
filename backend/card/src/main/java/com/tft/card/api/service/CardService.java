@@ -28,6 +28,7 @@ public class CardService {
 
     private final CardRepository cardRepository;
     private final CardPayLogRepository cardPayLogRepository;
+    private final String MASK = "*-****-****-**";
 
     @Transactional
     public CardRegistRes createCard(CardRegistReq cardRegistReq) {
@@ -44,7 +45,12 @@ public class CardService {
 
         cardRepository.save(card);
 
+        StringBuilder basicInfo = new StringBuilder();
+        basicInfo.append(cardRegistReq.getCardNumber().substring(0, 3))
+                .append(MASK)
+                .append(cardRegistReq.getCardNumber().substring(17));
         CardRegistRes cardRegist = CardRegistRes.builder()
+                .basicInfo(basicInfo.toString())
                 .billingKey(uuid)
                 .build();
 
