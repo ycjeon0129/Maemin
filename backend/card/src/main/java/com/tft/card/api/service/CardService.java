@@ -49,6 +49,13 @@ public class CardService {
         basicInfo.append(cardRegistReq.getCardNumber().substring(0, 3))
                 .append(MASK)
                 .append(cardRegistReq.getCardNumber().substring(17));
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println("basicInfo:::::::::::::" + basicInfo.toString());
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
+        System.out.println(":::::::::::::::::::::::::::::::::::::::::::");
         CardRegistRes cardRegist = CardRegistRes.builder()
                 .basicInfo(basicInfo.toString())
                 .billingKey(uuid)
