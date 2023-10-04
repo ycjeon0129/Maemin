@@ -74,6 +74,8 @@ springfox:
       use-model-v3: 'false'
 
 custom:
+  #  url: "http://localhost:8000"
+  url: "https://j9c208.p.ssafy.io"
   hash:
     pepper: '67b1551b36d255f7c63cd62aa0d5ddbe'
   card:

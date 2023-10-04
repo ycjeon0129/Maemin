@@ -1,9 +1,26 @@
 package com.tft.payservice.common.util;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class RequestUtil {
+
+    public static String getToken() {
+        String token = null;
+
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes();
+
+        if (attributes != null) {
+            String headerData = attributes.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
+            if (headerData != null) {
+                token = headerData;
+            }
+        }
+
+        return token;
+    }
 
     public static Long getUserId() {
         Long userId = null;

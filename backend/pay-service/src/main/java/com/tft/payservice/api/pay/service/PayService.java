@@ -13,6 +13,7 @@ import com.tft.payservice.api.pay.dto.response.*;
 //import com.tft.payservice.common.dto.AuthenticationCode;
 //import com.tft.payservice.common.dto.AuthenticationCodeRedisRepository;
 //import com.tft.payservice.common.dto.AuthenticationCodeRepository;
+import com.tft.payservice.common.feign.UserFeignClient;
 import com.tft.payservice.common.util.HashUtil;
 import com.tft.payservice.common.util.RandomUtil;
 import com.tft.payservice.common.util.RequestUtil;
@@ -49,6 +50,7 @@ import static com.tft.payservice.common.util.LogCurrent.*;
 @RequiredArgsConstructor
 public class PayService {
 
+    private final UserFeignClient userFeignClient;
     private final PayRepository payRepository;
     private final PayUserRepository payUserRepository;
 //    private final AuthenticationCodeRepository authenticationCodeRepository;
@@ -66,6 +68,7 @@ public class PayService {
     @Value("${custom.card.CARD_URL}")
     private String CARD_URL;
 
+    @Transactional
     public void createPayUser(PayJoinReq payJoinReq) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Long userId = RequestUtil.getUserId();
@@ -81,6 +84,11 @@ public class PayService {
                 .build();
 
         payUserRepository.save(user);
+
+        int status = userFeignClient.joinPay(true);
+        if (status != 200) {
+            throw new RuntimeException();
+        }
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
