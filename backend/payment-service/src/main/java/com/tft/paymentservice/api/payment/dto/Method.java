@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Method {
-    TFT_PAY("TFT페이"), TOSS("토스");
+    TFT_PAY("TFT페이"), KAKAO("카카오"), TOSS("토스");
 
     private String krName;
 

@@ -1,10 +1,12 @@
 package com.tft.paymentservice.common.util;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class RequestUtil {
+
 
     public static String getToken() {
         String token = null;
@@ -40,6 +42,14 @@ public class RequestUtil {
             }
         }
         return userId;
+    }
+
+    public static HttpHeaders getHeaders(String key) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", key);
+        headers.set("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        return headers;
     }
 
 }
