@@ -20,7 +20,7 @@ import com.tft.storeservice.order.db.repository.OrderRepository;
 import com.tft.storeservice.order.dto.request.OrderUpdateStatusReq;
 import com.tft.storeservice.order.dto.request.OrderReq;
 import com.tft.storeservice.order.dto.response.OrderRes;
-import com.tft.storeservice.sse.Service.SseService;
+// import com.tft.storeservice.sse.Service.SseService;
 import com.tft.storeservice.store.db.entity.Store;
 import com.tft.storeservice.store.db.repository.StoreRepository;
 
@@ -39,7 +39,7 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	private final OrderMenusRepository orderMenusRepository;
 	private final OrderMenuOptionRepository orderMenuOptionRepository;
-	private final SseService sseService;
+	// private final SseService sseService;
 
 	public OrderRes getInfo(Long orderId) {
 		return new OrderRes(orderRepository.findById(orderId).orElseThrow());
