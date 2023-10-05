@@ -26,6 +26,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.tft.paymentservice.common.util.LogCurrent.*;
 
@@ -223,7 +224,7 @@ public class PaymentService {
                 .build();
 
         String uuid = userId + TimeUtil.getTimeUuid();
-        redisTemplate.opsForValue().set(PAYMENT_CODE + uuid, userId.toString());
+        redisTemplate.opsForValue().set(PAYMENT_CODE + uuid, userId.toString(), 300, TimeUnit.SECONDS);
 
         payment.updatePaymentDate(approveRes.getApproved_at().replace('T', ' '));
         payment.updateStatus(Status.PAYMENT_COMPLETE);
