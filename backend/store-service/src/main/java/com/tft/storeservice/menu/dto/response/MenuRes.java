@@ -21,7 +21,7 @@ public class MenuRes {
     // private List<MenuOptionRes> menuOptionList;
 
     // 고쳐야할것
-    private int category;
+    private String category;
 
     public MenuRes(Menu menu) {
         this.menuId = menu.getMenuId();
