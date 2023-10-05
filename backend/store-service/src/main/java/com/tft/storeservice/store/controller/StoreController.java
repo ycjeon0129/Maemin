@@ -41,4 +41,9 @@ public class StoreController {
     public ResponseEntity<List<StoreRes>> findStores(@RequestBody StoreFindReq storeFindReq){
         return ResponseEntity.ok(storeService.findStores(storeFindReq));
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<StoreRes>> findAll(){
+        return ResponseEntity.ok(storeService.findAll());
+    }
 }

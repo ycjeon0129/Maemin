@@ -39,6 +39,10 @@ public class StoreService {
         return storeRepository.findAllByArea(area).stream().map(StoreRes::new).collect(Collectors.toList());
     }
 
+    public List<StoreRes> findAll(){
+        return storeRepository.findAll().stream().map(StoreRes::new).collect(Collectors.toList());
+    }
+
     @Transactional
     public StoreRes register(StoreReq storeReq) {
         return new StoreRes(storeRepository.save(storeReq.toStore()
@@ -52,4 +56,6 @@ public class StoreService {
     public Store getStore(Long storeId) {
         return storeRepository.findStoreByStoreId(storeId);
     }
+
+
 }

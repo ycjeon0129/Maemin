@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface StoreRepository extends JpaRepository<Store, Long> {
     Store findStoreByStoreId(Long storeId);
     List<Store> findAllByArea(Area area);
+    List<Store> findAllBy();
+
 }
