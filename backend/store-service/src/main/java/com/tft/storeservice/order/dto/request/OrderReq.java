@@ -25,6 +25,7 @@ public class OrderReq {
 	private String authCode;	// 결제 인증 코드
 	private int totalPrice;
 	private int method;
+	private Long tableId;
 	// 넣어야함
 	private List<OrderMenuReq> menus = new ArrayList<>();
 
@@ -36,6 +37,7 @@ public class OrderReq {
 			.requests(orderReq.requests)
 			.createdTime(LocalDateTime.now())
 			.totalPrice(this.totalPrice)
+			.tableId(this.tableId)
 			.build();
 	}
 

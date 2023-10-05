@@ -36,6 +36,7 @@ public class Orders {
 	private String requests;
 	private int totalPrice;
 	private int status;
+	private Long tableId;
 
 	@OneToMany(mappedBy = "orders", orphanRemoval = true, cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({"orders"})
