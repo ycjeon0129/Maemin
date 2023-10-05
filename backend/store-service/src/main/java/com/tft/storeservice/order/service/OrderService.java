@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.tft.storeservice.common.feign.SseFeignClient;
+import com.tft.storeservice.common.util.RequestUtil;
+import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +44,11 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	private final OrderMenusRepository orderMenusRepository;
 	private final OrderMenuOptionRepository orderMenuOptionRepository;
+	private final SseFeignClient sseFeignClient;
 	// private final SseService sseService;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+	private final String PAYMENT_CODE = "payment_code::";
 
 	public OrderRes getInfo(Long orderId) {
 		return new OrderRes(orderRepository.findById(orderId).orElseThrow());
@@ -57,7 +66,21 @@ public class OrderService {
 	}
 
 	@Transactional
-	public Long register(OrderReq orderReq) {
+	public Long register(OrderReq orderReq) throws IllegalAccessException {
+
+		Long userId = RequestUtil.getUserId();
+		String uuid = userId + orderReq.getAuthCode();
+		String stringUserId = (String) redisTemplate.opsForValue().get(PAYMENT_CODE + uuid);
+		if (!stringUserId.equals(userId.toString())) {
+			throw new IllegalAccessException();
+		}
+
+		String msg = "주문 접수";
+		sseFeignClient.count(orderReq.getStoreId().toString(), msg);
+
+
+
+		////////////////////
 		Orders orders = orderRepository.save(orderReq.toOrder(orderReq));
 		int size = orderReq.getMenus().size();
 

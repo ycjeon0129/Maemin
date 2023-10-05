@@ -22,9 +22,11 @@ public class OrderReq {
 	private Long storeId;
 	private String requests;
 	private int status;
+	private String authCode;	// 결제 인증 코드
+	private int totalPrice;
+	private int method;
 	// 넣어야함
 	private List<OrderMenuReq> menus = new ArrayList<>();
-	private int totalPrice;
 
 
 	public Orders toOrder(OrderReq orderReq){

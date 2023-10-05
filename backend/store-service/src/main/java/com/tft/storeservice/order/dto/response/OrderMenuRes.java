@@ -28,6 +28,7 @@ public class OrderMenuRes {
 		this.menuId = orderMenus.getMenu().getMenuId();
 		this.name = orderMenus.getMenu().getName();
 		this.quantity = orderMenus.getQuantity();
+		this.price = orderMenus.getMenu().getPrice();
 		this.menuOptions = orderMenus.getMenuOptions()
 			.stream()
 			.map(OrderOptionRes::new)
