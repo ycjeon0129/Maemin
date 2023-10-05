@@ -27,7 +27,7 @@ public class OrderController {
 	private final OrderService orderService;
 
 	@PostMapping("/customer/order/register")
-	public ResponseEntity<String> register(@RequestBody OrderReq orderReq){
+	public ResponseEntity<String> register(@RequestBody OrderReq orderReq) throws IllegalAccessException {
 		Long orderId = orderService.register(orderReq);
 
 		// orderService.notify(orderId);
