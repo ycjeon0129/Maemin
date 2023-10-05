@@ -106,7 +106,8 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
                 "userName", curUser.getUserName(),
                 "nickName", curUser.getNickName(),
-                "pay", curUser.isPay()
+                "pay", curUser.isPay(),
+                "storeId", curUser.getStoreId()
         );
         // body 설정
         Map<String, Object> tokens = Map.of(

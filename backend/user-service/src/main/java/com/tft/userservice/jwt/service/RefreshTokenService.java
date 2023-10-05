@@ -52,7 +52,7 @@ public class RefreshTokenService {
     @Transactional
     public JwtTokenDto refreshJwtToken(String accessToken, String refreshToken) {
         String userId = jwtTokenProvider.getUserId(accessToken);
-
+        log.info("refresj JWT 토큰 : {}", userId);
         RefreshToken findRefreshToken = refreshTokenRedisRepository.findById(Long.valueOf(userId))
                 .orElseThrow(()
                         -> new RefreshTokenNotValidException("사용자 고유번호 : " + userId + "는 등록된 리프레쉬 토큰이 없습니다.")

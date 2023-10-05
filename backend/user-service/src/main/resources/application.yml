@@ -41,8 +41,9 @@ logging:
     org.hibernate.type: trace # Show Query Parameter
 
 token:
-  access-expired-time: 3600000
-  refresh-expired-time: 604800000
+  access-expired-time: 3600000 # 1시간
+#  access-expiration-time: 43200000 # 12시간
+  refresh-expired-time: 604800000 # 7일
   secret: $2a$10$q42lY7Y18xqrFt1qbODZIO4OMTeOxnrCe7tF3n9bazJinVE7VH5Pi
   refresh-token-name: refresh-token
   access-token-name: access-token

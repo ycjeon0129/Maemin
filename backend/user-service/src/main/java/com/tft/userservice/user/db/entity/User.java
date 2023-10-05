@@ -56,6 +56,9 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Bill> bills;
 
+    @ColumnDefault("0")
+    private Long storeId;
+
     @Builder
     public User(Long userId, String loginId, String loginPw, String userName, String nickName, String phone,
                 String address, LocalDateTime createdDate, boolean sex, int age, String role, boolean pay) {
@@ -74,5 +77,9 @@ public class User {
 
     public void changePay(boolean newPay){
         this.pay = newPay;
+    }
+
+    public void changeStoreId(Long newStoreId){
+        this.storeId = newStoreId;
     }
 }

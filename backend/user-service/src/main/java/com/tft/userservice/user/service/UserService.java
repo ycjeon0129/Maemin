@@ -116,5 +116,15 @@ public class UserService {
 
         return 200;
     }
+
+    // 사장 store 컬럼 변경
+    public void addStore (String userId, Long storeId) {
+        User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(() -> new UserNotExistException());
+
+        user.changeStoreId(storeId);
+
+        userRepository.save(user);
+
+    }
     
 }
