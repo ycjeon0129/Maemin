@@ -31,10 +31,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     }
 
-    //    public AuthorizationHeaderFilter(Environment environment) {
-//        super(Config.class);
-//        this.environment = environment;
-//    }
     @Override
     public GatewayFilter apply(AuthorizationHeaderFilter.Config config) {
         // 첫 번째 매개변수는 ServerWebExchange 형태
