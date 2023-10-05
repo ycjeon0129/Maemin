@@ -1,44 +1,62 @@
 package com.tft.cartservice.sse.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class SseEmitters {
 
-    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    // Map을 사용하여 storeId와 SSE 연결을 매핑합니다.
+    private final Map<String, SseEmitter> storeEmitters = new ConcurrentHashMap<>();
 
-    public SseEmitter add(SseEmitter emitter) {
-        this.emitters.add(emitter);
-        log.info("new emitter added: {}", emitter);
-        log.info("emitter list size: {}", emitters.size());
+    //    @Transactional
+    public SseEmitter add(String storeId, SseEmitter emitter) {
+        // 가게별로 SSE 연결 리스트를 가져옵니다.
+//        List<SseEmitter> emitters = storeEmitters.computeIfAbsent(storeId, key -> new CopyOnWriteArrayList<>());
+//
+//        // SSE 연결을 리스트에 추가합니다.
+//        emitters.add(emitter);
+        storeEmitters.put(storeId, emitter);
+
+        log.info("new emitter added for store {}: {}", storeId, emitter);
+
         emitter.onCompletion(() -> {
-            log.info("onCompletion callback");
-            this.emitters.remove(emitter);    // 만료되면 리스트에서 삭제
+            // SSE 연결이 완료될 때 해당 연결을 리스트에서 삭제합니다.
+            storeEmitters.remove(storeId);
+            log.info("emitter removed for store {}: {}", storeId, emitter);
         });
+
         emitter.onTimeout(() -> {
-            log.info("onTimeout callback");
+            // SSE 연결이 타임아웃될 때 연결을 종료합니다.
             emitter.complete();
+            log.info("emitter timed out for store {}: {}", storeId, emitter);
         });
 
         return emitter;
     }
 
-//    public void count() {
-//        long count = counter.incrementAndGet();
-//        emitters.forEach(emitter -> {
-//            try {
-//                emitter.send(SseEmitter.event()
-//                        .name("count")
-//                        .data(count));
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-//    }
+    public void sendOrderAlert(String storeId, String message) {
+        // 특정 가게에 대한 주문 알람을 보냅니다.
+        SseEmitter emitter = storeEmitters.get(storeId);
+        log.info("send 준비 : {}", emitter);
+        if (emitter != null) {
+            try {
+                log.info(String.valueOf(emitter));
+                emitter.send(SseEmitter.event()
+                        .name("order")
+                        .data(message));
+            } catch (IOException e) {
+                log.error("Error sending order alert to store {}: {}", storeId, e.getMessage());
+                storeEmitters.remove(storeId);
+            }
+        }
+    }
 }
