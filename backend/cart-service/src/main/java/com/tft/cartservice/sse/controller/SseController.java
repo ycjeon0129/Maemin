@@ -25,7 +25,7 @@ public class SseController {
 
     @GetMapping(value = "/connect/{storeId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connect(@PathVariable String storeId) {
-        SseEmitter emitter = new SseEmitter(60 * 1000L); // 만료시간 설정
+        SseEmitter emitter = new SseEmitter(60 * 100000L); // 만료시간 설정
 //        sseEmitters.add(emitter);
         sseEmitters.add(storeId, emitter);
 

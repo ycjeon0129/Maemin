@@ -46,6 +46,7 @@ public class SseEmittersNew {
         // 특정 가게에 대한 주문 알람을 보냅니다.
         List<SseEmitter> emitters = storeEmitters.get(storeId);
         log.info("send 준비");
+        log.info("보내기 전 emitters 길이 체크 : {}", String.valueOf(emitters.size()));
         if (emitters != null) {
             emitters.forEach(emitter -> {
                 try {
