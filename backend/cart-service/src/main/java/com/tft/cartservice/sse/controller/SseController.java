@@ -1,7 +1,6 @@
 package com.tft.cartservice.sse.controller;
 
 import com.tft.cartservice.sse.service.SseEmitters;
-import com.tft.cartservice.sse.service.SseEmittersNew;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -19,14 +18,12 @@ import java.io.IOException;
 @RestController
 public class SseController {
 
-//    private final SseEmitters sseEmitters;
-    private final SseEmittersNew sseEmitters;
+    private final SseEmitters sseEmitters;
     
 
     @GetMapping(value = "/connect/{storeId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connect(@PathVariable String storeId) {
         SseEmitter emitter = new SseEmitter(60 * 100000L); // 만료시간 설정
-//        sseEmitters.add(emitter);
         sseEmitters.add(storeId, emitter);
 
         try {
