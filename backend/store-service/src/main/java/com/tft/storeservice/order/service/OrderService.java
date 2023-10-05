@@ -60,7 +60,6 @@ public class OrderService {
 	public Long register(OrderReq orderReq) {
 		Orders orders = orderRepository.save(orderReq.toOrder(orderReq));
 		int size = orderReq.getMenus().size();
-		int price = 0;
 
 		log.info("size : "+ size);
 
@@ -69,7 +68,6 @@ public class OrderService {
 				.quantity(orderReq.getMenus().get(i).getQuantity())
 				.build();
 			orderMenus.addMenu(getMenu(orderReq.getMenus().get(i).getMenuId()));
-			price += orderMenus.getMenu().getPrice();
 			orderMenus.addOrders(orders);
 			orderMenusRepository.save(orderMenus);
 
@@ -78,12 +76,10 @@ public class OrderService {
 				OrderMenuOption orderMenuOption = OrderMenuOption.builder()
 					.build();
 				orderMenuOption.addMenuOption(getMenuOption(orderReq.getMenus().get(i).getMenuOptionId().get(j)));
-				price += orderMenuOption.getMenuOption().getPrice();
 				orderMenuOption.addOrderMenus(orderMenus);
 				orderMenuOptionRepository.save(orderMenuOption);
 			}
 		}
-		orders.addPrice(price);
 		return orders.getOrderId();
 
 		// return new OrderRes(orderRepository.findById(orders.getOrderId()).orElseThrow());		// int price = 0;
@@ -92,7 +88,7 @@ public class OrderService {
 	public void notify(Long orderId){
 		Orders orders = orderRepository.findById(orderId).orElseThrow();
 		OrderRes orderRes = new OrderRes(orders);
-		sseService.notify(orders.getStoreId(), orderRes);
+		// sseService.notify(orders.getStoreId(), orderRes);
 	}
 
 	public Store getStore(Long storeId) {

@@ -29,6 +29,7 @@ public class OrderController {
 	@PostMapping("/customer/order/register")
 	public ResponseEntity<String> register(@RequestBody OrderReq orderReq){
 		Long orderId = orderService.register(orderReq);
+
 		// orderService.notify(orderId);
 		return ResponseEntity.ok("orderId : " + orderId);
 	}

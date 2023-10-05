@@ -24,6 +24,7 @@ public class OrderReq {
 	private int status;
 	// 넣어야함
 	private List<OrderMenuReq> menus = new ArrayList<>();
+	private int totalPrice;
 
 
 	public Orders toOrder(OrderReq orderReq){
@@ -32,6 +33,7 @@ public class OrderReq {
 			.status(orderReq.status)
 			.requests(orderReq.requests)
 			.createdTime(LocalDateTime.now())
+			.totalPrice(this.totalPrice)
 			.build();
 	}
 
