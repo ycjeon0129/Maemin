@@ -35,7 +35,7 @@ public class StoreRes {
 
 
 	// 고쳐야할것
-	private int category;
+	private String category;
 	private double rating;
 	private List<MenuRes> menuList = new ArrayList<>();
 	// private int reviewCount;

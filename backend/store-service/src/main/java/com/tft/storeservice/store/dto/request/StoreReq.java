@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class StoreReq {
 	private Long ownerId;
 	private String name;
-	private int category;
+	private String category;
 	private String address;
 	private int areaCode;
 	private String phone;

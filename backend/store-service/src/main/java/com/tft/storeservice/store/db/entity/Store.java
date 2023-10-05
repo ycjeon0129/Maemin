@@ -33,7 +33,7 @@ public class Store{
 	@Getter
 	private String name;
 
-	private int category;
+	private String category;
 
 	private String address;
 

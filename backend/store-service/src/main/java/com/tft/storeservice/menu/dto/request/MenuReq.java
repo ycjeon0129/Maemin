@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class MenuReq {
     private Long storeId;
-    private int category;
+    private String category;
     private String name;
     private int price;
     private String menuPictureUrl;

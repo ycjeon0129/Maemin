@@ -35,7 +35,7 @@ public class Menu {
     private List<OrderMenus> orderMenus = new ArrayList<>();
 
     @NotNull
-    private int category;
+    private String category;
 
     @NotNull
     private String name;

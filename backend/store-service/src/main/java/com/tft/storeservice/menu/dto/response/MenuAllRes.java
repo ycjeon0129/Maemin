@@ -22,7 +22,7 @@ public class MenuAllRes {
 	private List<MenuOptionRes> menuOptionList = new ArrayList<>();
 
 	// 고쳐야할것
-	private int category;
+	private String category;
 
 	public MenuAllRes(Menu menu) {
 		this.menuId = menu.getMenuId();
