@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -155,7 +154,7 @@ public class PaymentService {
         parameters.add("total_amount", String.valueOf(paymentKakaoReq.getAmount()));
         parameters.add("tax_free_amount", String.valueOf(0));
         parameters.add("approval_url", REDIRECT_URL+
-                "/kakao/success/"+paymentKakaoReq.getStoreId()+"/"+paymentKakaoReq.getTableId()+"/"+paymentKakaoReq.getSessionId()); // 결제승인시 넘어갈 url
+                "/kakao/success/"+paymentKakaoReq.getStoreId()+"/"+paymentKakaoReq.getTableId()+"/"+paymentKakaoReq.getSessionId()+"/"+userId); // 결제승인시 넘어갈 url
         parameters.add("cancel_url", REDIRECT_URL+"/kakao/cancel"); // 결제취소시 넘어갈 url
         parameters.add("fail_url", REDIRECT_URL+"/kakao/fail"); // 결제 실패시 넘어갈 url
 
@@ -178,10 +177,9 @@ public class PaymentService {
     }
 
     @Transactional
-    public void approveKakaoPayment(String pgToken, Long storeId, Long tableId, Long sessionId) {
+    public void approveKakaoPayment(String pgToken, Long storeId, Long tableId, Long sessionId, Long userId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        Long userId = RequestUtil.getUserId();
 
         /** 요청 Body */
         LinkedMultiValueMap<String, String> map = new LinkedMultiValueMap<>();
