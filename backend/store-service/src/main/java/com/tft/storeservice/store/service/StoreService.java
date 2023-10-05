@@ -34,13 +34,13 @@ public class StoreService {
         return new StoreAllRes(storeRepository.findById(storeId).orElseThrow());
     }
 
-    public List<StoreRes> findStores(StoreFindReq storeFindReq){
+    public List<StoreAllRes> findStores(StoreFindReq storeFindReq){
         Area area = areaRepository.findByArea(storeFindReq.getAreaName());
-        return storeRepository.findAllByArea(area).stream().map(StoreRes::new).collect(Collectors.toList());
+        return storeRepository.findAllByArea(area).stream().map(StoreAllRes::new).collect(Collectors.toList());
     }
 
-    public List<StoreRes> findAll(){
-        return storeRepository.findAll().stream().map(StoreRes::new).collect(Collectors.toList());
+    public List<StoreAllRes> findAll(){
+        return storeRepository.findAll().stream().map(StoreAllRes::new).collect(Collectors.toList());
     }
 
     @Transactional
