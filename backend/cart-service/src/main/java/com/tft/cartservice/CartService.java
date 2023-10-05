@@ -1,4 +1,4 @@
-package com.tft.cartservice.cart.service;
+package com.tft.cartservice;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,13 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import com.tft.cartservice.cart.dto.request.CartMenu;
-import com.tft.cartservice.cart.dto.request.Cart;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +21,15 @@ public class CartService {
 
 
 
-	public void addToCart(Cart cart){
-		sharedCart.computeIfAbsent(cart.getTeamId(), k -> new ArrayList<>()).add(cart.getCartMenu());
-		broadcastCartUpdate(cart.getTeamId());
+	public void addToCart(CartReq cart){
+		sharedCart.computeIfAbsent(cart.getRoomId(), k -> new ArrayList<>()).add(cart.getCartMenu());
+		broadcastCartUpdate(cart);
 	}
 
-	private void broadcastCartUpdate(Long teamId){
-		List<CartMenu> updatedCart = sharedCart.get(teamId);
-		log.info("/topic/cart/" + teamId);
-		simpMessagingTemplate.convertAndSend("/topic/cart/" + teamId, updatedCart);
+	private void broadcastCartUpdate(CartReq cart){
+		List<CartMenu> updatedCart = sharedCart.get(cart.getRoomId());
+		log.info("/topic/cart/" + cart.getRoomId());
+		simpMessagingTemplate.convertAndSend("/topic/cart/" + cart.getRoomId(), updatedCart);
 		log.info(updatedCart.toString());
 	}
 
