@@ -1,7 +1,9 @@
 package com.tft.cartservice.sse.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -11,12 +13,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class SseEmittersNew {
 
     // Map을 사용하여 storeId와 SSE 연결을 매핑합니다.
     private final Map<String, List<SseEmitter>> storeEmitters = new ConcurrentHashMap<>();
 
+//    @Transactional
     public SseEmitter add(String storeId, SseEmitter emitter) {
         // 가게별로 SSE 연결 리스트를 가져옵니다.
         List<SseEmitter> emitters = storeEmitters.computeIfAbsent(storeId, key -> new CopyOnWriteArrayList<>());
