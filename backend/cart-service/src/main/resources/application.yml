@@ -16,11 +16,9 @@ spring:
     name: cart-service
 
   datasource:
-#    url: jdbc:mariadb://localhost:3305/cart
     url: jdbc:mariadb://j9c208.p.ssafy.io:3311/cart
     driverClassName: org.mariadb.jdbc.Driver
     username: root
-#    password: ssafy
     password: bigbigred
   jpa:
     hibernate:
