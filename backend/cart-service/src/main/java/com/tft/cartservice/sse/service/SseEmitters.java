@@ -54,8 +54,12 @@ public class SseEmitters {
                         .name("order")
                         .data(message));
             } catch (IOException e) {
-                log.error("Error sending order alert to store {}: {}", storeId, e.getMessage());
-                storeEmitters.remove(storeId);
+                if (e.getMessage().contains("Broken pipe")) {
+                    log.warn("SSE 연결이 끊어짐. 무시됨.", e); // 경고 메시지로 로그를 기록
+                } else {
+                    log.error("Error sending order alert to store {}: {}", storeId, e.getMessage());
+                    storeEmitters.remove(storeId);
+                }
             }
         }
     }
