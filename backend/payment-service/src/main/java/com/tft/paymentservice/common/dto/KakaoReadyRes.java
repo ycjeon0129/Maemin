@@ -11,6 +11,6 @@ public class KakaoReadyRes {
 
     private String tid;
     private String next_redirect_mobile_url;
-    private String partner_order_id;
+//    private String partner_order_id;
 
 }
