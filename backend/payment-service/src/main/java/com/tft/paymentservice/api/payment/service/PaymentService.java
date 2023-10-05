@@ -39,6 +39,7 @@ public class PaymentService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     private final String AUTHENTICATION_CODE = "authentication_code::";
+    private final String PAYMENT_CODE = "payment_code::";
     private final String MM = "매장의민족";
     private final String KAKAO = "kakao::";
     @Value("${custom.url}"+"/payment-service/payment")
@@ -90,8 +91,12 @@ public class PaymentService {
         payment.updateStatus(Status.PAYMENT_COMPLETE);
         paymentRepository.save(payment);
 
-        paymentRes.updatePaymentDate(payRes.getPayedDate());
-        paymentRes.updateStatus(Status.PAYMENT_COMPLETE.getKrName());
+        String uuid = userId + TimeUtil.getTimeUuid();
+        redisTemplate.opsForValue().set(PAYMENT_CODE + uuid, userId.toString());
+
+        paymentRes.setPaymentDate(payRes.getPayedDate());
+        paymentRes.setStatus(Status.PAYMENT_COMPLETE.getKrName());
+        paymentRes.setAuthCode(uuid);
 
 //            // pay confirm
 //            PayConfirmReq payConfirmReq = PayConfirmReq.builder()
@@ -177,7 +182,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public void approveKakaoPayment(String pgToken, Long storeId, Long tableId, Long sessionId, Long userId) {
+    public String approveKakaoPayment(String pgToken, Long storeId, Long tableId, Long sessionId, Long userId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
 
@@ -217,12 +222,16 @@ public class PaymentService {
                 .amount(approveRes.getAmount().getTotal())
                 .build();
 
+        String uuid = userId + TimeUtil.getTimeUuid();
+        redisTemplate.opsForValue().set(PAYMENT_CODE + uuid, userId.toString());
+
         payment.updatePaymentDate(approveRes.getApproved_at().replace('T', ' '));
         payment.updateStatus(Status.PAYMENT_COMPLETE);
 
         paymentRepository.save(payment);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
+        return uuid;
     }
 
     public List<PaymentLogRes> getPaymentLog(int page, int count) {

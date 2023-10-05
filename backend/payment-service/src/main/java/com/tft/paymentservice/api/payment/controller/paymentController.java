@@ -56,8 +56,8 @@ public class paymentController {
     public void approveKakaoPayment(HttpServletResponse response, @RequestParam("pg_token") String pgToken
     , @PathVariable Long storeId, @PathVariable Long tableId, @PathVariable Long sessionId, @PathVariable Long userId) throws IOException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-        paymentService.approveKakaoPayment(pgToken, storeId, tableId, sessionId, userId);
-        String url = String.format("%s?storeid=%s&tableid=%s&sessionid=%s", REDIRECT_URL, storeId, tableId, sessionId);
+        String uuid = paymentService.approveKakaoPayment(pgToken, storeId, tableId, sessionId, userId);
+        String url = String.format("%s?authcode=%s", REDIRECT_URL, uuid);
 
         response.sendRedirect(url);
 

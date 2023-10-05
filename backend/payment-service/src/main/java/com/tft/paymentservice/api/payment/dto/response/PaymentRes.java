@@ -1,10 +1,7 @@
 package com.tft.paymentservice.api.payment.dto.response;
 
 import com.tft.paymentservice.api.payment.dto.CartDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 public class PaymentRes {
 
 //    private Long orderId;   // 주문ID
@@ -27,14 +25,7 @@ public class PaymentRes {
     private Long requestId;     // 결제 요청 ID
     private int amount;         // 결제 가격
     private String paymentDate;      // 결제 방법
-    private String status;      // 결제 방법
-
-    public void updatePaymentDate(String paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public void updateStatus(String status) {
-        this.status = status;
-    }
+    private String status;      // 결제 상태
+    private String authCode;      // 결제 인증 코드
 
 }
