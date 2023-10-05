@@ -219,7 +219,7 @@ public class PaymentService {
                 .amount(approveRes.getAmount().getTotal())
                 .build();
 
-        payment.updatePaymentDate(approveRes.getApproved_at());
+        payment.updatePaymentDate(approveRes.getApproved_at().replace('T', ' '));
         payment.updateStatus(Status.PAYMENT_COMPLETE);
 
         paymentRepository.save(payment);
