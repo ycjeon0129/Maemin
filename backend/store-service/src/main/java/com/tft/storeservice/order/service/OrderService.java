@@ -74,8 +74,7 @@ public class OrderService {
 		System.out.println("userId:::::::::::" + userId);
 		System.out.println("userId:::::::::::" + userId);
 		System.out.println("userId:::::::::::" + userId);
-		String uuid = userId + orderReq.getAuthCode();
-		String stringUserId = (String) redisTemplate.opsForValue().get(PAYMENT_CODE + uuid);
+		String stringUserId = (String) redisTemplate.opsForValue().get(PAYMENT_CODE + orderReq.getAuthCode());
 		System.out.println("stringUserId:::::" + stringUserId);
 		System.out.println("stringUserId:::::" + stringUserId);
 		System.out.println("stringUserId:::::" + stringUserId);
