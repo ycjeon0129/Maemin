@@ -142,7 +142,7 @@ public class PaymentService {
 //                .build();
         Long userId = RequestUtil.getUserId();
 
-        String uuid = TimeUtil.getTimestamp();
+        String uuid = TimeUtil.getTimeUuid();
 
         // 카카오가 요구한 결제요청request값을 담아줍니다.
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<String, String>();
@@ -218,6 +218,9 @@ public class PaymentService {
                 .paymentRequestId(Long.parseLong(requestId))
                 .amount(approveRes.getAmount().getTotal())
                 .build();
+
+        payment.updatePaymentDate(approveRes.getApproved_at());
+        payment.updateStatus(Status.PAYMENT_COMPLETE);
 
         paymentRepository.save(payment);
 

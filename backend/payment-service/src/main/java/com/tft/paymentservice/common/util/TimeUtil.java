@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class TimeUtil {
 
-    public static String getTimestamp() {
+    public static String getTimeUuid() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         return LocalDateTime.now().format(formatter);
     }
