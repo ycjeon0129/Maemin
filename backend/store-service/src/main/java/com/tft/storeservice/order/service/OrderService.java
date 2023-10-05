@@ -69,8 +69,18 @@ public class OrderService {
 	public Long register(OrderReq orderReq) throws IllegalAccessException {
 
 		Long userId = RequestUtil.getUserId();
+		System.out.println("userId:::::::::::" + userId);
+		System.out.println("userId:::::::::::" + userId);
+		System.out.println("userId:::::::::::" + userId);
+		System.out.println("userId:::::::::::" + userId);
+		System.out.println("userId:::::::::::" + userId);
 		String uuid = userId + orderReq.getAuthCode();
 		String stringUserId = (String) redisTemplate.opsForValue().get(PAYMENT_CODE + uuid);
+		System.out.println("stringUserId:::::" + stringUserId);
+		System.out.println("stringUserId:::::" + stringUserId);
+		System.out.println("stringUserId:::::" + stringUserId);
+		System.out.println("stringUserId:::::" + stringUserId);
+		System.out.println("stringUserId:::::" + stringUserId);
 		if (!stringUserId.equals(userId.toString())) {
 			throw new IllegalAccessException();
 		}
