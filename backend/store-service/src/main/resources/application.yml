@@ -37,7 +37,7 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug # Logger
-    org.hibernate.type: trace # Show Query Parameter
+    org.hibernate.type: debug # Show Query Parameter
 
 #token:
 #  access-expired-time: 3600000
