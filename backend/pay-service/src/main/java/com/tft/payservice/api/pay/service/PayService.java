@@ -297,9 +297,12 @@ public class PayService {
     public PayPaymentRes payPayment(PayPaymentReq payPaymentReq) throws IOException, NoPermissionException {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Long userId = RequestUtil.getUserId();
-
+        System.out.println("userId:::::::::::::::::::::::"+userId);
+        System.out.println("userId:::::::::::::::::::::::"+userId.getClass());
         Pay pay = payRepository.findByPayId(payPaymentReq.getPayId())
                 .orElseThrow( () -> new NullPointerException() );
+        System.out.println("payUserId::::::::::::::::::::"+pay.getPayUser().getUserId());
+        System.out.println("payUserId::::::::::::::::::::"+pay.getPayUser().getUserId().getClass());
         if (!pay.getPayUser().getUserId().equals(userId)) {
             throw new NoPermissionException();
         }
