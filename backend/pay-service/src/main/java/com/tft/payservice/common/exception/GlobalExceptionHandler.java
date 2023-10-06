@@ -1,6 +1,6 @@
-package com.tft.payservice.exception;
+package com.tft.payservice.common.exception;
 
-import com.tft.payservice.exception.custom.PayNotExistException;
+import com.tft.payservice.common.exception.custom.PayNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

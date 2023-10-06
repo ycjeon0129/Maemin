@@ -1,4 +1,4 @@
-package com.tft.payservice.exception;
+package com.tft.payservice.common.exception;
 
 public enum ExceptionMessage {
     // 다른 예외 메시지들도 추가 가능

@@ -1,4 +1,4 @@
-package com.tft.payservice.api.pay.dto.request;
+package com.tft.payservice.api.pay.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class PayAuthenticationReq {
+public class PayAuthenticationRes {
 
-    private String payPw;    // 간편 인증 비밀번호 6자리
+    private String code;    // 자체 페이 비밀번호 인증 코드
 
 }

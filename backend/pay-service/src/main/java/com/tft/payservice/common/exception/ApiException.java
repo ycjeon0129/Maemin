@@ -1,4 +1,4 @@
-package com.tft.payservice.exception;
+package com.tft.payservice.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
