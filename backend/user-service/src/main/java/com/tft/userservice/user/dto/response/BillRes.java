@@ -23,7 +23,7 @@ public class BillRes {
 
     private String requests;
 
-    private LocalDateTime createdDate;
+    private String createdDate;
 
     private List<String> menuList;
 

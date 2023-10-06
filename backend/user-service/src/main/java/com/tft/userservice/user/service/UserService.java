@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,15 +95,17 @@ public class UserService {
             for (BillMenu billMenu : billMenus){
                 menuList.add(billMenu.getMenuName());
             }
+            String changeDate = bill.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             BillRes billRes = BillRes.builder()
 //                    .billId(bill.getBillId())
                     .storeName(bill.getStoreName())
                     .paymentMethod(String.valueOf(bill.getPaymentMethod()))
                     .totalPrice(bill.getTotalPrice())
                     .requests(bill.getRequests())
-                    .createdDate(bill.getCreatedDate())
+                    .createdDate(changeDate)
                     .menuList(menuList)
                     .build();
+
             billResList.add(billRes);
         }
         return billResList;
