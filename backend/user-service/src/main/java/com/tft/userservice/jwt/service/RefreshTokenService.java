@@ -1,7 +1,7 @@
 package com.tft.userservice.jwt.service;
 
 import com.tft.userservice.common.exception.custom.AccessTokenNotValidException;
-import com.tft.userservice.common.exception.custom.UsernameNotExistException;
+import com.tft.userservice.common.exception.custom.UserNotExistException;
 import com.tft.userservice.user.db.entity.User;
 import com.tft.userservice.user.db.repository.UserRepository;
 import com.tft.userservice.jwt.JwtTokenProvider;
@@ -23,10 +23,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+import static com.tft.userservice.common.util.LogCurrent.*;
+
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Slf4j
+@Service
 public class RefreshTokenService {
 
     private final UserDetailsService userDetailsService;
@@ -36,21 +38,21 @@ public class RefreshTokenService {
 
     @Transactional
     public void updateRefreshToken(Long id, String uuid) {
-        System.out.println("********REDIS 갱신*********");
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
         User user = userRepository.findByUserId(id)
-                .orElseThrow(() -> new UsernameNotExistException());
+                .orElseThrow(UserNotExistException::new);
 
         refreshTokenRedisRepository.save(RefreshToken.of(user.getUserId(), uuid));
-        System.out.println("******** REDIS 저장 *********");
         log.info("refresh key : {}", user.getUserId());
         log.info("refresh value : {}", uuid);
-
+        log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
     @Transactional
     public JwtTokenDto refreshJwtToken(String accessToken, String refreshToken) {
         String userId = jwtTokenProvider.getUserId(accessToken);
-
+        log.info("refresj JWT 토큰 : {}", userId);
         RefreshToken findRefreshToken = refreshTokenRedisRepository.findById(Long.valueOf(userId))
                 .orElseThrow(()
                         -> new RefreshTokenNotValidException("사용자 고유번호 : " + userId + "는 등록된 리프레쉬 토큰이 없습니다.")
@@ -68,7 +70,7 @@ public class RefreshTokenService {
         }
 
         User findUser = userRepository.findById(Long.valueOf(userId))
-                .orElseThrow(() -> new UsernameNotExistException());
+                .orElseThrow(UserNotExistException::new);
 //                .orElseThrow(() -> new NotExistUserException("유저 고유 번호 : " + userId + "는 없는 유저입니다."));
 
         // access token 생성
@@ -99,8 +101,8 @@ public class RefreshTokenService {
         refreshTokenRedisRepository.delete(refreshToken);
     }
 
-    public Authentication getAuthentication(String account) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(account);
+    public Authentication getAuthentication(String loginId) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 }

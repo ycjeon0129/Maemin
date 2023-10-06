@@ -1,5 +1,8 @@
 package com.tft.userservice.jwt;
 
+import com.tft.userservice.common.exception.custom.UserNotExistException;
+import com.tft.userservice.user.db.entity.User;
+import com.tft.userservice.user.db.repository.UserRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     @Value("${token.access-expired-time}")
     private long ACCESS_EXPIRED_TIME;
@@ -31,8 +35,13 @@ public class JwtTokenProvider {
 
     // JWT access token 생성
     public String createJwtAccessToken(String userId, String uri, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(String.valueOf(userId)); // JWT payload 에 저장되는 정보단위
+        User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(UserNotExistException::new);
+        Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
+        claims.put("name", user.getUserName());
+        claims.put("nickName", user.getNickName());
         claims.put("roles", roles); // 정보는 key : value 쌍으로 저장된다.
+
+
 
         return Jwts.builder()
                 .addClaims(claims)

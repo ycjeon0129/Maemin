@@ -1,0 +1,60 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://j9c208.p.ssafy.io:3308/card
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: bigbigred
+    hikari:
+      idle-timeout: '600000'
+      maximum-pool-size: '50'
+      auto-commit: 'true'
+      connection-init-sql: SELECT 1
+      driver-class-name: org.mariadb.jdbc.Driver
+      connection-timeout: '5000'
+      pool-name: HikariPool
+      max-lifetime: '1800000'
+      minimum-idle: '50'
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      show_sql: true
+      format_sql: true
+  devtools:
+    livereload:
+      enabled: 'true'
+  #  mvc:
+  #    pathmatch:
+  #      matching-strategy: ANT_PATH_MATCHER
+  profiles:
+    include: env
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        boot : info
+        security : DEBUG
+        web : info
+  file:
+    name: ./card.log
+server:
+  servlet:
+    encoding:
+      enabled: 'true'
+      force: 'true'
+      charset: UTF-8
+    contextPath: /
+  port: '8090'
+  compression:
+    enabled: 'true'
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+build:
+  date: '@build.date@'
+springfox:
+  documentation:
+    swagger:
+      use-model-v3: 'false'
+---
+

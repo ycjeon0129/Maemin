@@ -1,0 +1,47 @@
+server.port: 0
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+#      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://j9c208.p.ssafy.io:8761/eureka
+
+  instance:
+    prefer-ip-address: true
+
+spring:
+  application:
+    name: store-service
+
+  datasource:
+#    url: jdbc:mariadb://localhost:3305/store
+    url: jdbc:mariadb://j9c208.p.ssafy.io:3310/store
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+#    password: ssafy
+    password: bigbigred
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true #To beautify or pretty print the SQL
+        show_sql: true #show sql
+
+  redis:
+    port: 6379
+    host: j9c208.p.ssafy.io
+
+logging:
+  level:
+    org.hibernate.SQL: debug # Logger
+    org.hibernate.type: debug # Show Query Parameter
+
+#token:
+#  access-expired-time: 3600000
+#  refresh-expired-time: 604800000
+#  secret: $2a$10$q42lY7Y18xqrFt1qbODZIO4OMTeOxnrCe7tF3n9bazJinVE7VH5Pi
+#  refresh-token-name: refresh-token
+#  access-token-name: access-token

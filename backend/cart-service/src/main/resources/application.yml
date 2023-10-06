@@ -1,0 +1,51 @@
+server:
+  port: 9999
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+#            defaultZone: http://localhost:8761/eureka
+      defaultZone: http://j9c208.p.ssafy.io:8761/eureka
+
+  instance:
+    prefer-ip-address: true
+
+#activemq:
+#  queue.name : sample-queue
+
+spring:
+#  activemq:
+#    broker-url: tcp://localhost:61616
+#    stomp:
+#      host : localhost
+#      port : 61613
+#    user: admin
+#    password: admin
+  application:
+    name: cart-service
+
+  datasource:
+    url: jdbc:mariadb://j9c208.p.ssafy.io:3311/cart
+#    url: jdbc:mariadb://localhost:3305/cart
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: bigbigred
+#    password: ssafy
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true #To beautify or pretty print the SQL
+        show_sql: true #show sql
+
+  redis:
+    port: 6379
+    host: j9c208.p.ssafy.io
+
+logging:
+  level:
+    org.hibernate.SQL: debug # Logger
+    org.hibernate.type: trace # Show Query Parameter

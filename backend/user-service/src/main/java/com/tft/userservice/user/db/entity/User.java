@@ -5,12 +5,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class User {
@@ -45,9 +49,19 @@ public class User {
 
     private String role;
 
+    @Column(columnDefinition = "TINYINT(1)")
+    @ColumnDefault("False")
+    private boolean pay;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Bill> bills;
+
+    @ColumnDefault("0")
+    private Long storeId;
+
     @Builder
     public User(Long userId, String loginId, String loginPw, String userName, String nickName, String phone,
-                String address, LocalDateTime createdDate, boolean sex, int age, String role) {
+                String address, LocalDateTime createdDate, boolean sex, int age, String role, boolean pay) {
         this.userId = userId;
         this.loginId = loginId;
         this.loginPw = loginPw;
@@ -55,9 +69,17 @@ public class User {
         this.nickName = nickName;
         this.phone = phone;
         this.currentAddress = address;
-//        this.createdDate = createdDate;
         this.sex = sex;
         this.age = age;
         this.role = role;
+        this.pay = pay;
+    }
+
+    public void changePay(boolean newPay){
+        this.pay = newPay;
+    }
+
+    public void changeStoreId(Long newStoreId){
+        this.storeId = newStoreId;
     }
 }
