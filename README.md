@@ -324,11 +324,22 @@ FE/customer
 | **PORT** |                        **이름**                         |
 | :------: | :-----------------------------------------------------: |
 |   443    |                          HTTPS                          |
-|    80    | HTTP - HTTPS로 리다이렉트(프론트 페이지지로 리다이렉트) |
-|   5443   |                        Openvidu                         |
-|   3000   |                          React                          |
-|   3306   |                          MySQL                          |
-|   5442   |              Spring boot Docker Container               |
+|    80    | HTTP - HTTPS로 리다이렉트(프론트 페이지지로 리다이렉트)      |
+|   3000   |                          React - customer                     |
+|   3001   |                          React - owner                       |
+|   3306   |                          MariaDB - user                          |
+|   3307   |                          MariaDB - pay                          |
+|   3308   |                          MariaDB - card                          |
+|   3309   |                          MariaDB - payment                          |
+|   3310   |                          MariaDB - store                          |
+|   3311   |                          MariaDB - cart                          |
+|   6379   |                          Redis                          |
+|   8000   |                          ApiGateway - Service                          |
+|   8080   |                          Jenkins                          |
+|   8761   |                          Discovery - Service                          |
+|   9999   |                          Cart - Service                          |
+
+
 
 ### 😃 팀원 역할
 
