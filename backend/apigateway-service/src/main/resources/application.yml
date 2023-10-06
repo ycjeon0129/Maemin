@@ -6,7 +6,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-#            defaultZone: http://localhost:8761/eureka
+      #            defaultZone: http://localhost:8761/eureka
       defaultZone: http://j9c208.p.ssafy.io:8761/eureka
 
   instance:
@@ -56,6 +56,14 @@ spring:
 
         - id: user-service
           predicates:
+            - Path=/user-service/users/check
+            - Method=POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          predicates:
             - Path=/user-service/login
             - Method=POST
           uri: lb://USER-SERVICE
@@ -78,13 +86,14 @@ spring:
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
 
+        # 필터 test용
         - id: user-service
           predicates:
-            - Path=/user-service/api/test/services
-            - Method=GET
+            - Path=/user-service/test/**
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - PaymentAuthorizationHeaderFilter
 
         - id: user-service
           predicates:
@@ -92,6 +101,14 @@ spring:
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          predicates:
+            - Path=/user-service/owners/**
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - OwnerAuthorizationHeaderFilter
 
         - id: user-service # 구분하기 위한 id값으로 임의로 작성해도 무관
           predicates: # 라우팅 조건
@@ -111,7 +128,7 @@ spring:
           uri: lb://STORE-SERVICE
           filters:
             - RewritePath=/store-service/(?<segment>.*), /$\{segment}
-        #            - OwnerAuthorizationHeaderFilter
+            - PaymentAuthorizationHeaderFilter
 
         - id: payment-service
           predicates:
@@ -119,6 +136,15 @@ spring:
           uri: lb://PAYMENT-SERVICE
           filters:
             - RewritePath=/payment-service/(?<segment>.*), /$\{segment}
+            - PaymentAuthorizationHeaderFilter
+
+        - id: pay-service
+          predicates:
+            - Path=/pay-service/encrypt
+            - Method=GET
+          uri: lb://PAY-SERVICE
+          filters:
+            - RewritePath=/pay-service/(?<segment>.*), /$\{segment}
 
         - id: pay-service
           predicates:
@@ -126,7 +152,14 @@ spring:
           uri: lb://PAY-SERVICE
           filters:
             - RewritePath=/pay-service/(?<segment>.*), /$\{segment}
-#            - AuthorizationHeaderFilter
+            - AuthorizationHeaderFilter
+
+        - id: cart-service
+          predicates:
+            - Path=/cart-service/**
+          uri: lb://CART-SERVICE
+          filters:
+            - RewritePath=/cart-service/(?<segment>.*), /$\{segment}
 
 token:
   access-expired-time: 3600000
