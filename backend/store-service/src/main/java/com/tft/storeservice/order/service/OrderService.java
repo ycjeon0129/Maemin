@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.tft.storeservice.common.feign.BillAddReq;
 import com.tft.storeservice.common.feign.SseFeignClient;
+import com.tft.storeservice.common.feign.UserFeignClient;
 import com.tft.storeservice.common.util.RequestUtil;
+import com.tft.storeservice.order.dto.request.OrderMenuReq;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -45,6 +48,7 @@ public class OrderService {
 	private final OrderMenusRepository orderMenusRepository;
 	private final OrderMenuOptionRepository orderMenuOptionRepository;
 	private final SseFeignClient sseFeignClient;
+	private final UserFeignClient userFeignClient;
 	// private final SseService sseService;
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
@@ -87,6 +91,25 @@ public class OrderService {
 		String msg = "주문 접수";
 		sseFeignClient.count(orderReq.getStoreId().toString(), msg);
 
+		Store store = storeRepository.findStoreByStoreId(orderReq.getStoreId());
+		System.out.println(":::::: store 찾음 ::::::");
+		List<String> menus = new ArrayList<>();
+		for (OrderMenuReq menu : orderReq.getMenus()) {
+			System.out.println(":::::: 메뉴 이름 찾는중 ::::::" + getMenu(menu.getMenuId()).getName());
+			menus.add(getMenu(menu.getMenuId()).getName());
+		}
+		System.out.println(":::::: 메뉴 이름 다 찾음 ::::::");
+		BillAddReq bill = BillAddReq.builder()
+				.storeName(store.getName())
+				.paymentMethod(orderReq.getMethod())
+				.totalPrice(orderReq.getTotalPrice())
+				.requests(orderReq.getRequests())
+				.menuList(menus)
+				.build();
+		System.out.println(":::::: FeignReq 생성 ::::::");
+
+		userFeignClient.addBills(bill);
+		System.out.println(":::::: UserFeign 완료 ::::::");
 
 
 		////////////////////
