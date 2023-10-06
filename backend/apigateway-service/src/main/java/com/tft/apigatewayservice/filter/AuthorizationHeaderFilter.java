@@ -50,7 +50,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             log.info(jwtTokenProvider.getRoles(jwt).toString());
 
-            if (false == jwtTokenProvider.getRoles(jwt).contains("ROLE_CUSTOMER")) {
+            if (!jwtTokenProvider.getRoles(jwt).contains("ROLE_CUSTOMER")) {
                 return onError(exchange, "CUSTOMER 권한 없음", HttpStatus.UNAUTHORIZED);
             }
 
