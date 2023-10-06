@@ -6,8 +6,11 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
+//@Order(-1)
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     @Autowired
@@ -26,13 +31,14 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+
         List<Class<? extends RuntimeException>> jwtExceptions =
                 List.of(SignatureException.class,
                         MalformedJwtException.class,
                         UnsupportedJwtException.class,
                         IllegalArgumentException.class);
         Class<? extends Throwable> exceptionClass = ex.getClass();
-
+        log.info("Excpetion Hadler 종류 : {}", exceptionClass.toString());
         Map<String, Object> responseBody = new HashMap<>();
         if (exceptionClass == ExpiredJwtException.class) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);

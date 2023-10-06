@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CardRegistRes {
 
+    private String basicInfo;   // 마스킹 된 카드번호
     private String billingKey;  // 빌링키
 
 }

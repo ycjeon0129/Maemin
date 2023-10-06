@@ -1,7 +1,9 @@
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:4406/tft_card?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: jdbc:mariadb://j9c208.p.ssafy.io:3308/card
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: bigbigred
     hikari:
       idle-timeout: '600000'
       maximum-pool-size: '50'

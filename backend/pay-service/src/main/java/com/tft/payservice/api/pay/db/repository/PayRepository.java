@@ -11,6 +11,5 @@ import java.util.Optional;
 public interface PayRepository extends JpaRepository<Pay, Long> {
 
     Optional<Pay> findByPayId(Long payId);
-    List<Pay> findByUserId(Long userId);
 
 }

@@ -50,11 +50,18 @@ public class OwnerAuthorizationHeaderFilter extends AbstractGatewayFilterFactory
 
             String subject = jwtTokenProvider.getUserId(jwt);
 
-            if (false == jwtTokenProvider.getRoles(jwt).contains("ROLE_OWNER")) {
+            if (!jwtTokenProvider.getRoles(jwt).contains("ROLE_OWNER")) {
                 return onError(exchange, "OWNER 권한 없음", HttpStatus.UNAUTHORIZED);
             }
 
-            return chain.filter(exchange); // 토큰이 일치할때
+            ServerHttpRequest newRequest = request.mutate()
+                    .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
+                    .header("user-id", subject)
+                    .build();
+
+//            return chain.filter(exchange); // 토큰이 일치할때
+
+            return chain.filter(exchange.mutate().request(newRequest).build());
         };
     }
 

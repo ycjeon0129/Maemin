@@ -10,12 +10,14 @@ public class Result<T> {
     private Code code;
     private String message;
     private T data;
+    private T userInfo;
 
     @Builder
-    public Result(Code code, String message, T data) {
+    public Result(Code code, String message, T data, T userInfo) {
         this.code = code;
         this.message = message;
         this.data = data;
+        this.userInfo = userInfo;
     }
 
     public static Result createErrorResult(String message) {
@@ -32,6 +34,15 @@ public class Result<T> {
                 .code(Code.SUCCESS)
                 .message("")
                 .data(data)
+                .build();
+    }
+
+    public static <T> Result createSuccessLogin(T data, T userInfo) {
+        return Result.builder()
+                .code(Code.SUCCESS)
+                .message("")
+                .data(data)
+                .userInfo(userInfo)
                 .build();
     }
 }

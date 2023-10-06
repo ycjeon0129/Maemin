@@ -2,6 +2,7 @@ package com.tft.userservice.common.exception;
 
 import com.tft.userservice.common.exception.custom.AccessTokenNotValidException;
 import com.tft.userservice.common.exception.custom.LoginIdExistException;
+import com.tft.userservice.common.exception.custom.SmsNumNotValidException;
 import com.tft.userservice.common.exception.custom.UserNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,21 @@ public class GlobalExceptionHandler {
 
         ApiException apiException = new ApiException(
                 ExceptionMessage.LOGIN_ID_EXIST,
+                httpStatus,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+
+        return new ResponseEntity<>(apiException, httpStatus);
+
+    }
+
+    @ExceptionHandler(value = {SmsNumNotValidException.class})
+    public ResponseEntity<Object> handelSmsNumNotValidException(SmsNumNotValidException e) {
+
+        HttpStatus httpStatus = HttpStatus.OK; // 409에러
+
+        ApiException apiException = new ApiException(
+                ExceptionMessage.SMS_NUM_NOT_VALID,
                 httpStatus,
                 ZonedDateTime.now(ZoneId.of("Z"))
         );

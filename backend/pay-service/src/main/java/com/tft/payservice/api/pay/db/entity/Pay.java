@@ -6,13 +6,10 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@ToString
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @Table(name = "pay")
 @Entity
@@ -22,8 +19,9 @@ public class Pay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long payId; // 페이 식별 ID
 
-    @NotNull
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private PayUser payUser;
 
     @NotNull
     private String company; // 카드사
@@ -35,12 +33,5 @@ public class Pay {
 
     @NotNull
     private String billingKey;  // 카드사로부터 발급
-
-    @NotNull
-    private String payPw;   // salt 및 key streching 적용값
-
-    private String salt;
-
-    private int keyStreching;   // 1 ~ 5 사이 랜덤값
 
 }

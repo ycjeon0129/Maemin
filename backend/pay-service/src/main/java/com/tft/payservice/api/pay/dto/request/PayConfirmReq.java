@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PayConfirmReq {
 
-    private Long orderId;   // 주문ID
-    private int amount;     // 결제 가격
+    private Long requestId;     // 결제요청ID
+    private String billingKey;  // 빌링키
+    private int amount;         // 결제 가격
 
 }
