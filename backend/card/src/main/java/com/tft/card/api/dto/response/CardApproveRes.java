@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class CardRegistRes {
+public class CardApproveRes {
 
-    private String basicInfo;   // 마스킹 된 카드번호
-    private String billingKey;  // 빌링키
+    private int code;           // HTTP 상태 코드
+//    private String msg;         // 메세지
+    private String payedDate;   // 결제 승인 일시 (YYYY-MM-DD HH:mm:SS)
 
 }
