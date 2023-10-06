@@ -1,6 +1,8 @@
 package com.tft.userservice.user.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tft.userservice.common.exception.custom.UserNotExistException;
+import com.tft.userservice.user.db.repository.UserRepository;
 import com.tft.userservice.user.dto.request.LoginReq;
 import com.tft.userservice.jwt.CookieProvider;
 import com.tft.userservice.jwt.JwtTokenProvider;
@@ -38,6 +40,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService;
     private final CookieProvider cookieProvider;
+    private final UserRepository userRepository;
 
     // login 리퀘스트 로 오는 요청을 판단
     @Override
@@ -97,13 +100,24 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         response.setContentType(APPLICATION_JSON_VALUE);
         response.addCookie(cookie);
 
+        com.tft.userservice.user.db.entity.User curUser = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(UserNotExistException::new);
+
+        Map<String, Object> userInfo = Map.of(
+
+                "userName", curUser.getUserName(),
+                "nickName", curUser.getNickName(),
+                "pay", curUser.isPay(),
+                "storeId", curUser.getStoreId()
+        );
         // body 설정
         Map<String, Object> tokens = Map.of(
                 "accessToken", accessToken,
                 "expiredTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(expiredTime)
         );
 
-        new ObjectMapper().writeValue(response.getOutputStream(), Result.createSuccessResult(tokens));
+        new ObjectMapper().writeValue(response.getOutputStream(), Result.createSuccessLogin(tokens, userInfo));
+
+//        new ObjectMapper().writeValue(response.getOutputStream(), Result.createSuccessResult(tokens));
 
 
     }

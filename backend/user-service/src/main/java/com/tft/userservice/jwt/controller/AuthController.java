@@ -1,6 +1,7 @@
 package com.tft.userservice.jwt.controller;
 
 import com.tft.userservice.jwt.CookieProvider;
+import com.tft.userservice.jwt.dto.Code;
 import com.tft.userservice.jwt.dto.JwtTokenDto;
 import com.tft.userservice.jwt.dto.Result;
 import com.tft.userservice.jwt.service.AccessTokenService;
@@ -63,7 +64,8 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .body(Result.createSuccessResult(""));
+                .body(Result.builder().code(Code.SUCCESS).message("로그아웃 성공").data("").build());
+//                .body(Result.createSuccessResult(""));
     }
 
     @GetMapping("/check/access-token")

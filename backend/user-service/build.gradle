@@ -48,6 +48,14 @@ dependencies {
 
     //jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // naver sms
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+
+    // QR Code - zxing
+    implementation group: 'com.google.zxing', name: 'javase', version: '3.5.0'
+    implementation group: 'com.google.zxing', name: 'core', version: '3.5.0'
+
 }
 
 dependencyManagement {
