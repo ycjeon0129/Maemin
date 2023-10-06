@@ -16,9 +16,6 @@ import java.util.UUID;
 @Component
 public class JwtTokenProvider {
 
-//    private final UserDetailsService userDetailsService;
-//    private final UserRepository userRepository;
-
     @Value("${token.access-expired-time}")
     private long ACCESS_EXPIRED_TIME;
 
@@ -30,13 +27,9 @@ public class JwtTokenProvider {
 
     // JWT access token 생성
     public String createJwtAccessToken(String userId, String uri, List<String> roles) {
-//        User user = userRepository.findByUserId(Long.valueOf(userId)).orElseThrow(UserNotExistException::new);
         Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
-//        claims.put("name", user.getUserName());
-//        claims.put("nickName", user.getNickName());
+
         claims.put("roles", roles); // 정보는 key : value 쌍으로 저장된다.
-
-
 
         return Jwts.builder()
                 .addClaims(claims)
@@ -81,25 +74,12 @@ public class JwtTokenProvider {
     }
 
     // 토큰 정보 검증 메소드 유효성 + 만료 일자 확인
-    public boolean validateJwtToken(String token) {
+    public void validateJwtToken(String token) {
         try {
             Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
-            return true;
-        } catch (SignatureException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
-            return false;
-        } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
-            return false;
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-            return false;
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-            return false;
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
-            return false;
+        } catch (SignatureException  | MalformedJwtException |
+                 UnsupportedJwtException | IllegalArgumentException | ExpiredJwtException jwtException) {
+            throw jwtException;
         }
     }
 
