@@ -20,11 +20,47 @@
 
   - 높은 수수료
 
-### 프로젝트 기간 - 2023.09.28 ~ 2021.10.06
+### 프로젝트 기간 - 2023.09.28 ~ 2023.10.06
 
 ## 서비스 화면 소개
 
 ### 메인 화면
+
+1. 회원가입
+
+> <img src = "exec/img/회원가입.gif" width=50%  height=50%>
+
+<br/><br/> 2. 장바구니
+
+> <img src = "exec/img/장바구니.gif" width=50%  height=50%>
+
+<br/><br/> 3. 간편페이 등록
+
+> <img src = "exec/img/간편페이등록.gif" width=50%  height=50%>
+
+<br/><br/> 4. 결제
+
+> <img src = "exec/img/결제.gif" width=50%  height=50%>
+
+<br/><br/> 5. 마이페이지
+
+> <img src = "exec/img/마이페이지.gif" width=50%  height=50%>
+
+<br/><br/> 6. 로그인 : 로그인 시 JWT 토큰(Access, Refresh) 반환
+
+> <img src = "exec/img/jwt토큰.gif" width=50%  height=50%>
+
+<br/><br/> 7. QR로 해당 가게 접속
+
+> <img src = "exec/img/QR.gif" width=50%  height=50%>
+
+<br/><br/> 8. 사장님 페이지
+
+> <img src = "exec/img/사장화면.gif" width=70%  height=70%>
+
+<br/><br/> 9. 주문 알림 : 사용자가 결제 완료 시 해당 가게로 주문 알림 기능
+
+> <img src = "exec/img/사장화면.gif" width=70%  height=70%>
 
 ## 주요 기능
 
@@ -85,7 +121,7 @@
 
 ---
 
-![서비스 아키텍처](/exec/img/특화아키텍쳐C208.png)
+<img src = "exec/img/특화아키텍쳐C208.png" width=60%  height=60%>
 
 ### 게임 기대효과
 
@@ -93,7 +129,7 @@
 
 - **주문 및 결제의 편리함**
   : 핸드폰 QR을 통한 주문
-	: 매장의 기기에 의존하지 않고, QR을 통해 개인 핸드폰 기기로 주문!
+  : 매장의 기기에 의존하지 않고, QR을 통해 개인 핸드폰 기기로 주문!
 - **사장님의 비용 감소**
   : 인건비 및 키오스크 렌탈 비용을 줄일 수 있다
 - **우리만의 결제시스템 구축**
@@ -107,7 +143,7 @@
 
   - Eureka, API gateway, OpenFeign 등을 통해 MSA 구축
   - user, store, pay, payment 각각의 서비스 및 DB 독립적으로 배포
-    ![MSA](/exec/img/msa.png)
+    > <img src = "exec/img/msa.png" width=60%  height=60%>
 
 - **JWT** 인증 인가
 
@@ -140,13 +176,13 @@
 
 - **TypeScript**
 
-	- 기존 자바스크립트 소스와의 호환
-	- 정적타입 : 컴파일단계에서 오류를 포착
+  - 기존 자바스크립트 소스와의 호환
+  - 정적타입 : 컴파일단계에서 오류를 포착
 
 - **PWA**
 
-	- 모바일 사이트에서 네이티브 앱과 같은 사용자 경험을 제공
-	- 사장님 서비스는 웹, 고객 서비스는 모바일로 제공
+  - 모바일 사이트에서 네이티브 앱과 같은 사용자 경험을 제공
+  - 사장님 서비스는 웹, 고객 서비스는 모바일로 제공
 
 - Naver SMS
 
@@ -170,20 +206,24 @@
 ---
 
 - Git
-  ![gitImgMR](/exec/img/gitImgMR.png)
+  <!-- ![gitImgMR](/exec/img/gitImgMR.png) -->
 - Jira
-  ![jiraImg](/exec/img/jiraimg.png)
+  <!-- ![jiraImg](/exec/img/jiraimg.png) -->
 - Figma
-  ![figmaImg](/exec/img/figmaimg.png)
+
+  > <img src = "exec/img/figma.png" width=60%  height=60%>
+
 - Notion
-  ![notionImg](/exec/img/notionimg.png)
+
+  > <img src = "exec/img/notion.png" width=60%  height=60%>
+
 - Mattermost
 
 ### 💭 기능 명세서
 
 ---
 
-[기능 명세서](/exec/기능 명세서.pdf)
+- [기능명세서](/exec/기능명세서.pdf)
 
 ## ✨컨벤션
 
@@ -295,7 +335,7 @@ FE/customer
  └─style - 각 컴포넌트에 사용된 styled컴포넌트 저장폴더 / GlobalStyle.js : 전역 css설정해주는 컴포넌트
     │
     └─ pages- 페이지 파일들
-    └- 
+    └-
     └- home
     └- …
 ```
@@ -315,7 +355,7 @@ FE/customer
 
 ---
 
-![erd](/exec/img/erd.png)
+> <img src = "exec/img/erd.png" width=60%  height=60%>
 
 ### ✨ EC2 포트 정리
 
@@ -324,22 +364,20 @@ FE/customer
 | **PORT** |                        **이름**                         |
 | :------: | :-----------------------------------------------------: |
 |   443    |                          HTTPS                          |
-|    80    | HTTP - HTTPS로 리다이렉트(프론트 페이지지로 리다이렉트)      |
-|   3000   |                          React - customer                     |
-|   3001   |                          React - owner                       |
-|   3306   |                          MariaDB - user                          |
-|   3307   |                          MariaDB - pay                          |
-|   3308   |                          MariaDB - card                          |
-|   3309   |                          MariaDB - payment                          |
-|   3310   |                          MariaDB - store                          |
-|   3311   |                          MariaDB - cart                          |
+|    80    | HTTP - HTTPS로 리다이렉트(프론트 페이지지로 리다이렉트) |
+|   3000   |                    React - customer                     |
+|   3001   |                      React - owner                      |
+|   3306   |                     MariaDB - user                      |
+|   3307   |                      MariaDB - pay                      |
+|   3308   |                     MariaDB - card                      |
+|   3309   |                    MariaDB - payment                    |
+|   3310   |                     MariaDB - store                     |
+|   3311   |                     MariaDB - cart                      |
 |   6379   |                          Redis                          |
-|   8000   |                          ApiGateway - Service                          |
-|   8080   |                          Jenkins                          |
-|   8761   |                          Discovery - Service                          |
-|   9999   |                          Cart - Service                          |
-
-
+|   8000   |                  ApiGateway - Service                   |
+|   8080   |                         Jenkins                         |
+|   8761   |                   Discovery - Service                   |
+|   9999   |                     Cart - Service                      |
 
 ### 😃 팀원 역할
 
