@@ -217,7 +217,7 @@
 
 - Notion
 
-  <img src = "exec/img/API명세서.png" width=60%  height=60%>
+  <img src = "exec/img/API명세서.PNG" width=60%  height=60%>
 
   <img src = "exec/img/notion.png" width=60%  height=60%>
 
