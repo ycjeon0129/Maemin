@@ -13,16 +13,19 @@
 
 # misc
 .DS_Store
+<<<<<<< HEAD
+.env
+.env.local
+=======
 
 # dotenv environment variable files
 .env
+>>>>>>> fd74e80bd5c552a51e9ecb68c34a4baade006899
 .env.development.local
 .env.test.local
 .env.production.local
 .env.local
 
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
